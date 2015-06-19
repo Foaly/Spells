@@ -6,6 +6,9 @@
 #define SPELLS_SPELLS_H
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+
+#include <vector>
 
 
 class Spells {
@@ -20,8 +23,11 @@ private:
     void update();
     void draw();
 
-    sf::RenderWindow window;
-
+    bool m_isUserDrawing;
+    sf::RenderWindow m_window;
+    std::vector<sf::CircleShape> m_spellPoints;
+    std::vector<sf::CircleShape> m_userPoints;
+    sf::Vector2f m_lastPosition;
 };
 
 
