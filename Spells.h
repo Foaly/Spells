@@ -22,8 +22,10 @@ private:
     void handleEvents();
     void update();
     void draw();
+    void addUserPoint(const sf::Vector2f& point);
 
     bool m_isUserDrawing;
+    bool m_startComputing;
     sf::RenderWindow m_window;
     std::vector<sf::CircleShape> m_spellPoints;
     std::vector<sf::CircleShape> m_userPoints;
