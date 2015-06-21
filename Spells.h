@@ -5,11 +5,12 @@
 #ifndef SPELLS_SPELLS_H
 #define SPELLS_SPELLS_H
 
+#include <vector>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
-#include <vector>
-
+#include "SpellGenerator.h"
 
 class Spells {
 public:
@@ -27,6 +28,7 @@ private:
     bool m_isUserDrawing;
     bool m_startComputing;
     sf::RenderWindow m_window;
+    SpellGenerator m_spellGenerator;
     std::vector<sf::CircleShape> m_spellPoints;
     std::vector<sf::CircleShape> m_userPoints;
     sf::Vector2f m_lastPosition;

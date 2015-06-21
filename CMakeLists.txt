@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # Define sources and executable
 set(EXECUTABLE_NAME "Spells")
-add_executable(${EXECUTABLE_NAME} main.cpp Spells.cpp Spells.h)
+add_executable(${EXECUTABLE_NAME} main.cpp Spells.cpp Spells.h SpellGenerator.cpp SpellGenerator.h)
 
 # Detect and add SFML
 set(SFML_ROOT F:/Librarys/official_SFML/install)

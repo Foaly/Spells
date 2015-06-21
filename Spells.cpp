@@ -1,8 +1,6 @@
 //
 // Created by Maximilian on 19.06.2015.
 //
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <iostream>
 
 #include <SFML/Window/Event.hpp>
@@ -12,18 +10,10 @@
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_startComputing(false),
-                   m_window(sf::VideoMode(1024, 798), "Spells")
+                   m_window(sf::VideoMode(1024, 798), "Spells"),
+                   m_spellGenerator(sf::Vector2f(m_window.getSize().x / 2 - 25, m_window.getSize().y / 2 - 25))
 {
-    // fill the spell point vector
-    for(int i = 0; i < 20; i++)
-    {
-        sf::CircleShape circle;
-        circle.setRadius(25);
-        circle.setPosition(200 + 20 * i, 300);
-        circle.setFillColor(sf::Color(255, 255, 255, 100));
-
-        m_spellPoints.push_back(circle);
-    }
+    m_spellPoints = m_spellGenerator.generateSpirale();
 }
 
 
