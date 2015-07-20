@@ -13,7 +13,9 @@ Spells::Spells() : m_isUserDrawing(false),
                    m_window(sf::VideoMode(1024, 798), "Spells"),
                    m_spellGenerator(sf::Vector2f(m_window.getSize().x / 2 - 25, m_window.getSize().y / 2 - 25))
 {
-    m_spellPoints = m_spellGenerator.generateSpirale();
+    //m_spellPoints = m_spellGenerator.generateSpirale();
+    auto wave = m_spellGenerator.generateWave();
+    std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
 }
 
 

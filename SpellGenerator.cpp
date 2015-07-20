@@ -50,8 +50,8 @@ std::vector<sf::CircleShape> SpellGenerator::generateSpirale()
         double around = theta + rotation;
 
         // Convert 'around' and 'away' to X and Y.
-        double x = m_center.x + std::cos ( around ) * away;
-        double y = m_center.y + std::sin ( around ) * away;
+        float x = m_center.x + std::cos ( around ) * away;
+        float y = m_center.y + std::sin ( around ) * away;
 
         // save the position
         result.push_back(createCircle(sf::Vector2f(x, y)));
@@ -63,6 +63,44 @@ std::vector<sf::CircleShape> SpellGenerator::generateSpirale()
 
     return result;
 }
+
+
+std::vector<sf::CircleShape> SpellGenerator::generateWave()
+{
+    // algorithm taken from: https://stackoverflow.com/questions/26226663/evenly-space-circles-along-sin-curve#answer-26226795
+    std::vector<sf::CircleShape> result;
+    result.reserve(100);
+
+    const float dx = 0.01f;  // increase for performance vs accuracy
+    float s = 0.f;
+    const float step = 0.2f; // equals a distance between points along the arc of 20 px
+    float total = 0.f;
+
+    for (float x = 0.f; x < 2.0 * M_PI; x += dx) {
+
+        // method using difference between successive y values to calculate dy
+        // NB: in practise you should remember the value of fx from the previous
+        // iteration to avoid two evaluations of f(x) per loop
+        float fx = std::sin(x);
+        float dy = std::sin(x + dx) - fx;
+        float ds = (dx * dx + dy * dy) / dx;
+
+        // add up distance so far
+        s += ds;
+        total += ds;
+
+        if (s >= step) {
+            float px = 80.f + 800.f * (x / (2.f * static_cast<float>(M_PI)));
+            float py = 380.f - 180.f * fx;
+
+            result.push_back(createCircle({px, py}));
+            s -= step;   // reset segment distance
+        }
+    }
+
+    return result;
+}
+
 
 sf::CircleShape SpellGenerator::createCircle(sf::Vector2f position) const
 {

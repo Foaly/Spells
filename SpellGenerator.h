@@ -16,6 +16,8 @@ public:
 
     std::vector<sf::CircleShape> generateSpirale();
 
+    std::vector<sf::CircleShape> generateWave();
+
 private:
 
     sf::CircleShape createCircle(sf::Vector2f position) const;
