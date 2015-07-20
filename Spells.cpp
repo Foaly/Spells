@@ -2,12 +2,24 @@
 // Created by Maximilian on 19.06.2015.
 //
 #include <iostream>
+#include <sstream>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <Thor/Math.hpp>
 
 #include "Spells.h"
+
+namespace
+{
+    template <typename T>
+    std::string toString ( T Number )
+    {
+        std::stringstream ss;
+        ss << Number;
+        return ss.str();
+    }
+}
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_startComputing(false),
@@ -32,6 +44,17 @@ Spells::Spells() : m_isUserDrawing(false),
     sf::Vector2f acceleration(thor::random(-100.f, 100.f), thor::random(-100.f, 100.f));
     thor::ForceAffector gravityAffector(acceleration);
     m_particleSystem.addAffector(gravityAffector);
+
+    if(!m_font.loadFromFile("data/fonts/BilboSwashCaps-Regular.otf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+    }
+
+    m_percentageText.setFont(m_font);
+    m_percentageText.setString("0%");
+    m_percentageText.setCharacterSize(50);
+    m_percentageText.setPosition(30, 10);
+    m_percentageText.setStyle(sf::Text::Style::Bold);
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
 }
@@ -162,6 +185,8 @@ void Spells::update()
         percent = std::round(percent * 10.f) / 10.f;
         std::cout << "Hits: " << numberOfPointsHit << " Percent: " << percent << std::endl;
 
+        // TODO: this should use std::to_string. This is a compiler error an update should help
+        m_percentageText.setString(toString(percent) + "%");
 
 
         if(percent > 70.f)
@@ -170,7 +195,7 @@ void Spells::update()
             emitter.setEmissionRate(10);
             emitter.setParticleLifetime(sf::seconds(1));
             emitter.setParticlePosition( thor::Distributions::circle(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2), 50) );   // Emit particles in given circle
-            emitter.setParticleVelocity( thor::Distributions::deflect(sf::Vector2f(thor::random(-1.f, 1.f), thor::random(-1.f, 1.f)), 15.f) ); // Emit towards direction with deviation of 15�
+            emitter.setParticleVelocity( thor::Distributions::deflect(sf::Vector2f(thor::random(-1.f, 1.f), thor::random(-1.f, 1.f)), 15.f) ); // Emit towards direction with deviation of 15°
             emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
             m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
         }
@@ -203,6 +228,9 @@ void Spells::draw()
     {
         m_window.draw(circle);
     }
+
+    // draw percentage text
+    m_window.draw(m_percentageText);
 
     // end the current frame
     m_window.display();

@@ -10,6 +10,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+
 #include <Thor/Particles.hpp>
 
 #include "SpellGenerator.h"
@@ -37,6 +40,8 @@ private:
     sf::Clock m_frameClock;
     thor::ParticleSystem m_particleSystem;
     sf::Texture m_particleTexture;
+    sf::Font m_font;
+    sf::Text m_percentageText;
 };
 
 
