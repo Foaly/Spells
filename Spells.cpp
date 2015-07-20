@@ -5,6 +5,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <Thor/Math.hpp>
 
 #include "Spells.h"
 
@@ -16,6 +17,23 @@ Spells::Spells() : m_isUserDrawing(false),
     //m_spellPoints = m_spellGenerator.generateSpirale();
     auto wave = m_spellGenerator.generateWave();
     std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
+
+    // limit frame time
+    m_window.setFramerateLimit(60);
+
+    if(!m_particleTexture.loadFromFile("data/old key small.png"))
+    {
+        std::cerr << "Failed to load particle texture!" << std::endl;
+    }
+
+    // set particle texture
+    m_particleSystem.setTexture(m_particleTexture);
+
+    sf::Vector2f acceleration(thor::random(-100.f, 100.f), thor::random(-100.f, 100.f));
+    thor::ForceAffector gravityAffector(acceleration);
+    m_particleSystem.addAffector(gravityAffector);
+
+    std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
 }
 
 
@@ -94,6 +112,9 @@ void Spells::handleEvents()
 
 void Spells::update()
 {
+    // get frame time
+    const sf::Time frameTime = m_frameClock.restart();
+
     if(m_isUserDrawing)
     {
         const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
@@ -137,11 +158,29 @@ void Spells::update()
         }
 
         // calculate the percentage of points hit
-        std::cout << "Hits: " << numberOfPointsHit << " Percent: " <<
-                static_cast<float>(numberOfPointsHit) / m_spellPoints.size() * 100.f << std::endl;
+        float percent = static_cast<float>(numberOfPointsHit) / m_spellPoints.size() * 100.f;
+        percent = std::round(percent * 10.f) / 10.f;
+        std::cout << "Hits: " << numberOfPointsHit << " Percent: " << percent << std::endl;
+
+
+
+        if(percent > 70.f)
+        {
+            thor::UniversalEmitter emitter;
+            emitter.setEmissionRate(10);
+            emitter.setParticleLifetime(sf::seconds(1));
+            emitter.setParticlePosition( thor::Distributions::circle(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2), 50) );   // Emit particles in given circle
+            emitter.setParticleVelocity( thor::Distributions::deflect(sf::Vector2f(thor::random(-1.f, 1.f), thor::random(-1.f, 1.f)), 15.f) ); // Emit towards direction with deviation of 15�
+            emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
+            m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
+        }
+
 
         m_startComputing = false;
     }
+
+    // update particle system
+    m_particleSystem.update(frameTime);
 }
 
 
@@ -149,6 +188,9 @@ void Spells::draw()
 {
     // clear the m_window with black color
     m_window.clear(sf::Color::Black);
+
+    // draw particle system
+    m_window.draw(m_particleSystem);
 
     // draw the spell
     for(auto circle: m_spellPoints)

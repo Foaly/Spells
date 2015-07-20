@@ -9,6 +9,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <Thor/Particles.hpp>
 
 #include "SpellGenerator.h"
 
@@ -32,6 +34,9 @@ private:
     std::vector<sf::CircleShape> m_spellPoints;
     std::vector<sf::CircleShape> m_userPoints;
     sf::Vector2f m_lastPosition;
+    sf::Clock m_frameClock;
+    thor::ParticleSystem m_particleSystem;
+    sf::Texture m_particleTexture;
 };
 
 

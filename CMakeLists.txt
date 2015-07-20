@@ -27,5 +27,13 @@ if(SFML_FOUND)
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 endif()
 
+set(THOR_ROOT F:/Librarys/Thor/Install)
+set(CMAKE_MODULE_PATH "${THOR_ROOT}/cmake/modules" ${CMAKE_MODULE_PATH})
+find_package(Thor 2 REQUIRED)
+if(THOR_FOUND)
+  include_directories(${THOR_INCLUDE_DIR})
+  target_link_libraries(${EXECUTABLE_NAME} ${THOR_LIBRARY})
+endif()
+
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
