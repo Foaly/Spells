@@ -4,7 +4,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-#include "SpellGenerator.h"
+#include "SpellGenerator.hpp"
 
 SpellGenerator::SpellGenerator(sf::Vector2f center) : m_center(center)
 {

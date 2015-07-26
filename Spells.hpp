@@ -15,7 +15,7 @@
 
 #include <Thor/Particles.hpp>
 
-#include "SpellGenerator.h"
+#include "SpellGenerator.hpp"
 
 class Spells {
 public:
@@ -33,6 +33,7 @@ private:
     bool m_isUserDrawing;
     bool m_startComputing;
     sf::RenderWindow m_window;
+    const sf::Vector2f m_windowCenter;
     SpellGenerator m_spellGenerator;
     std::vector<sf::CircleShape> m_spellPoints;
     std::vector<sf::CircleShape> m_userPoints;

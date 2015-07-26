@@ -1,4 +1,4 @@
-#include "Spells.h"
+#include "Spells.hpp"
 
 int main(int argc, char* argv[])
 {

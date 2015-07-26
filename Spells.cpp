@@ -8,7 +8,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <Thor/Math.hpp>
 
-#include "Spells.h"
+#include "Spells.hpp"
+#include "Util.hpp"
 
 namespace
 {
@@ -24,6 +25,7 @@ namespace
 Spells::Spells() : m_isUserDrawing(false),
                    m_startComputing(false),
                    m_window(sf::VideoMode(1024, 798), "Spells"),
+                   m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_spellGenerator(sf::Vector2f(m_window.getSize().x / 2 - 25, m_window.getSize().y / 2 - 25))
 {
     //m_spellPoints = m_spellGenerator.generateSpirale();
@@ -41,10 +43,6 @@ Spells::Spells() : m_isUserDrawing(false),
     // set particle texture
     m_particleSystem.setTexture(m_particleTexture);
 
-    sf::Vector2f acceleration(thor::random(-100.f, 100.f), thor::random(-100.f, 100.f));
-    thor::ForceAffector gravityAffector(acceleration);
-    m_particleSystem.addAffector(gravityAffector);
-
     if(!m_font.loadFromFile("data/fonts/BilboSwashCaps-Regular.otf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
@@ -55,6 +53,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_percentageText.setCharacterSize(50);
     m_percentageText.setPosition(30, 10);
     m_percentageText.setStyle(sf::Text::Style::Bold);
+    // TODO horizontal character spacing
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
 }
@@ -181,25 +180,24 @@ void Spells::update()
         }
 
         // calculate the percentage of points hit
-        float percent = static_cast<float>(numberOfPointsHit) / m_spellPoints.size() * 100.f;
-        percent = std::round(percent * 10.f) / 10.f;
+        const float percent = std::round(static_cast<float>(numberOfPointsHit) / m_spellPoints.size() * 100.f);
         std::cout << "Hits: " << numberOfPointsHit << " Percent: " << percent << std::endl;
 
         // TODO: this should use std::to_string. This is a compiler error an update should help
         m_percentageText.setString(toString(percent) + "%");
 
-
+        // if more than 70% are covered play an animation
         if(percent > 70.f)
         {
             thor::UniversalEmitter emitter;
             emitter.setEmissionRate(10);
-            emitter.setParticleLifetime(sf::seconds(1));
-            emitter.setParticlePosition( thor::Distributions::circle(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2), 50) );   // Emit particles in given circle
-            emitter.setParticleVelocity( thor::Distributions::deflect(sf::Vector2f(thor::random(-1.f, 1.f), thor::random(-1.f, 1.f)), 15.f) ); // Emit towards direction with deviation of 15°
+            emitter.setParticleLifetime(sf::seconds(1.5f));
+            emitter.setParticlePosition( thor::Distributions::circle(m_windowCenter, 50) );   // Emit particles in a circle 50px around the center
+            emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
             emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
+            emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
             m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
         }
-
 
         m_startComputing = false;
     }
