@@ -10,6 +10,7 @@
 
 #include "Spells.hpp"
 #include "Util.hpp"
+#include "VectorEmitter.hpp"
 
 namespace
 {
@@ -189,9 +190,9 @@ void Spells::update()
         // if more than 70% are covered play an animation
         if(percent > 70.f)
         {
-            thor::UniversalEmitter emitter;
+            VectorEmitter emitter(m_spellPoints);
             emitter.setEmissionRate(10);
-            emitter.setParticleLifetime(sf::seconds(1.5f));
+            emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
             emitter.setParticlePosition( thor::Distributions::circle(m_windowCenter, 50) );   // Emit particles in a circle 50px around the center
             emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
             emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
