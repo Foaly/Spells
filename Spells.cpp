@@ -101,6 +101,7 @@ void Spells::handleEvents()
                 // delete all the user points
                 case sf::Keyboard::C:
                     m_userPoints.clear();
+                    m_percentageText.setString("0%");
                     break;
                 default:
                     break;
@@ -115,11 +116,9 @@ void Spells::handleEvents()
                 m_isUserDrawing = true;
                 const sf::Vector2i pixelPosition(event.mouseButton.x, event.mouseButton.y);
                 m_lastPosition = m_window.mapPixelToCoords(pixelPosition);
-
                 addUserPoint(m_lastPosition);
             }
         }
-
         else if(event.type == sf::Event::MouseButtonReleased)
         {
             if (event.mouseButton.button == sf::Mouse::Left)
@@ -141,15 +140,20 @@ void Spells::update()
     if(m_isUserDrawing)
     {
         const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
-        const sf::Vector2f delta(m_lastPosition - mousePosition);
-        const float threshold = 20.f;
+        const sf::Vector2f delta(mousePosition - m_lastPosition);
 
-        // if the mouse has moved further away form the
-        // last position than the threshold add a new point
-        if((delta.x * delta.x + delta.y * delta.y) > threshold * threshold)
+        const float movementLength = thor::length(delta);
+
+        // add a point for every 20 pixel the mouse moves between two frames
+        if(movementLength > 20.f)
         {
-            m_lastPosition = mousePosition;
-            addUserPoint(m_lastPosition);
+            const sf::Vector2f direction(thor::unitVector(delta));
+            const int steps = static_cast<int>(std::ceil(movementLength)) / 20;
+            for(int i = 0; i < steps; i++)
+            {
+                m_lastPosition += direction * 20.f;
+                addUserPoint(m_lastPosition);
+            }
         }
     }
     else if(m_startComputing)
@@ -167,7 +171,9 @@ void Spells::update()
                 const sf::Vector2f userPointPosition(userPoint.getPosition());
                 const sf::Vector2f delta(spellPointPosition - userPointPosition);
 
-                if((delta.x * delta.x + delta.y * delta.y) < 20 * 20)
+                const float movementLength = thor::length(delta);
+
+                if(movementLength < 20.f)
                 {
                     numberOfPointsHit++;
                     spellPoints.erase(itor);
