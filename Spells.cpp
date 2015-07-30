@@ -27,6 +27,7 @@ Spells::Spells() : m_isUserDrawing(false),
                    m_startComputing(false),
                    m_window(sf::VideoMode(1024, 798), "Spells"),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
+                   m_userPointRadius(20.f),
                    m_spellGenerator(sf::Vector2f(m_window.getSize().x / 2 - 25, m_window.getSize().y / 2 - 25))
 {
     //m_spellPoints = m_spellGenerator.generateSpirale();
@@ -55,6 +56,18 @@ Spells::Spells() : m_isUserDrawing(false),
     m_percentageText.setPosition(30, 10);
     m_percentageText.setStyle(sf::Text::Style::Bold);
     // TODO horizontal character spacing
+
+    if(sf::Shader::isAvailable())
+    {
+        if(!m_radialGradientShader.loadFromFile("data/shader/RadialGradient.frag", sf::Shader::Fragment))
+        {
+            std::cerr << "Failed to load radial gradient shader!" << std::endl;
+        }
+        else
+        {
+            m_radialGradientShader.setParameter("circleDiameter", m_userPointRadius * 2.f);
+        }
+    }
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
 }
@@ -145,13 +158,13 @@ void Spells::update()
         const float movementLength = thor::length(delta);
 
         // add a point for every 20 pixel the mouse moves between two frames
-        if(movementLength > 20.f)
+        if(movementLength > m_userPointRadius)
         {
             const sf::Vector2f direction(thor::unitVector(delta));
-            const int steps = static_cast<int>(std::ceil(movementLength)) / 20;
+            const int steps = static_cast<int>(std::ceil(movementLength)) / static_cast<int>(m_userPointRadius);
             for(int i = 0; i < steps; i++)
             {
-                m_lastPosition += direction * 20.f;
+                m_lastPosition += direction * m_userPointRadius;
                 addUserPoint(m_lastPosition);
             }
         }
@@ -231,7 +244,7 @@ void Spells::draw()
     // draw the user spell
     for(auto circle: m_userPoints)
     {
-        m_window.draw(circle);
+        m_window.draw(circle, &m_radialGradientShader);
     }
 
     // draw percentage text
@@ -247,8 +260,10 @@ void Spells::draw()
 void Spells::addUserPoint(const sf::Vector2f &point)
 {
     sf::CircleShape circle;
-    circle.setRadius(20);
-    circle.setPosition(point - sf::Vector2f(20, 20));
+    circle.setRadius(m_userPointRadius);
+    circle.setOrigin(m_userPointRadius, m_userPointRadius);
+    circle.setPosition(point);
     circle.setFillColor(sf::Color(165, 0, 0, 200));
+    circle.setTextureRect(sf::IntRect(0, 0, static_cast<int>(m_userPointRadius) * 2, static_cast<int>(m_userPointRadius) * 2));
     m_userPoints.push_back(circle);
 }

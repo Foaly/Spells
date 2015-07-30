@@ -106,6 +106,7 @@ sf::CircleShape SpellGenerator::createCircle(sf::Vector2f position) const
 {
     sf::CircleShape circle;
     circle.setRadius(25);
+    circle.setOrigin(circle.getRadius(), circle.getRadius());
     circle.setPosition(position);
     circle.setFillColor(sf::Color(255, 255, 255, 100));
     return circle;
