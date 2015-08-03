@@ -32,7 +32,6 @@ private:
     void handleEvents();
     void update();
     void draw();
-    void addUserPoint(const sf::Vector2f& point);
 
     bool m_isUserDrawing;
     bool m_isComputing;
@@ -44,10 +43,10 @@ private:
     thor::ResourceHolder<sf::Texture, std::string> m_textures;
     const float m_userPointRadius;
     SpellGenerator m_spellGenerator;
-    std::vector<sf::Sprite> m_spellPoints;
-    std::vector<sf::Sprite> m_userPoints;
-    std::vector<sf::Sprite>::iterator m_userPointIter;
-    std::vector<sf::Sprite> m_spellPointsCopy;
+    std::vector<sf::Vector2f> m_spellPoints;
+    std::vector<sf::Vector2f> m_userPoints;
+    std::vector<sf::Vector2f>::iterator m_userPointIter;
+    std::vector<sf::Vector2f> m_spellPointsCopy;
     unsigned int m_numberOfPointsHit;
     sf::Clock m_computingClock;
     thor::ParticleSystem m_fallingPointParticleSystem;
@@ -56,7 +55,6 @@ private:
     sf::Vector2f m_lastPosition;
 
     thor::ParticleSystem m_particleSystem;
-    sf::Texture m_particleTexture;
 
     sf::Font m_font;
     sf::Text m_percentageText;

@@ -27,7 +27,7 @@ class  VectorEmitter
 public:
     /// @brief Default constructor
     ///
-    VectorEmitter(std::vector<sf::Sprite>& points);
+    VectorEmitter(std::vector<sf::Vector2f>& points);
 
     /// @brief Emits particles into a particle system.
     /// @param system Indirection to the particle system that stores the particles.
@@ -84,7 +84,7 @@ public:
     // ---------------------------------------------------------------------------------------------------------------------------
     // Private variables
 private:
-    std::vector<sf::Sprite>&       m_points;
+    std::vector<sf::Vector2f>&          m_points;
 
     bool                                m_firstEmission;
     float                               mEmissionRate;

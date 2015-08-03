@@ -29,13 +29,14 @@ Spells::Spells() : m_isUserDrawing(false),
                    m_window(sf::VideoMode(1024, 798), "Spells"),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
-                   m_spellGenerator(m_windowCenter, m_textures)
+                   m_spellGenerator(m_windowCenter)
 {
     // limit frame time
     m_window.setFramerateLimit(60);
 
     try
     {
+        m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>("data/textures/Circle.png"), thor::Resources::Reuse);
         m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>("data/textures/old key small.png"), thor::Resources::Reuse);
     }
     catch (thor::ResourceLoadingException &e)
@@ -136,7 +137,7 @@ void Spells::handleEvents()
                     m_isUserDrawing = true;
                     const sf::Vector2i pixelPosition(event.mouseButton.x, event.mouseButton.y);
                     m_lastPosition = m_window.mapPixelToCoords(pixelPosition);
-                    addUserPoint(m_lastPosition);
+                    m_userPoints.push_back(m_lastPosition);
                 }
             }
         }
@@ -181,7 +182,7 @@ void Spells::update()
             for(int i = 0; i < steps; i++)
             {
                 m_lastPosition += direction * m_userPointRadius;
-                addUserPoint(m_lastPosition);
+                m_userPoints.push_back(m_lastPosition);
             }
         }
     }
@@ -190,13 +191,13 @@ void Spells::update()
         if(m_computingClock.getElapsedTime() >= sf::milliseconds(30))
         {
             bool didUserPointHit = false;
-            const sf::Vector2f userPointPosition(m_userPointIter->getPosition());
+            const sf::Vector2f userPointPosition(*m_userPointIter);
 
             // check if the user point we are currently looking at is close to any spell point
             for (auto iter = m_spellPointsCopy.begin(); iter != m_spellPointsCopy.end();)
             {
                 // calculate the distance between the current user point the current spell point
-                const sf::Vector2f spellPointPosition(iter->getPosition());
+                const sf::Vector2f spellPointPosition(*iter);
                 const sf::Vector2f delta(spellPointPosition - userPointPosition);
                 const float distance = thor::length(delta);
 
@@ -221,7 +222,7 @@ void Spells::update()
             else
             {
                 // if the user point is not near any spell point remove it and make a falling point animation
-                const sf::Vector2f position = m_userPointIter->getPosition();
+                const sf::Vector2f position = *m_userPointIter;
                 m_fallingPointEmitter.emitParticle(position);
                 m_userPointIter = m_userPoints.erase(m_userPointIter);
             }
@@ -272,16 +273,26 @@ void Spells::draw()
 
     // draw the spell
     m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.4f));
-    for(auto circle: m_spellPoints)
+    sf::Sprite circle(m_textures["circle"]);
+    circle.setOrigin(25, 25);
+    circle.setColor(sf::Color(255, 255, 255, 100));
+    for(auto position: m_spellPoints)
     {
+        circle.setPosition(position);
         m_window.draw(circle, &m_radialGradientShader);
     }
 
-    // draw the user spell
+    // draw the falling user points
     m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.3f));
     m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
-    for(auto circle: m_userPoints)
+
+    // draw the user spell
+    circle.setScale(0.8f, 0.8f);
+    circle.setOrigin(m_userPointRadius, m_userPointRadius);
+    circle.setColor(sf::Color(165, 0, 0, 200));
+    for(auto position: m_userPoints)
     {
+        circle.setPosition(position);
         m_window.draw(circle, &m_radialGradientShader);
     }
 
@@ -290,17 +301,4 @@ void Spells::draw()
 
     // end the current frame
     m_window.display();
-}
-
-/**
- * @brief: Adds a circle at the given point to the user points vector.
- */
-void Spells::addUserPoint(const sf::Vector2f &point)
-{
-    sf::Sprite circle(m_textures["circle"]);
-    circle.setScale(0.8f, 0.8f);
-    circle.setOrigin(m_userPointRadius, m_userPointRadius);
-    circle.setPosition(point);
-    circle.setColor(sf::Color(165, 0, 0, 200));
-    m_userPoints.push_back(circle);
 }

@@ -6,7 +6,7 @@
 
 #include "VectorEmitter.hpp"
 
-VectorEmitter::VectorEmitter(std::vector<sf::Sprite>& points)
+VectorEmitter::VectorEmitter(std::vector<sf::Vector2f>& points)
         : m_points(points)
         , m_firstEmission(true)
         , mEmissionRate(1.f)
@@ -28,7 +28,7 @@ void VectorEmitter::operator() (thor::EmissionInterface& system, sf::Time dt)
     {
         for(auto itor = m_points.begin(); itor != m_points.end(); itor++)
         {
-            emitParticle(system, itor->getPosition());
+            emitParticle(system, *itor);
         }
 
         m_firstEmission = false;
@@ -40,7 +40,7 @@ void VectorEmitter::operator() (thor::EmissionInterface& system, sf::Time dt)
         for (std::size_t i = 0; i < nbParticles; ++i)
         {
             const unsigned int randomIndex= thor::random(0u, m_points.size() - 1u);
-            emitParticle(system, m_points[randomIndex].getPosition());
+            emitParticle(system, m_points[randomIndex]);
         }
     }
 }
