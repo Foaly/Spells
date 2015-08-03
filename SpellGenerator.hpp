@@ -7,22 +7,27 @@
 
 
 #include <vector>
-#include <SFML/Graphics/CircleShape.hpp>
+
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+
+#include <Thor/Resources/ResourceHolder.hpp>
 
 class SpellGenerator
 {
 public:
-    SpellGenerator(sf::Vector2f center);
+    SpellGenerator(sf::Vector2f center, thor::ResourceHolder<sf::Texture, std::string>& texture);
 
-    std::vector<sf::CircleShape> generateSpirale();
+    std::vector<sf::Sprite> generateSpirale();
 
-    std::vector<sf::CircleShape> generateWave();
+    std::vector<sf::Sprite> generateWave();
 
 private:
 
-    sf::CircleShape createCircle(sf::Vector2f position) const;
+    sf::Sprite createCircle(sf::Vector2f position) const;
 
     sf::Vector2f m_center;
+    thor::ResourceHolder<sf::Texture, std::string>& m_textures;
 };
 
 

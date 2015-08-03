@@ -6,7 +6,7 @@
 
 #include "VectorEmitter.hpp"
 
-VectorEmitter::VectorEmitter(std::vector<sf::CircleShape>& points)
+VectorEmitter::VectorEmitter(std::vector<sf::Sprite>& points)
         : m_points(points)
         , m_firstEmission(true)
         , mEmissionRate(1.f)

@@ -3,19 +3,31 @@
 //
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <iostream>
 
 #include "SpellGenerator.hpp"
+#include <Thor/Resources/SfmlLoaders.hpp>
 
-SpellGenerator::SpellGenerator(sf::Vector2f center) : m_center(center)
+
+SpellGenerator::SpellGenerator(sf::Vector2f center, thor::ResourceHolder<sf::Texture, std::string>& texture) :
+        m_center(center),
+        m_textures(texture)
 {
-
+    try
+    {
+        m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>("data/textures/Circle.png"), thor::Resources::Reuse);
+    }
+    catch (thor::ResourceLoadingException &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 
-std::vector<sf::CircleShape> SpellGenerator::generateSpirale()
+std::vector<sf::Sprite> SpellGenerator::generateSpirale()
 {
     // algorithm taken from: https://stackoverflow.com/questions/13894715/draw-equidistant-points-on-a-spiral
-    std::vector<sf::CircleShape> result;
+    std::vector<sf::Sprite> result;
     result.reserve(100);
 
     // number of coils or full rotations. (Positive numbers spin clockwise, negative numbers spin counter-clockwise)
@@ -65,10 +77,10 @@ std::vector<sf::CircleShape> SpellGenerator::generateSpirale()
 }
 
 
-std::vector<sf::CircleShape> SpellGenerator::generateWave()
+std::vector<sf::Sprite> SpellGenerator::generateWave()
 {
     // algorithm taken from: https://stackoverflow.com/questions/26226663/evenly-space-circles-along-sin-curve#answer-26226795
-    std::vector<sf::CircleShape> result;
+    std::vector<sf::Sprite> result;
     result.reserve(100);
 
     const float dx = 0.01f;  // increase for performance vs accuracy
@@ -101,13 +113,11 @@ std::vector<sf::CircleShape> SpellGenerator::generateWave()
     return result;
 }
 
-
-sf::CircleShape SpellGenerator::createCircle(sf::Vector2f position) const
+sf::Sprite SpellGenerator::createCircle(sf::Vector2f position) const
 {
-    sf::CircleShape circle;
-    circle.setRadius(25);
-    circle.setOrigin(circle.getRadius(), circle.getRadius());
+    sf::Sprite circle(m_textures["circle"]);
+    circle.setOrigin(25, 25);
     circle.setPosition(position);
-    circle.setFillColor(sf::Color(255, 255, 255, 100));
+    circle.setColor(sf::Color(255, 255, 255, 100));
     return circle;
 }

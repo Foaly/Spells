@@ -11,7 +11,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 #include <vector>
 
@@ -27,7 +27,7 @@ class  VectorEmitter
 public:
     /// @brief Default constructor
     ///
-    VectorEmitter(std::vector<sf::CircleShape>& points);
+    VectorEmitter(std::vector<sf::Sprite>& points);
 
     /// @brief Emits particles into a particle system.
     /// @param system Indirection to the particle system that stores the particles.
@@ -84,7 +84,7 @@ public:
     // ---------------------------------------------------------------------------------------------------------------------------
     // Private variables
 private:
-    std::vector<sf::CircleShape>&       m_points;
+    std::vector<sf::Sprite>&       m_points;
 
     bool                                m_firstEmission;
     float                               mEmissionRate;

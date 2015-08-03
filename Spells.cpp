@@ -7,6 +7,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <Thor/Math.hpp>
+#include <Thor/Resources/SfmlLoaders.hpp>
 
 #include "Spells.hpp"
 #include "Util.hpp"
@@ -24,26 +25,29 @@ namespace
 }
 
 Spells::Spells() : m_isUserDrawing(false),
-                   m_startComputing(false),
+                   m_isComputing(false),
                    m_window(sf::VideoMode(1024, 798), "Spells"),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
-                   m_spellGenerator(sf::Vector2f(m_window.getSize().x / 2 - 25, m_window.getSize().y / 2 - 25))
+                   m_spellGenerator(m_windowCenter, m_textures)
 {
-    //m_spellPoints = m_spellGenerator.generateSpirale();
-    auto wave = m_spellGenerator.generateWave();
-    std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
-
     // limit frame time
     m_window.setFramerateLimit(60);
 
-    if(!m_particleTexture.loadFromFile("data/old key small.png"))
+    try
     {
-        std::cerr << "Failed to load particle texture!" << std::endl;
+        m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>("data/textures/old key small.png"), thor::Resources::Reuse);
+    }
+    catch (thor::ResourceLoadingException &e)
+    {
+        std::cout << e.what() << std::endl;
     }
 
     // set particle texture
-    m_particleSystem.setTexture(m_particleTexture);
+    m_particleSystem.setTexture(m_textures["key"]);
+
+    m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
+    m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
 
     if(!m_font.loadFromFile("data/fonts/BilboSwashCaps-Regular.otf"))
     {
@@ -63,11 +67,12 @@ Spells::Spells() : m_isUserDrawing(false),
         {
             std::cerr << "Failed to load radial gradient shader!" << std::endl;
         }
-        else
-        {
-            m_radialGradientShader.setParameter("circleDiameter", m_userPointRadius * 2.f);
-        }
     }
+
+    m_spellPoints = m_spellGenerator.generateSpirale();
+    //auto wave = m_spellGenerator.generateWave();
+    //std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
+
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
 }
@@ -125,20 +130,31 @@ void Spells::handleEvents()
         {
             if (event.mouseButton.button == sf::Mouse::Left)
             {
-                // the user starts drawing
-                m_isUserDrawing = true;
-                const sf::Vector2i pixelPosition(event.mouseButton.x, event.mouseButton.y);
-                m_lastPosition = m_window.mapPixelToCoords(pixelPosition);
-                addUserPoint(m_lastPosition);
+                if(!m_isComputing)
+                {
+                    // the user starts drawing
+                    m_isUserDrawing = true;
+                    const sf::Vector2i pixelPosition(event.mouseButton.x, event.mouseButton.y);
+                    m_lastPosition = m_window.mapPixelToCoords(pixelPosition);
+                    addUserPoint(m_lastPosition);
+                }
             }
         }
         else if(event.type == sf::Event::MouseButtonReleased)
         {
             if (event.mouseButton.button == sf::Mouse::Left)
             {
-                // the user has stopped drawing
-                m_isUserDrawing = false;
-                m_startComputing = true;
+                if(!m_isComputing)
+                {
+                    // the user has stopped drawing
+                    // set up everything for the calculation of the hit percentage
+                    m_isUserDrawing = false;
+                    m_isComputing = true;
+                    m_spellPointsCopy = m_spellPoints; // make a copy of the spell points
+                    m_userPointIter = m_userPoints.begin();
+                    m_numberOfPointsHit = 0;
+                    m_computingClock.restart();
+                }
             }
         }
     }
@@ -169,61 +185,80 @@ void Spells::update()
             }
         }
     }
-    else if(m_startComputing)
+    else if(m_isComputing)
     {
-        unsigned int numberOfPointsHit = 0;
-        auto spellPoints = m_spellPoints; // make a copy of the spell points
-
-        for(auto userPoint: m_userPoints)
+        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30))
         {
-            // check if the user point is within range of a spell point, if so
-            // increment the counter and remove the spell point (every spell point can only be hit once)
-            for(auto itor = spellPoints.begin(); itor != spellPoints.end();)
+            bool didUserPointHit = false;
+            const sf::Vector2f userPointPosition(m_userPointIter->getPosition());
+
+            // check if the user point we are currently looking at is close to any spell point
+            for (auto iter = m_spellPointsCopy.begin(); iter != m_spellPointsCopy.end();)
             {
-                const sf::Vector2f spellPointPosition(itor->getPosition());
-                const sf::Vector2f userPointPosition(userPoint.getPosition());
+                // calculate the distance between the current user point the current spell point
+                const sf::Vector2f spellPointPosition(iter->getPosition());
                 const sf::Vector2f delta(spellPointPosition - userPointPosition);
+                const float distance = thor::length(delta);
 
-                const float movementLength = thor::length(delta);
-
-                if(movementLength < 20.f)
+                if (distance < 22.f)
                 {
-                    numberOfPointsHit++;
-                    spellPoints.erase(itor);
+                    m_numberOfPointsHit++;
+                    didUserPointHit = true;
+                    m_spellPointsCopy.erase(iter);
                     break;
                 }
                 else
                 {
-                    itor++;
+                    iter++;
                 }
             }
+
+            if (didUserPointHit)
+            {
+                // if the user point is close to a spell point simply keep going
+                m_userPointIter++;
+            }
+            else
+            {
+                // if the user point is not near any spell point remove it and make a falling point animation
+                const sf::Vector2f position = m_userPointIter->getPosition();
+                m_fallingPointEmitter.emitParticle(position);
+                m_userPointIter = m_userPoints.erase(m_userPointIter);
+            }
+
+            // calculate the percentage of points hit
+            const float percent = std::round(static_cast<float>(m_numberOfPointsHit) / m_spellPoints.size() * 100.f);
+
+            // TODO: this should use std::to_string. This is a compiler error an update should help
+            m_percentageText.setString(toString(percent) + "%");
+
+            // if we have checked all user points play an animation if enough percent are covert
+            if (m_userPointIter == m_userPoints.end())
+            {
+                std::cout << "Hits: " << m_numberOfPointsHit << " Percent: " << percent << std::endl;
+
+                // if more than 70% are covered play an animation
+                if(percent > 70.f)
+                {
+                    VectorEmitter emitter(m_spellPoints);
+                    emitter.setEmissionRate(10);
+                    emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
+                    emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
+                    emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
+                    emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
+                    m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
+                }
+
+                m_isComputing = false;
+            }
+
+            m_computingClock.restart();
         }
-
-        // calculate the percentage of points hit
-        const float percent = std::round(static_cast<float>(numberOfPointsHit) / m_spellPoints.size() * 100.f);
-        std::cout << "Hits: " << numberOfPointsHit << " Percent: " << percent << std::endl;
-
-        // TODO: this should use std::to_string. This is a compiler error an update should help
-        m_percentageText.setString(toString(percent) + "%");
-
-        // if more than 70% are covered play an animation
-        if(percent > 70.f)
-        {
-            VectorEmitter emitter(m_spellPoints);
-            emitter.setEmissionRate(10);
-            emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
-            emitter.setParticlePosition( thor::Distributions::circle(m_windowCenter, 50) );   // Emit particles in a circle 50px around the center
-            emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
-            emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
-            emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
-            m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
-        }
-
-        m_startComputing = false;
     }
 
     // update particle system
     m_particleSystem.update(frameTime);
+    m_fallingPointParticleSystem.update(frameTime);
 }
 
 
@@ -236,12 +271,15 @@ void Spells::draw()
     m_window.draw(m_particleSystem);
 
     // draw the spell
+    m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.4f));
     for(auto circle: m_spellPoints)
     {
-        m_window.draw(circle);
+        m_window.draw(circle, &m_radialGradientShader);
     }
 
     // draw the user spell
+    m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.3f));
+    m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
     for(auto circle: m_userPoints)
     {
         m_window.draw(circle, &m_radialGradientShader);
@@ -259,11 +297,10 @@ void Spells::draw()
  */
 void Spells::addUserPoint(const sf::Vector2f &point)
 {
-    sf::CircleShape circle;
-    circle.setRadius(m_userPointRadius);
+    sf::Sprite circle(m_textures["circle"]);
+    circle.setScale(0.8f, 0.8f);
     circle.setOrigin(m_userPointRadius, m_userPointRadius);
     circle.setPosition(point);
-    circle.setFillColor(sf::Color(165, 0, 0, 200));
-    circle.setTextureRect(sf::IntRect(0, 0, static_cast<int>(m_userPointRadius) * 2, static_cast<int>(m_userPointRadius) * 2));
+    circle.setColor(sf::Color(165, 0, 0, 200));
     m_userPoints.push_back(circle);
 }

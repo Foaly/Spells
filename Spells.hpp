@@ -10,13 +10,16 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
 #include <Thor/Particles.hpp>
+#include <Thor/Resources/ResourceHolder.hpp>
 
 #include "SpellGenerator.hpp"
+#include "FallingPointEmitter.hpp"
 
 class Spells {
 public:
@@ -32,16 +35,23 @@ private:
     void addUserPoint(const sf::Vector2f& point);
 
     bool m_isUserDrawing;
-    bool m_startComputing;
+    bool m_isComputing;
 
     sf::Clock m_frameClock;
     sf::RenderWindow m_window;
     const sf::Vector2f m_windowCenter;
 
+    thor::ResourceHolder<sf::Texture, std::string> m_textures;
     const float m_userPointRadius;
     SpellGenerator m_spellGenerator;
-    std::vector<sf::CircleShape> m_spellPoints;
-    std::vector<sf::CircleShape> m_userPoints;
+    std::vector<sf::Sprite> m_spellPoints;
+    std::vector<sf::Sprite> m_userPoints;
+    std::vector<sf::Sprite>::iterator m_userPointIter;
+    std::vector<sf::Sprite> m_spellPointsCopy;
+    unsigned int m_numberOfPointsHit;
+    sf::Clock m_computingClock;
+    thor::ParticleSystem m_fallingPointParticleSystem;
+    FallingPointEmitter m_fallingPointEmitter;
 
     sf::Vector2f m_lastPosition;
 
