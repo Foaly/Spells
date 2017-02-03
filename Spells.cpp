@@ -8,6 +8,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <Thor/Math.hpp>
 #include <Thor/Resources/SfmlLoaders.hpp>
+#include <Thor/Particles/Affectors.hpp>
+#include <Thor/Animations/ColorAnimation.hpp>
 
 #include "Spells.hpp"
 #include "Util.hpp"
@@ -46,12 +48,16 @@ Spells::Spells() : m_isUserDrawing(false),
         // TODO: better error handeling, program will crash on texture access, maybe shutdown gracefully
     }
 
-    // set particle texture
-    m_particleSystem.setTexture(m_textures["key"]);
+    // set up the particle systems
+    m_winParticleSystem.setTexture(m_textures["key"]);
 
+    m_failParticleSystem.setTexture(m_textures["circle"]);
+    
     m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
 
+    
+    // font loading and text setup
     if(!m_font.loadFromFile(resolvePath("data/fonts/BilboSwashCaps-Regular.otf")))
     {
         std::cerr << "Failed to load font!" << std::endl;
@@ -256,11 +262,32 @@ void Spells::update()
                     emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
                     emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
                     emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
-                    m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
+                    m_winParticleSystem.addEmitter(emitter, sf::seconds(2.f));
                 }
                 else
                 {
-                    m_userPoints.clear();
+                    // copy the failed points
+                    m_failedPoints = std::move(m_userPoints);
+
+                    // generate a particle for each failed point
+                    VectorEmitter emitter(m_failedPoints);
+                    emitter.setEmissionRate(0);
+                    emitter.setParticleLifetime( util::Distributions::constant(sf::seconds(1.8f)) );
+                    m_failParticleSystem.addEmitter(emitter, sf::seconds(2.f));
+                    
+                    // scale the particles up
+                    thor::ScaleAffector scaleUp(sf::Vector2f(1.1, 1.1));
+                    m_failParticleSystem.addAffector(scaleUp, sf::seconds(2.f));
+                    
+                    // fade the points from red to black to transparent
+                    thor::ColorGradient toBlackGradient;
+                    toBlackGradient[0.0f] = sf::Color(165,  0,  0, 200); // slightly transparent red
+                    toBlackGradient[0.9f] = sf::Color( 20, 20, 20,  50); // slightly opaque grey
+                    toBlackGradient[1.0f] = sf::Color(  0,  0,  0,   0); // transparent
+                    thor::ColorAnimation toBlack(toBlackGradient);
+                    m_failParticleSystem.addAffector(thor::AnimationAffector(toBlack), sf::seconds(2.f));
+                    
+                    // play a fail sound and reset the percent text
                     m_failSound.play();
                     m_percentageText.setString("0%");
                 }
@@ -273,7 +300,8 @@ void Spells::update()
     }
 
     // update particle system
-    m_particleSystem.update(frameTime);
+    m_winParticleSystem.update(frameTime);
+    m_failParticleSystem.update(frameTime);
     m_fallingPointParticleSystem.update(frameTime);
 }
 
@@ -283,8 +311,8 @@ void Spells::draw()
     // clear the m_window with black color
     m_window.clear(sf::Color::Black);
 
-    // draw particle system
-    m_window.draw(m_particleSystem);
+    // draw the win particle system
+    m_window.draw(m_winParticleSystem);
 
     // draw the spell
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
@@ -300,6 +328,9 @@ void Spells::draw()
     // draw the falling user points
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.3f));
     m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
+    
+    // draw the fail particle system
+    m_window.draw(m_failParticleSystem, &m_radialGradientShader);
 
     // draw the user spell
     circle.setScale(0.8f, 0.8f);

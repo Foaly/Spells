@@ -103,7 +103,7 @@ void VectorEmitter::setParticleColor(thor::Distribution<sf::Color> particleColor
 
 void VectorEmitter::setParticleTextureIndex(thor::Distribution<unsigned int> particleTextureIndex)
 {
-mParticleTextureIndex = std::move(particleTextureIndex);
+    mParticleTextureIndex = std::move(particleTextureIndex);
 }
 
 std::size_t VectorEmitter::computeParticleCount(sf::Time dt)

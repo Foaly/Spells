@@ -53,12 +53,15 @@ private:
     sf::Clock m_computingClock;
     thor::ParticleSystem m_fallingPointParticleSystem;
     FallingPointEmitter m_fallingPointEmitter;
+    
     sf::SoundBuffer m_failSoundBuffer;
     sf::Sound m_failSound;
+    thor::ParticleSystem m_failParticleSystem;
+    std::vector<sf::Vector2f> m_failedPoints;
 
     sf::Vector2f m_lastPosition;
 
-    thor::ParticleSystem m_particleSystem;
+    thor::ParticleSystem m_winParticleSystem;
 
     sf::Font m_font;
     sf::Text m_percentageText;

@@ -4,16 +4,29 @@
 
 #include "Util.hpp"
 
-#include <iostream>
-
-thor::Distribution<sf::Vector2f> util::Distributions::disk(sf::Vector2f center, float minRadius, float maxRadius)
+namespace util
 {
-    assert(minRadius >= 0.f);
-    assert(maxRadius > minRadius);
-
-    return [=] () -> sf::Vector2f
+    namespace Distributions
     {
-        sf::Vector2f radiusVector = thor::PolarVector2f(thor::random(minRadius, maxRadius), thor::random(0.f, 360.f));
-        return center + radiusVector;
-    };
-}
+        
+        thor::Distribution<sf::Vector2f> disk(sf::Vector2f center, float minRadius, float maxRadius)
+        {
+            assert(minRadius >= 0.f);
+            assert(maxRadius > minRadius);
+
+            return [=] () -> sf::Vector2f
+            {
+                sf::Vector2f radiusVector = thor::PolarVector2f(thor::random(minRadius, maxRadius), thor::random(0.f, 360.f));
+                return center + radiusVector;
+            };
+        }
+
+
+        thor::Distribution<sf::Time> constant(sf::Time time)
+        {
+            return time;
+        }
+
+
+    } // namespace Distributions
+} // namespace util
