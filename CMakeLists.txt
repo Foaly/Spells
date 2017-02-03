@@ -27,11 +27,14 @@ set(SOURCE_FILES main.cpp
                  VectorEmitter.cpp
                  FallingPointEmitter.hpp
                  FallingPointEmitter.cpp
+                 PathResolver.hpp
                  )
 
 # when we are on MacOS create a bundle and
 # put the rescources in it
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(SOURCE_FILES ${SOURCE_FILES}
+                     PathResolver.mm)
 
     file(GLOB_RECURSE RESOURCE_FILES "rundirectory/data/*")
 
@@ -41,6 +44,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 else()
     # on windows there are no bundles
+    set(SOURCE_FILES ${SOURCE_FILES}
+                     PathResolver.cpp)
 
     add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 endif()

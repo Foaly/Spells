@@ -12,6 +12,7 @@
 #include "Spells.hpp"
 #include "Util.hpp"
 #include "VectorEmitter.hpp"
+#include "PathResolver.hpp"
 
 namespace
 {
@@ -36,8 +37,8 @@ Spells::Spells() : m_isUserDrawing(false),
 
     try
     {
-        m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>("data/textures/Circle.png"), thor::Resources::Reuse);
-        m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>("data/textures/old key small.png"), thor::Resources::Reuse);
+        m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
+        m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
     }
     catch (thor::ResourceLoadingException &e)
     {
@@ -51,7 +52,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
 
-    if(!m_font.loadFromFile("data/fonts/BilboSwashCaps-Regular.otf"))
+    if(!m_font.loadFromFile(resolvePath("data/fonts/BilboSwashCaps-Regular.otf")))
     {
         std::cerr << "Failed to load font!" << std::endl;
     }
@@ -65,7 +66,7 @@ Spells::Spells() : m_isUserDrawing(false),
 
     if(sf::Shader::isAvailable())
     {
-        if(!m_radialGradientShader.loadFromFile("data/shader/RadialGradient.frag", sf::Shader::Fragment))
+        if(!m_radialGradientShader.loadFromFile(resolvePath("data/shader/RadialGradient.frag"), sf::Shader::Fragment))
         {
             std::cerr << "Failed to load radial gradient shader!" << std::endl;
         }
