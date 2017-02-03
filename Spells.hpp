@@ -14,6 +14,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Shader.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 #include <Thor/Particles.hpp>
 #include <Thor/Resources/ResourceHolder.hpp>
@@ -51,6 +53,8 @@ private:
     sf::Clock m_computingClock;
     thor::ParticleSystem m_fallingPointParticleSystem;
     FallingPointEmitter m_fallingPointEmitter;
+    sf::SoundBuffer m_failSoundBuffer;
+    sf::Sound m_failSound;
 
     sf::Vector2f m_lastPosition;
 

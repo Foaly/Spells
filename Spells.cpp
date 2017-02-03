@@ -72,6 +72,13 @@ Spells::Spells() : m_isUserDrawing(false),
         }
     }
 
+    if(!m_failSoundBuffer.loadFromFile(resolvePath("data/sounds/fail.wav")))
+    {
+        std::cerr << "Failed to load the fail sound!" << std::endl;
+    }
+
+    m_failSound.setBuffer(m_failSoundBuffer);
+
     m_spellPoints = m_spellGenerator.generateSpirale();
     //auto wave = m_spellGenerator.generateWave();
     //std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
@@ -251,6 +258,12 @@ void Spells::update()
                     emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
                     m_particleSystem.addEmitter(emitter, sf::seconds(2.f));
                 }
+                else
+                {
+                    m_userPoints.clear();
+                    m_failSound.play();
+                    m_percentageText.setString("0%");
+                }
 
                 m_isComputing = false;
             }
@@ -290,7 +303,6 @@ void Spells::draw()
 
     // draw the user spell
     circle.setScale(0.8f, 0.8f);
-    circle.setOrigin(m_userPointRadius, m_userPointRadius);
     circle.setColor(sf::Color(165, 0, 0, 200));
     for(auto position: m_userPoints)
     {
