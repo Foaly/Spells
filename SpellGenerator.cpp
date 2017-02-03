@@ -101,4 +101,3 @@ std::vector<sf::Vector2f> SpellGenerator::generateWave()
 
     return result;
 }
-

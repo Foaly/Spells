@@ -1,39 +1,70 @@
 cmake_minimum_required(VERSION 3.1)
-project(Spells)
+set(PROJECT_NAME "Spells")
+project(${PROJECT_NAME})
 
 
 # Enable debug symbols by default
 if(CMAKE_BUILD_TYPE STREQUAL "")
-  set(CMAKE_BUILD_TYPE Debug)
+    set(CMAKE_BUILD_TYPE Debug)
 endif()
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 
+message(STATUS "Configuring in ${CMAKE_BUILD_TYPE} mode.")
 
 # enable C++11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-# Define sources and executable
-set(EXECUTABLE_NAME "Spells")
-add_executable(${EXECUTABLE_NAME} main.cpp Spells.cpp Spells.hpp SpellGenerator.cpp SpellGenerator.hpp Util.cpp Util.hpp VectorEmitter.cpp VectorEmitter.hpp FallingPointEmitter.cpp FallingPointEmitter.hpp)
+# define sources
+set(EXECUTABLE_NAME "${PROJECT_NAME}")
+set(SOURCE_FILES main.cpp
+                 Spells.hpp
+                 Spells.cpp
+                 SpellGenerator.hpp
+                 SpellGenerator.cpp
+                 Util.hpp
+                 Util.cpp
+                 VectorEmitter.hpp
+                 VectorEmitter.cpp
+                 FallingPointEmitter.hpp
+                 FallingPointEmitter.cpp
+                 )
 
-# Detect and add SFML
-set(SFML_ROOT F:/Librarys/official_SFML/install)
-set(CMAKE_MODULE_PATH "${SFML_ROOT}/cmake/modules" ${CMAKE_MODULE_PATH})
-#Find any version 2.X of SFML
-#See the FindSFML.cmake file for additional details and instructions
-find_package(SFML 2 REQUIRED system window graphics network audio)
-if(SFML_FOUND)
-  include_directories(${SFML_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+# when we are on MacOS create a bundle and
+# put the rescources in it
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
+    file(GLOB_RECURSE RESOURCE_FILES "rundirectory/data/*")
+
+    add_executable(${EXECUTABLE_NAME} MACOSX_BUNDLE ${SOURCE_FILES} ${RESOURCE_FILES})
+
+    set_source_files_properties(${RESOURCE_FILES}
+        PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+else()
+    # on windows there are no bundles
+
+    add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 endif()
 
-set(THOR_ROOT F:/Librarys/Thor/Install)
-set(CMAKE_MODULE_PATH "${THOR_ROOT}/cmake/modules" ${CMAKE_MODULE_PATH})
+
+# Add our CMake scripts
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
+
+# Detect and add any version 2.X of SFML
+# See the FindSFML.cmake file for additional details and instructions
+find_package(SFML 2 COMPONENTS system window graphics network audio REQUIRED)
+if(SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+    target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+endif()
+
+
+# Detect and add Thor
 find_package(Thor 2 REQUIRED)
 if(THOR_FOUND)
-  include_directories(${THOR_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${THOR_LIBRARY})
+    include_directories(${THOR_INCLUDE_DIR})
+    target_link_libraries(${EXECUTABLE_NAME} ${THOR_LIBRARY})
 endif()
 
 # Install target
-install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
+#install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

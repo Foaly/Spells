@@ -42,6 +42,7 @@ Spells::Spells() : m_isUserDrawing(false),
     catch (thor::ResourceLoadingException &e)
     {
         std::cout << e.what() << std::endl;
+        // TODO: better error handeling, program will crash on texture access, maybe shutdown gracefully
     }
 
     // set particle texture
