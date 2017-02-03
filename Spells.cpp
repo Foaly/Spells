@@ -287,7 +287,7 @@ void Spells::draw()
     m_window.draw(m_particleSystem);
 
     // draw the spell
-    m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.4f));
+    m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
     sf::Sprite circle(m_textures["circle"]);
     circle.setOrigin(25, 25);
     circle.setColor(sf::Color(255, 255, 255, 100));
@@ -298,7 +298,7 @@ void Spells::draw()
     }
 
     // draw the falling user points
-    m_radialGradientShader.setParameter("radiuses", sf::Vector2f(0.5f, 0.3f));
+    m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.3f));
     m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
 
     // draw the user spell
