@@ -22,7 +22,7 @@ namespace util
         ///
         /// \brief A uniform random distribution in a certain range of a circle. Comparable to a disk.
         ///
-        thor::Distribution<sf::Vector2f> disk(sf::Vector2f center, float minRadius, float maxRadius);
+        thor::Distribution<sf::Vector2f> disk(float minRadius, float maxRadius, sf::Vector2f center = sf::Vector2f(0.f, 0.f));
         
         ///
         /// \brief A constant "distribution". Always returns the same value

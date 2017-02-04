@@ -9,7 +9,7 @@ namespace util
     namespace Distributions
     {
         
-        thor::Distribution<sf::Vector2f> disk(sf::Vector2f center, float minRadius, float maxRadius)
+        thor::Distribution<sf::Vector2f> disk(float minRadius, float maxRadius, sf::Vector2f center)
         {
             assert(minRadius >= 0.f);
             assert(maxRadius > minRadius);

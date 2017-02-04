@@ -62,6 +62,8 @@ private:
     sf::Vector2f m_lastPosition;
 
     thor::ParticleSystem m_winParticleSystem;
+    
+    sf::Sprite m_backgroundSprite;
 
     sf::Font m_font;
     sf::Text m_percentageText;

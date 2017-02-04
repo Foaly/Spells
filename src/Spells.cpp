@@ -30,7 +30,7 @@ namespace
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
-                   m_window(sf::VideoMode(1024, 798), "Spells"),
+                   m_window(sf::VideoMode(1280, 800), "Spells"),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
                    m_spellGenerator(m_windowCenter)
@@ -42,12 +42,18 @@ Spells::Spells() : m_isUserDrawing(false),
     {
         m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
         m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
+        m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
     }
     catch (thor::ResourceLoadingException &e)
     {
         std::cout << e.what() << std::endl;
         // TODO: better error handeling, program will crash on texture access, maybe shutdown gracefully
     }
+    
+    // set up background
+    m_textures["arches"].setSmooth(true);
+    m_backgroundSprite.setTexture(m_textures["arches"]);
+    m_backgroundSprite.setScale(static_cast<float>(m_window.getSize().x) / m_textures["arches"].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures["arches"].getSize().y);
 
     // set up the particle systems
     m_winParticleSystem.setTexture(m_textures["key"]);
@@ -88,8 +94,8 @@ Spells::Spells() : m_isUserDrawing(false),
 
     //m_spellPoints = m_spellGenerator.generateSpirale();
     //m_spellPoints = m_spellGenerator.generateWave();
-    
-    BezierCurve curve(sf::Vector2f(200, 400), sf::Vector2f(400, 100), sf::Vector2f(600, 700), sf::Vector2f(800, 400));
+
+    BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
 
 
@@ -264,14 +270,14 @@ void Spells::update()
                     VectorEmitter emitter(m_spellPoints);
                     emitter.setEmissionRate(10);
                     emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
-                    emitter.setParticleVelocity( util::Distributions::disk(sf::Vector2f(), 100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
+                    emitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
                     emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
                     emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
                     m_winParticleSystem.addEmitter(emitter, sf::seconds(2.f));
                 }
                 else
                 {
-                    // copy the failed points
+                    // move the failed points
                     m_failedPoints = std::move(m_userPoints);
 
                     // generate a particle for each failed point
@@ -315,6 +321,9 @@ void Spells::draw()
 {
     // clear the m_window with black color
     m_window.clear(sf::Color::Black);
+    
+    // draw background
+    m_window.draw(m_backgroundSprite);
 
     // draw the win particle system
     m_window.draw(m_winParticleSystem);
