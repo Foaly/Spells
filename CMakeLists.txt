@@ -42,6 +42,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     set_source_files_properties(${RESOURCE_FILES}
         PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+  	set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/osx/Info.plist.in)
 else()
     # on windows there are no bundles
     set(SOURCE_FILES ${SOURCE_FILES}
@@ -61,6 +62,8 @@ find_package(SFML 2 COMPONENTS system window graphics network audio REQUIRED)
 if(SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+else()
+	  message(FATAL_ERROR "Unable to find SFML!")
 endif()
 
 
@@ -69,7 +72,6 @@ find_package(Thor 2 REQUIRED)
 if(THOR_FOUND)
     include_directories(${THOR_INCLUDE_DIR})
     target_link_libraries(${EXECUTABLE_NAME} ${THOR_LIBRARY})
+else()
+	  message(FATAL_ERROR "Unable to find Thor!")
 endif()
-
-# Install target
-#install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
