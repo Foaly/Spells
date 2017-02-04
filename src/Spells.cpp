@@ -38,17 +38,10 @@ Spells::Spells() : m_isUserDrawing(false),
     // limit frame time
     m_window.setFramerateLimit(60);
 
-    try
-    {
-        m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
-        m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
-        m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
-    }
-    catch (thor::ResourceLoadingException &e)
-    {
-        std::cout << e.what() << std::endl;
-        // TODO: better error handeling, program will crash on texture access, maybe shutdown gracefully
-    }
+    // load textures
+    m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
+    m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
+    m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
     
     // set up background
     m_textures["arches"].setSmooth(true);
