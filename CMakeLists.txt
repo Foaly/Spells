@@ -16,25 +16,26 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # define sources
 set(EXECUTABLE_NAME "${PROJECT_NAME}")
-set(SOURCE_FILES main.cpp
-                 Spells.hpp
-                 Spells.cpp
-                 SpellGenerator.hpp
-                 SpellGenerator.cpp
-                 Util.hpp
-                 Util.cpp
-                 VectorEmitter.hpp
-                 VectorEmitter.cpp
-                 FallingPointEmitter.hpp
-                 FallingPointEmitter.cpp
-                 PathResolver.hpp
+include_directories("src/*")
+set(SOURCE_FILES src/main.cpp
+                 src/Spells.hpp
+                 src/Spells.cpp
+                 src/SpellGenerator.hpp
+                 src/SpellGenerator.cpp
+                 src/Util.hpp
+                 src/Util.cpp
+                 src/VectorEmitter.hpp
+                 src/VectorEmitter.cpp
+                 src/FallingPointEmitter.hpp
+                 src/FallingPointEmitter.cpp
+                 src/PathResolver.hpp
                  )
 
 # when we are on MacOS create a bundle and
 # put the rescources in it
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(SOURCE_FILES ${SOURCE_FILES}
-                     PathResolver.mm)
+                     src/osx/PathResolver.mm)
 
     file(GLOB_RECURSE RESOURCE_FILES "rundirectory/data/*")
 
@@ -42,11 +43,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     set_source_files_properties(${RESOURCE_FILES}
         PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-  	set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/osx/Info.plist.in)
+  	set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/osx/Info.plist.in)
 else()
     # on windows there are no bundles
     set(SOURCE_FILES ${SOURCE_FILES}
-                     PathResolver.cpp)
+                     src/PathResolver.cpp)
 
     add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 endif()

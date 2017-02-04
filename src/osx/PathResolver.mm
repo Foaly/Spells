@@ -1,4 +1,4 @@
-#include "PathResolver.hpp"
+#include "../PathResolver.hpp"
 #import <Foundation/Foundation.h>
 
 // On OSX take the path and extract the file name
