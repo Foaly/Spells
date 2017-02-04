@@ -10,7 +10,9 @@ class BezierCurve
 public:
     BezierCurve(sf::Vector2f p0, sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3);
     
-    std::vector<sf::Vector2f> calculatePoints(std::size_t pointCount);
+    std::vector<sf::Vector2f> generateRegularPoints(std::size_t pointCount);
+    sf::Vector2f              calculatePoint(float t);
+    std::vector<sf::Vector2f> generateEvenlySpacedPoints(float distanceBetweenPoints);
     
 private:
     

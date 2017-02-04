@@ -89,8 +89,8 @@ Spells::Spells() : m_isUserDrawing(false),
     //m_spellPoints = m_spellGenerator.generateSpirale();
     //m_spellPoints = m_spellGenerator.generateWave();
     
-    BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(300, 300), sf::Vector2f(700, 300), sf::Vector2f(700, 400));
-    m_spellPoints = curve.calculatePoints(15);
+    BezierCurve curve(sf::Vector2f(200, 400), sf::Vector2f(400, 100), sf::Vector2f(600, 700), sf::Vector2f(800, 400));
+    m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
 
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
