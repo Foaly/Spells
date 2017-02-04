@@ -15,6 +15,7 @@
 #include "Util.hpp"
 #include "VectorEmitter.hpp"
 #include "PathResolver.hpp"
+#include "Bezier.hpp"
 
 namespace
 {
@@ -85,12 +86,16 @@ Spells::Spells() : m_isUserDrawing(false),
 
     m_failSound.setBuffer(m_failSoundBuffer);
 
-    m_spellPoints = m_spellGenerator.generateSpirale();
-    //auto wave = m_spellGenerator.generateWave();
-    //std::copy(wave.begin(), wave.end(), back_inserter(m_spellPoints));
+    //m_spellPoints = m_spellGenerator.generateSpirale();
+    //m_spellPoints = m_spellGenerator.generateWave();
+    
+    BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(300, 300), sf::Vector2f(700, 300), sf::Vector2f(700, 400));
+    m_spellPoints = curve.calculatePoints(15);
 
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
+    std::cout << "Thor version: " << THOR_VERSION_MAJOR << "." << THOR_VERSION_MINOR << std::endl;
+    std::cout << std::endl;
 }
 
 
@@ -203,7 +208,7 @@ void Spells::update()
     }
     else if(m_isComputing)
     {
-        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30))
+        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30)) // this clock determines the speed at which the wrong points fall
         {
             bool didUserPointHit = false;
             const sf::Vector2f userPointPosition(*m_userPointIter);

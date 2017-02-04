@@ -29,6 +29,8 @@ set(SOURCE_FILES src/main.cpp
                  src/FallingPointEmitter.hpp
                  src/FallingPointEmitter.cpp
                  src/PathResolver.hpp
+                 src/Bezier.hpp
+                 src/Bezier.cpp
                  )
 
 # when we are on MacOS create a bundle and
