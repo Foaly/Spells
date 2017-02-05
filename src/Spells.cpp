@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <Thor/Math.hpp>
 #include <Thor/Resources/SfmlLoaders.hpp>
@@ -29,7 +30,7 @@ namespace
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
-                   m_window(sf::VideoMode(1280, 800), "Spells"),
+                   m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
                    m_spellGenerator(m_windowCenter)
@@ -39,13 +40,24 @@ Spells::Spells() : m_isUserDrawing(false),
 
     // load textures
     m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
+    m_textures.acquire("rect", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Rect.png")), thor::Resources::Reuse);
     m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
     m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
+    m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
+    
+    std::string bgTextureName = "door";
     
     // set up background
-    m_textures["arches"].setSmooth(true);
-    m_backgroundSprite.setTexture(m_textures["arches"]);
-    m_backgroundSprite.setScale(static_cast<float>(m_window.getSize().x) / m_textures["arches"].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures["arches"].getSize().y);
+    m_textures[bgTextureName].setSmooth(true);
+    m_backgroundSprite.setTexture(m_textures[bgTextureName]);
+    sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
+    m_backgroundSprite.setScale(scale);
+    std::cout << "Scale: " << scale.x << "x" << scale.y << std::endl;
+    
+    m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
+    m_overlayRect.setPosition(100, 25);
+    m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
+    m_overlayRect.setTexture(&m_textures["rect"]);
 
     // set up the particle systems
     m_winParticleSystem.setTexture(m_textures["key"]);
@@ -75,6 +87,12 @@ Spells::Spells() : m_isUserDrawing(false),
         {
             std::cerr << "Failed to load radial gradient shader!" << std::endl;
         }
+        if(!m_rectangleGradientShader.loadFromFile(resolvePath("data/shader/RectangleGradient.frag"), sf::Shader::Fragment))
+        {
+            std::cerr << "Failed to load radial gradient shader!" << std::endl;
+        }
+        m_rectangleGradientShader.setUniform("leftTop", sf::Vector2f(0.f, 0.05f));
+        m_rectangleGradientShader.setUniform("rightBottom", sf::Vector2f(0.95f, 1.0));
     }
 
     if(!m_failSoundBuffer.loadFromFile(resolvePath("data/sounds/fail.wav")))
@@ -262,7 +280,7 @@ void Spells::update()
                 if(percent > 70.f)
                 {
                     VectorEmitter emitter(m_spellPoints);
-                    emitter.setEmissionRate(10);
+                    emitter.setEmissionRate(20);
                     emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
                     emitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
                     emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
@@ -318,6 +336,8 @@ void Spells::draw()
     
     // draw background
     m_window.draw(m_backgroundSprite);
+    
+    m_window.draw(m_overlayRect, &m_rectangleGradientShader);
 
     // draw the win particle system
     m_window.draw(m_winParticleSystem);

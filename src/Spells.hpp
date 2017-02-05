@@ -9,6 +9,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -64,11 +65,13 @@ private:
     thor::ParticleSystem m_winParticleSystem;
     
     sf::Sprite m_backgroundSprite;
+    sf::RectangleShape m_overlayRect;
 
     sf::Font m_font;
     sf::Text m_percentageText;
 
     sf::Shader m_radialGradientShader;
+    sf::Shader m_rectangleGradientShader;
 };
 
 
