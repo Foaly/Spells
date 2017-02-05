@@ -41,9 +41,11 @@ Spells::Spells() : m_isUserDrawing(false),
     // load textures
     m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
     m_textures.acquire("rect", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Rect.png")), thor::Resources::Reuse);
+    m_textures.acquire("star", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Star.png")), thor::Resources::Reuse);
     m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
     m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
     m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
+    m_textures.acquire("green house", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green house.png")), thor::Resources::Reuse);
     m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
     
     std::string bgTextureName = "door";
@@ -73,7 +75,29 @@ Spells::Spells() : m_isUserDrawing(false),
     
     m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
-
+    
+    m_textures["star"].setRepeated(false);
+    m_wandParticles.setTexture(m_textures["star"]);
+    m_wandParticles.addTextureRect(sf::IntRect(0, 0, 12, 12));
+    m_wandParticles.addTextureRect(sf::IntRect(12, 0, 24, 12));
+    m_wandEmitter.setEmissionRate(30.f);
+    m_wandEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(0.8f), sf::seconds(1.0f)));
+    m_wandEmitter.setParticlePosition( thor::Distributions::circle(sf::Vector2f(300, 300), 10) );
+    m_wandEmitter.setParticleVelocity( util::Distributions::disk(60.f, 100.f) );
+    m_wandEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );
+    m_wandEmitter.setParticleRotationSpeed( thor::Distributions::uniform(40.f, 60.f));
+    m_wandEmitter.setParticleTextureIndex( thor::Distributions::uniform(0, 1));
+    m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
+    
+    thor::ForceAffector forceAffector(sf::Vector2f(0, 150));
+    m_wandParticles.addAffector(forceAffector);
+    
+    thor::ColorGradient goldGradient;
+    goldGradient[0.0f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
+    goldGradient[0.8f] = sf::Color(255, 200, 50, 200);
+    goldGradient[1.0f] = sf::Color(255, 200, 50,   0); // transparent gold
+    thor::ColorAnimation goldToTransparent(goldGradient);
+    m_wandParticles.addAffector(thor::AnimationAffector(goldToTransparent));
     
     // font loading and text setup
     if(!m_font.loadFromFile(resolvePath("data/fonts/BilboSwashCaps-Regular.otf")))
@@ -200,6 +224,7 @@ void Spells::handleEvents()
                     m_userPointIter = m_userPoints.begin();
                     m_numberOfPointsHit = 0;
                     m_computingClock.restart();
+                    m_wandParticles.clearEmitters();
                 }
             }
         }
@@ -212,8 +237,12 @@ void Spells::update()
     // get frame time
     const sf::Time frameTime = m_frameClock.restart();
     
+    // get mouse position
     const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
+    
+    // update wand
     m_wand.setPosition(mousePosition);
+    m_wandEmitter.setParticlePosition(mousePosition );
     
     if(m_isUserDrawing)
     {
@@ -324,6 +353,7 @@ void Spells::update()
                 }
 
                 m_isComputing = false;
+                m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
             }
 
             m_computingClock.restart();
@@ -334,6 +364,7 @@ void Spells::update()
     m_winParticleSystem.update(frameTime);
     m_failParticleSystem.update(frameTime);
     m_fallingPointParticleSystem.update(frameTime);
+    m_wandParticles.update(frameTime);
 }
 
 
@@ -380,6 +411,8 @@ void Spells::draw()
     // draw percentage text
     m_window.draw(m_percentageText);
     
+    // draw wand
+    m_window.draw(m_wandParticles);
     m_window.draw(m_wand);
 
     // end the current frame

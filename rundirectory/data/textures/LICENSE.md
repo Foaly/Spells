@@ -6,6 +6,8 @@ License
 | arches.png | [CC BY-SA 2.0] [by-sa-2.0] | Frank Schulenburg | `8377772511_74c076f4f4_o.jpg` | https://www.flickr.com/photos/frank_schulenburg/8377772511/ |
 | circle.png | [CC0] [cc0]                | Foaly             | ---                           | Image was created for this game                             |
 | wand.png   | [CC BY-SA 4.0] [by-sa-4.0] | Foaly             | ---                           | Image was created for this game                             |
+| Star.png   | [CC0] [cc0]                | Foaly             | ---                           | Image was created for this game                             |
+
 
 
 Remixes

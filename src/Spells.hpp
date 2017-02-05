@@ -67,6 +67,8 @@ private:
     sf::Sprite m_backgroundSprite;
     sf::RectangleShape m_overlayRect;
     sf::Sprite m_wand;
+    thor::ParticleSystem m_wandParticles;
+    thor::UniversalEmitter m_wandEmitter;
 
     sf::Font m_font;
     sf::Text m_percentageText;
