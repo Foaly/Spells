@@ -66,6 +66,7 @@ private:
     
     sf::Sprite m_backgroundSprite;
     sf::RectangleShape m_overlayRect;
+    sf::Sprite m_wand;
 
     sf::Font m_font;
     sf::Text m_percentageText;

@@ -44,6 +44,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
     m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
     m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
+    m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
     
     std::string bgTextureName = "door";
     
@@ -52,12 +53,18 @@ Spells::Spells() : m_isUserDrawing(false),
     m_backgroundSprite.setTexture(m_textures[bgTextureName]);
     sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
     m_backgroundSprite.setScale(scale);
-    std::cout << "Scale: " << scale.x << "x" << scale.y << std::endl;
+    std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
     
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
     m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
     m_overlayRect.setTexture(&m_textures["rect"]);
+    
+    m_window.setMouseCursorVisible(false);
+    m_textures["wand"].setSmooth(true);
+    m_wand.setTexture(m_textures["wand"]);
+    m_wand.setScale(-1.f, 1.f); // uncomment for left hand
+    m_wand.setOrigin(94.f, 3.f);
 
     // set up the particle systems
     m_winParticleSystem.setTexture(m_textures["key"]);
@@ -204,12 +211,13 @@ void Spells::update()
 {
     // get frame time
     const sf::Time frameTime = m_frameClock.restart();
-
+    
+    const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
+    m_wand.setPosition(mousePosition);
+    
     if(m_isUserDrawing)
     {
-        const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
         const sf::Vector2f delta(mousePosition - m_lastPosition);
-
         const float movementLength = thor::length(delta);
 
         // add a point for every 20 pixel the mouse moves between two frames
@@ -371,6 +379,8 @@ void Spells::draw()
 
     // draw percentage text
     m_window.draw(m_percentageText);
+    
+    m_window.draw(m_wand);
 
     // end the current frame
     m_window.display();
