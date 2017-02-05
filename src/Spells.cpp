@@ -15,7 +15,6 @@
 #include "Util.hpp"
 #include "VectorEmitter.hpp"
 #include "PathResolver.hpp"
-#include "Bezier.hpp"
 
 namespace
 {
@@ -88,8 +87,10 @@ Spells::Spells() : m_isUserDrawing(false),
     //m_spellPoints = m_spellGenerator.generateSpirale();
     //m_spellPoints = m_spellGenerator.generateWave();
 
-    BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
-    m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
+    //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
+    //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
+    
+    m_spellPoints = loadPathsFromFile(resolvePath("data/svg/Alohomora.svg"));
 
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;

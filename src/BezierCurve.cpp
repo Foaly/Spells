@@ -1,4 +1,4 @@
-#include "Bezier.hpp"
+#include "BezierCurve.hpp"
 
 #include <cmath>
 #include <cassert>

@@ -14,6 +14,8 @@
 #include <Thor/Vectors/PolarVector2.hpp>
 
 #include <cassert>
+#include <vector>
+#include <string>
 
 namespace util
 {
@@ -30,6 +32,8 @@ namespace util
         thor::Distribution<sf::Time> constant(sf::Time time);
     }
 }
+
+std::vector<sf::Vector2f> loadPathsFromFile(std::string filename);
 
 
 #endif //SPELLS_UTIL_H
