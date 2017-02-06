@@ -32,6 +32,10 @@ set(SOURCE_FILES src/main.cpp
                  src/BezierCurve.hpp
                  src/BezierCurve.cpp
                  src/nanosvg/nanosvg.h
+                 src/SettingsParser/SettingsParser.hpp
+                 src/SettingsParser/SettingsParser.cpp
+                 src/Level.hpp
+                 src/Level.cpp
                  )
 
 # when we are on MacOS create a bundle and

@@ -48,15 +48,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_textures.acquire("green house", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green house.png")), thor::Resources::Reuse);
     m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
     
-    std::string bgTextureName = "door";
-    
-    // set up background
-    m_textures[bgTextureName].setSmooth(true);
-    m_backgroundSprite.setTexture(m_textures[bgTextureName]);
-    sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
-    m_backgroundSprite.setScale(scale);
-    std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
-    
+    // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
     m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
@@ -139,8 +131,8 @@ Spells::Spells() : m_isUserDrawing(false),
     //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
     
-    m_spellPoints = loadPathsFromFile(resolvePath("data/svg/Alohomora.svg"));
-
+    loadLevel(resolvePath("data/spells/Alohomora.spell"));
+    
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
     std::cout << "Thor version: " << THOR_VERSION_MAJOR << "." << THOR_VERSION_MINOR << std::endl;
@@ -417,4 +409,28 @@ void Spells::draw()
 
     // end the current frame
     m_window.display();
+}
+
+
+void Spells::loadLevel(std::string filename)
+{
+    m_level.loadFromFile(filename); // TODO: error handeling
+    
+    std::string bgTextureName = m_level.m_backgroundTextureName;
+    // make sure key is valid
+    try {
+        m_textures[bgTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
+    } catch (thor::ResourceAccessException& e) {
+        bgTextureName = "arches"; // default
+    }
+    
+    // set up background
+    m_textures[bgTextureName].setSmooth(true);
+    m_backgroundSprite.setTexture(m_textures[bgTextureName]);
+    sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
+    m_backgroundSprite.setScale(scale);
+    std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
+    
+    // set up path
+    m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + m_level.m_svgPath));
 }

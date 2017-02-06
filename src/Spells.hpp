@@ -6,6 +6,7 @@
 #define SPELLS_SPELLS_H
 
 #include <vector>
+#include <string>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -23,6 +24,7 @@
 
 #include "SpellGenerator.hpp"
 #include "FallingPointEmitter.hpp"
+#include "Level.hpp"
 
 class Spells {
 public:
@@ -35,6 +37,7 @@ private:
     void handleEvents();
     void update();
     void draw();
+    void loadLevel(std::string filename);
 
     bool m_isUserDrawing;
     bool m_isComputing;
@@ -69,6 +72,8 @@ private:
     sf::Sprite m_wand;
     thor::ParticleSystem m_wandParticles;
     thor::UniversalEmitter m_wandEmitter;
+    
+    Level m_level;
 
     sf::Font m_font;
     sf::Text m_percentageText;
