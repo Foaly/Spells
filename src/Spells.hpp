@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -37,7 +38,8 @@ private:
     void handleEvents();
     void update();
     void draw();
-    void loadLevel(std::string filename);
+    void loadSpells(std::string spellsFileDirectory);
+    void setSpell(Level& spell);
 
     bool m_isUserDrawing;
     bool m_isComputing;
@@ -73,7 +75,8 @@ private:
     thor::ParticleSystem m_wandParticles;
     thor::UniversalEmitter m_wandEmitter;
     
-    Level m_level;
+    std::map<std::string, Level> m_level;
+    std::map<std::string, Level>::iterator m_currentSpell;
 
     sf::Font m_font;
     sf::Text m_percentageText;

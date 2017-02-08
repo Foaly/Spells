@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <sstream>
+#include <iterator>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -131,7 +132,10 @@ Spells::Spells() : m_isUserDrawing(false),
     //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
     
-    loadLevel(resolvePath("data/spells/Alohomora.spell"));
+    loadSpells(resolvePath("data/spells/"));
+    
+    m_currentSpell = m_level.begin();
+    setSpell(m_currentSpell->second);
     
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
@@ -182,6 +186,27 @@ void Spells::handleEvents()
                 case sf::Keyboard::C:
                     m_userPoints.clear();
                     m_percentageText.setString("0%");
+                    break;
+                // switch to the next spell
+                case sf::Keyboard::Right:
+                    if (!m_isComputing)
+                    {
+                        m_currentSpell++;
+                        if (m_currentSpell == m_level.end())
+                            m_currentSpell = m_level.begin();
+                        setSpell(m_currentSpell->second);
+                    }
+                    break;
+                // switch to the previous spell
+                case sf::Keyboard::Left:
+                    if (!m_isComputing)
+                    {
+                        if (m_currentSpell == m_level.begin())
+                            m_currentSpell = std::prev(m_level.end());
+                        else
+                            m_currentSpell--;
+                        setSpell(m_currentSpell->second);
+                    }
                     break;
                 default:
                     break;
@@ -412,19 +437,46 @@ void Spells::draw()
 }
 
 
-void Spells::loadLevel(std::string filename)
+void Spells::loadSpells(std::string spellsFileDirectory)
 {
-    m_level.loadFromFile(filename); // TODO: error handeling
+    // TODO: resolvePath should return the bundle path when no file is entered
     
-    std::string bgTextureName = m_level.m_backgroundTextureName;
-    // make sure key is valid
-    try {
-        m_textures[bgTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
-    } catch (thor::ResourceAccessException& e) {
-        bgTextureName = "arches"; // default
+    // TODO: boost filesystem: get all files in spellsFileDirectory
+    // filter: get only *.svg files
+    
+    std::vector<std::string> files;
+    files.push_back(resolvePath("data/spells/Alohomora.spell"));
+    files.push_back(resolvePath("data/spells/Avis.spell"));
+
+    for (auto &file: files)
+    {
+        Level level;
+        if (!level.loadFromFile(file))
+            break;
+        
+        if (level.m_name.empty() || level.m_svgPath.empty() || level.m_backgroundTextureName.empty())
+            break;
+
+        // make sure background texture key is valid
+        try {
+            m_textures[level.m_backgroundTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
+        } catch (thor::ResourceAccessException& e) {
+            level.m_backgroundTextureName = "arches"; // default
+        }
+        
+        m_level[level.m_name] = level;
     }
+}
+
+
+void Spells::setSpell(Level& spell)
+{
+    // reset
+    m_userPoints.clear();
+    m_percentageText.setString("0%");
     
     // set up background
+    std::string bgTextureName = spell.m_backgroundTextureName;
     m_textures[bgTextureName].setSmooth(true);
     m_backgroundSprite.setTexture(m_textures[bgTextureName]);
     sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
@@ -432,5 +484,5 @@ void Spells::loadLevel(std::string filename)
     std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
     
     // set up path
-    m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + m_level.m_svgPath));
+    m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + spell.m_svgPath));
 }
