@@ -1,3 +1,19 @@
+/// Spells - a game about magic spells
+/// Copyright (C) 2015 - 2017  Foaly
+
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+
+/// You should have received a copy of the GNU General Public License
+/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "BezierCurve.hpp"
 
 #include <cmath>
@@ -17,7 +33,7 @@ BezierCurve::BezierCurve(sf::Vector2f p0, sf::Vector2f p1, sf::Vector2f p2, sf::
     m_p2(p2),
     m_p3(p3)
 {
-    
+
 }
 
 
@@ -29,16 +45,16 @@ BezierCurve::BezierCurve(sf::Vector2f p0, sf::Vector2f p1, sf::Vector2f p2, sf::
 std::vector<sf::Vector2f> BezierCurve::generateRegularPoints(std::size_t pointCount)
 {
     assert(pointCount > 1);
-    
+
     std::vector<sf::Vector2f> result;
     result.reserve(pointCount);
-    
+
     for(std::size_t i = 0; i < pointCount; i++)
     {
         float t = static_cast<float>(i) / (pointCount - 1);
         result.push_back(calculatePoint(t));
     }
-    
+
     return result;
 }
 
@@ -63,15 +79,15 @@ sf::Vector2f BezierCurve::calculatePoint(float t)
 std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distanceBetweenPoints)
 {
     assert(distanceBetweenPoints >= 1.f);
-    
+
     // The following solution to the problem of putting points with even distributed
     // distances along a curve was solved with this very helpful post:
     // https://gamedev.stackexchange.com/questions/5373/moving-ships-between-two-planets-along-a-bezier-missing-some-equations-for-acce/5427#5427
-    
+
     const float numberOfSegments = 100.f; // this should never be below 1
     std::vector<float> segmentLengths(numberOfSegments + 1);
     segmentLengths[0] = 0.f;
-    
+
     // precalculate a number of points on the curve
     // measure the distance between them and store it
     float currentLength = 0.f;
@@ -85,7 +101,7 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
         previousPoint = currentPoint;
     }
     const float curveLength = currentLength;
-    
+
     // map the normalized length on the curve back onto the interpolation parameter t
     auto map = [&](float u)
     {
@@ -98,7 +114,7 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
             index = low + static_cast<unsigned int>((high - low) / 2);
             if (segmentLengths[index] < targetLength) {
                 low = index + 1;
-                
+
             } else {
                 high = index;
             }
@@ -106,7 +122,7 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
         if (segmentLengths[index] > targetLength) {
             index--;
         }
-        
+
         float lengthBefore = segmentLengths[index];
         if (lengthBefore == targetLength) {
             return index / numberOfSegments;
@@ -114,12 +130,12 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
             return (index + (targetLength - lengthBefore) / (segmentLengths[index + 1] - lengthBefore)) / numberOfSegments;
         }
     };
-    
+
     assert(distanceBetweenPoints < curveLength);
 
     // compute how many segments of a given length fit on the curve
     std::size_t pointCount = std::floor(curveLength / distanceBetweenPoints);
-    
+
     // compute the points on the curve
     std::vector<sf::Vector2f> result;
     result.reserve(pointCount);

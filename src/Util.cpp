@@ -1,6 +1,21 @@
-//
-// Created by Maximilian on 26.07.2015.
-//
+/// Spells - a game about magic spells
+/// Copyright (C) 2015 - 2017  Foaly
+
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+
+/// You should have received a copy of the GNU General Public License
+/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+// File created by Maximilian on 26.07.2015.
+
 
 #include "Util.hpp"
 #include "BezierCurve.hpp"
@@ -18,7 +33,7 @@ namespace util
 {
     namespace Distributions
     {
-        
+
         thor::Distribution<sf::Vector2f> disk(float minRadius, float maxRadius, sf::Vector2f center)
         {
             assert(minRadius >= 0.f);
@@ -62,16 +77,16 @@ std::vector<sf::Vector2f> loadPathsFromFile(std::string filename)
             for (int i = 0; i < path->npts-1; i += 3)
             {
                 float* p = &path->pts[i*2];
-                
+
                 BezierCurve curve(sf::Vector2f(p[0],p[1]), sf::Vector2f(p[2],p[3]), sf::Vector2f(p[4],p[5]), sf::Vector2f(p[6],p[7]));
                 auto points = curve.generateEvenlySpacedPoints(20.f);
                 result.insert(std::end(result), std::begin(points), std::end(points));
             }
         }
     }
-    
+
     // free memory
     nsvgDelete(image);
-    
+
     return result;
 }

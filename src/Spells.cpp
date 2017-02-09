@@ -1,6 +1,21 @@
-//
+/// Spells - a game about magic spells
+/// Copyright (C) 2015 - 2017  Foaly
+
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+
+/// You should have received a copy of the GNU General Public License
+/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 // Created by Maximilian on 19.06.2015.
-//
+
 #include <iostream>
 #include <sstream>
 #include <iterator>
@@ -48,13 +63,13 @@ Spells::Spells() : m_isUserDrawing(false),
     m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
     m_textures.acquire("green house", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green house.png")), thor::Resources::Reuse);
     m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
-    
+
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
     m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
     m_overlayRect.setTexture(&m_textures["rect"]);
-    
+
     m_window.setMouseCursorVisible(false);
     m_textures["wand"].setSmooth(true);
     m_wand.setTexture(m_textures["wand"]);
@@ -65,10 +80,10 @@ Spells::Spells() : m_isUserDrawing(false),
     m_winParticleSystem.setTexture(m_textures["key"]);
 
     m_failParticleSystem.setTexture(m_textures["circle"]);
-    
+
     m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
-    
+
     m_textures["star"].setRepeated(false);
     m_wandParticles.setTexture(m_textures["star"]);
     m_wandParticles.addTextureRect(sf::IntRect(0, 0, 12, 12));
@@ -81,17 +96,17 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wandEmitter.setParticleRotationSpeed( thor::Distributions::uniform(40.f, 60.f));
     m_wandEmitter.setParticleTextureIndex( thor::Distributions::uniform(0, 1));
     m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
-    
+
     thor::ForceAffector forceAffector(sf::Vector2f(0, 150));
     m_wandParticles.addAffector(forceAffector);
-    
+
     thor::ColorGradient goldGradient;
     goldGradient[0.0f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
     goldGradient[0.8f] = sf::Color(255, 200, 50, 200);
     goldGradient[1.0f] = sf::Color(255, 200, 50,   0); // transparent gold
     thor::ColorAnimation goldToTransparent(goldGradient);
     m_wandParticles.addAffector(thor::AnimationAffector(goldToTransparent));
-    
+
     // font loading and text setup
     if(!m_font.loadFromFile(resolvePath("data/fonts/BilboSwashCaps-Regular.otf")))
     {
@@ -131,12 +146,12 @@ Spells::Spells() : m_isUserDrawing(false),
 
     //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
-    
+
     loadSpells(resolvePath("data/spells/"));
-    
+
     m_currentSpell = m_level.begin();
     setSpell(m_currentSpell->second);
-    
+
 
     std::cout << "SFML version: " << SFML_VERSION_MAJOR << "." << SFML_VERSION_MINOR << "." << SFML_VERSION_PATCH << std::endl;
     std::cout << "Thor version: " << THOR_VERSION_MAJOR << "." << THOR_VERSION_MINOR << std::endl;
@@ -253,14 +268,14 @@ void Spells::update()
 {
     // get frame time
     const sf::Time frameTime = m_frameClock.restart();
-    
+
     // get mouse position
     const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
-    
+
     // update wand
     m_wand.setPosition(mousePosition);
     m_wandEmitter.setParticlePosition(mousePosition );
-    
+
     if(m_isUserDrawing)
     {
         const sf::Vector2f delta(mousePosition - m_lastPosition);
@@ -351,11 +366,11 @@ void Spells::update()
                     emitter.setEmissionRate(0);
                     emitter.setParticleLifetime( util::Distributions::constant(sf::seconds(1.8f)) );
                     m_failParticleSystem.addEmitter(emitter, sf::seconds(2.f));
-                    
+
                     // scale the particles up
                     thor::ScaleAffector scaleUp(sf::Vector2f(1.1, 1.1));
                     m_failParticleSystem.addAffector(scaleUp, sf::seconds(2.f));
-                    
+
                     // fade the points from red to black to transparent
                     thor::ColorGradient toBlackGradient;
                     toBlackGradient[0.0f] = sf::Color(165,  0,  0, 200); // slightly transparent red
@@ -363,7 +378,7 @@ void Spells::update()
                     toBlackGradient[1.0f] = sf::Color(  0,  0,  0,   0); // transparent
                     thor::ColorAnimation toBlack(toBlackGradient);
                     m_failParticleSystem.addAffector(thor::AnimationAffector(toBlack), sf::seconds(2.f));
-                    
+
                     // play a fail sound and reset the percent text
                     m_failSound.play();
                     m_percentageText.setString("0%");
@@ -389,10 +404,10 @@ void Spells::draw()
 {
     // clear the m_window with black color
     m_window.clear(sf::Color::Black);
-    
+
     // draw background
     m_window.draw(m_backgroundSprite);
-    
+
     m_window.draw(m_overlayRect, &m_rectangleGradientShader);
 
     // draw the win particle system
@@ -412,7 +427,7 @@ void Spells::draw()
     // draw the falling user points
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.3f));
     m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
-    
+
     // draw the fail particle system
     m_window.draw(m_failParticleSystem, &m_radialGradientShader);
 
@@ -427,7 +442,7 @@ void Spells::draw()
 
     // draw percentage text
     m_window.draw(m_percentageText);
-    
+
     // draw wand
     m_window.draw(m_wandParticles);
     m_window.draw(m_wand);
@@ -440,10 +455,10 @@ void Spells::draw()
 void Spells::loadSpells(std::string spellsFileDirectory)
 {
     // TODO: resolvePath should return the bundle path when no file is entered
-    
+
     // TODO: boost filesystem: get all files in spellsFileDirectory
     // filter: get only *.svg files
-    
+
     std::vector<std::string> files;
     files.push_back(resolvePath("data/spells/Alohomora.spell"));
     files.push_back(resolvePath("data/spells/Avis.spell"));
@@ -453,7 +468,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         Level level;
         if (!level.loadFromFile(file))
             break;
-        
+
         if (level.m_name.empty() || level.m_svgPath.empty() || level.m_backgroundTextureName.empty())
             break;
 
@@ -463,7 +478,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         } catch (thor::ResourceAccessException& e) {
             level.m_backgroundTextureName = "arches"; // default
         }
-        
+
         m_level[level.m_name] = level;
     }
 }
@@ -474,7 +489,7 @@ void Spells::setSpell(Level& spell)
     // reset
     m_userPoints.clear();
     m_percentageText.setString("0%");
-    
+
     // set up background
     std::string bgTextureName = spell.m_backgroundTextureName;
     m_textures[bgTextureName].setSmooth(true);
@@ -482,7 +497,7 @@ void Spells::setSpell(Level& spell)
     sf::Vector2f scale(static_cast<float>(m_window.getSize().x) / m_textures[bgTextureName].getSize().x, static_cast<float>(m_window.getSize().y) / m_textures[bgTextureName].getSize().y);
     m_backgroundSprite.setScale(scale);
     std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
-    
+
     // set up path
     m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + spell.m_svgPath));
 }
