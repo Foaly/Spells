@@ -21,6 +21,12 @@
 
 #include "FallingPointEmitter.hpp"
 
+FallingPointEmitter::FallingPointEmitter() :
+    m_color(165, 0, 0, 200) // default: slightly transparent red
+{
+    
+}
+
 void FallingPointEmitter::operator()(thor::EmissionInterface &system, sf::Time dt)
 {
     for(auto iter = m_positions.begin(); iter != m_positions.end();)
@@ -29,7 +35,7 @@ void FallingPointEmitter::operator()(thor::EmissionInterface &system, sf::Time d
         particle.position = *(iter);
         particle.velocity = sf::Vector2f(0.f, thor::random(300.f, 400.f));
         particle.scale = sf::Vector2f(0.8f, 0.8f);
-        particle.color = sf::Color(165, 0, 0, 200);
+        particle.color = m_color;
 
         system.emitParticle(particle);
 
@@ -42,4 +48,9 @@ void FallingPointEmitter::emitParticle(sf::Vector2f position)
 {
     m_positions.push_back(position);
 
+}
+
+void FallingPointEmitter::setColor(sf::Color color)
+{
+    m_color = color;
 }

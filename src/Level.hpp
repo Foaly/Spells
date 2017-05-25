@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include <SFML/Graphics/Color.hpp>
+
 class Level
 {
 public:
@@ -32,6 +34,7 @@ public:
     std::string m_emitterName;
     std::string m_emitterTexture;
     int         m_particleDownsampleRate;
+    sf::Color   m_spellColor;
 };
 
 #endif // SPELLS_LEVEL_H

@@ -371,11 +371,11 @@ void Spells::update()
                     thor::ScaleAffector scaleUp(sf::Vector2f(1.1, 1.1));
                     m_failParticleSystem.addAffector(scaleUp, sf::seconds(2.f));
 
-                    // fade the points from red to black to transparent
+                    // fade the points to black to transparent
                     thor::ColorGradient toBlackGradient;
-                    toBlackGradient[0.0f] = sf::Color(165,  0,  0, 200); // slightly transparent red
-                    toBlackGradient[0.9f] = sf::Color( 20, 20, 20,  50); // slightly opaque grey
-                    toBlackGradient[1.0f] = sf::Color(  0,  0,  0,   0); // transparent
+                    toBlackGradient[0.0f] = m_currentSpell->second.m_spellColor; // spell color
+                    toBlackGradient[0.9f] = sf::Color( 20, 20, 20,  50);         // slightly opaque grey
+                    toBlackGradient[1.0f] = sf::Color(  0,  0,  0,   0);         // transparent
                     thor::ColorAnimation toBlack(toBlackGradient);
                     m_failParticleSystem.addAffector(thor::AnimationAffector(toBlack), sf::seconds(2.f));
 
@@ -433,7 +433,7 @@ void Spells::draw()
 
     // draw the user spell
     circle.setScale(0.8f, 0.8f);
-    circle.setColor(sf::Color(165, 0, 0, 200));
+    circle.setColor(m_currentSpell->second.m_spellColor);
     for(auto position: m_userPoints)
     {
         circle.setPosition(position);
@@ -510,13 +510,16 @@ void Spells::setSpell(Level& spell)
     m_backgroundSprite.setScale(scale);
     std::cout << "Background image scale: " << scale.x << "x" << scale.y << std::endl;
 
-    // set up path
+    // set up path to spell SVG
     m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + spell.m_svgPath));
     
     // set the win particle system texture
     m_winParticleSystem.setTexture(m_textures[spell.m_emitterTexture]);
     m_winParticleSystem.clearParticles();
     m_winParticleSystem.clearEmitters();
+    
+    // set up color for falling particles
+    m_fallingPointEmitter.setColor(spell.m_spellColor);
 }
 
 

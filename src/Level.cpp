@@ -17,6 +17,7 @@
 #include "Level.hpp"
 
 #include "SettingsParser/SettingsParser.hpp"
+#include "Util.hpp"
 
 #include <iostream>
 
@@ -57,6 +58,19 @@ bool Level::loadFromFile(std::string& filename)
     int particleDownsampleRate = 1;
     spell.get("particleDownsampleRate", particleDownsampleRate);
     m_particleDownsampleRate = particleDownsampleRate;
+    
+    sf::Color defaultSpellColor(165, 0, 0, 200); // slightly transparent red
+    std::vector<int> spellColor;
+    spell.get("spellColor", spellColor);
+    
+    if (spellColor.size() == 4)
+    {
+        defaultSpellColor.r = clamp(spellColor[0], 0, 255);
+        defaultSpellColor.g = clamp(spellColor[1], 0, 255);
+        defaultSpellColor.b = clamp(spellColor[2], 0, 255);
+        defaultSpellColor.a = clamp(spellColor[3], 0, 255);
+    }
+    m_spellColor = defaultSpellColor;
 
     return true;
 }

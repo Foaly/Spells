@@ -11,3 +11,6 @@ emitterTexture = yellow bird
 emitter = upEmitter
 
 particleDownsampleRate = 2
+
+# slightly transparent yellow
+spellColor = 255, 247, 20, 200

@@ -9,3 +9,6 @@ backgroundTextureName = door
 emitterTexture = key
 
 emitter = circularEmitter
+
+# slightly transparent dark blue
+spellColor = 0, 55, 224, 200

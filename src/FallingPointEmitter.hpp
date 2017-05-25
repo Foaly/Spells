@@ -25,16 +25,23 @@
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 
 class FallingPointEmitter
 {
 public:
+    FallingPointEmitter();
+    
+    
     void operator() (thor::EmissionInterface& system, sf::Time dt);
 
     void emitParticle(sf::Vector2f position);
+    
+    void setColor(sf::Color color);
 
 private:
     std::vector<sf::Vector2f> m_positions;
+    sf::Color                 m_color;
 };
 
 
