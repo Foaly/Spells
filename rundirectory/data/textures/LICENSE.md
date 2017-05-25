@@ -1,28 +1,28 @@
 License
 =======
 
-| Filename        | License                    | Author            | Original filename              | Link                                                        |
-|:----------------|:---------------------------|:------------------|:-------------------------------|:------------------------------------------------------------|
-| arches.png      | [CC BY-SA 2.0] [by-sa-2.0] | Frank Schulenburg | `8377772511_74c076f4f4_o.jpg`  | https://www.flickr.com/photos/frank_schulenburg/8377772511/ |
-| circle.png      | [CC0]          [cc0]       | Foaly             | ---                            | Image was created for this game                             |
-| wand.png        | [CC BY-SA 4.0] [by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
-| Star.png        | [CC0]          [cc0]       | Foaly             | ---                            | Image was created for this game                             |
-| Rect.png        | [CC0]          [cc0]       | Foaly             | ---                            | Image was created for this game                             |
-| green house.png | [CC BY-SA 4.0] [by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
-| yellow bird.png | [CC BY-ND 2.0] [by-nd-2.0] | Kelly Colgan Azar | `14111155059_15ce49a311_o.jpg` | https://www.flickr.com/photos/puttefin/14111155059/         |
+| Filename        | License                   | Author            | Original filename              | Link                                                        |
+|:----------------|:--------------------------|:------------------|:-------------------------------|:------------------------------------------------------------|
+| arches.png      | [CC BY-SA 2.0][by-sa-2.0] | Frank Schulenburg | `8377772511_74c076f4f4_o.jpg`  | https://www.flickr.com/photos/frank_schulenburg/8377772511/ |
+| circle.png      | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| wand.png        | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
+| Star.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| Rect.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| green house.png | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
+| yellow bird.png | [CC BY-ND 2.0][by-nd-2.0] | Kelly Colgan Azar | `14111155059_15ce49a311_o.jpg` | https://www.flickr.com/photos/puttefin/14111155059/         |
 
 
 
 Remixes
 -------
 
-### door.png ([CC BY 2.0] [by-2.0])
+### door.png ([CC BY 2.0][by-2.0])
 
-| Based on                      | License              | Author        | Link                                                  |
-|:------------------------------|:---------------------|:--------------|:------------------------------------------------------|
-| `6839752802_e57fa51a19_o.jpg` | [CC BY 2.0] [by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6839752802/ |
-| `6841601114_f2c2abb6d7_o.jpg` | [CC BY 2.0] [by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6841601114/ |
-| `6985875129_770c7a9989_o.jpg` | [CC BY 2.0] [by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6985875129/ |
+| Based on                      | License             | Author        | Link                                                  |
+|:------------------------------|:--------------------|:--------------|:------------------------------------------------------|
+| `6839752802_e57fa51a19_o.jpg` | [CC BY 2.0][by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6839752802/ |
+| `6841601114_f2c2abb6d7_o.jpg` | [CC BY 2.0][by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6841601114/ |
+| `6985875129_770c7a9989_o.jpg` | [CC BY 2.0][by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6985875129/ |
 
 
 
