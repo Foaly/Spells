@@ -55,6 +55,7 @@ private:
     void draw();
     void loadSpells(std::string spellsFileDirectory);
     void setSpell(Level& spell);
+    void loadEmitters();
 
     bool m_isUserDrawing;
     bool m_isComputing;
@@ -83,6 +84,7 @@ private:
     sf::Vector2f m_lastPosition;
 
     thor::ParticleSystem m_winParticleSystem;
+    std::vector<sf::Vector2f> m_winPoints;
 
     sf::Sprite m_backgroundSprite;
     sf::RectangleShape m_overlayRect;
@@ -92,6 +94,7 @@ private:
 
     std::map<std::string, Level> m_level;
     std::map<std::string, Level>::iterator m_currentSpell;
+    std::map<std::string, std::function<void(thor::EmissionInterface&, sf::Time)>> m_emitters;
 
     sf::Font m_font;
     sf::Text m_percentageText;

@@ -45,6 +45,18 @@ bool Level::loadFromFile(std::string& filename)
     std::string backgroundTextureName;
     spell.get("backgroundTextureName", backgroundTextureName);
     m_backgroundTextureName = backgroundTextureName;
+    
+    std::string emitterName;
+    spell.get("emitter", emitterName);
+    m_emitterName = emitterName;
+    
+    std::string emitterTexture;
+    spell.get("emitterTexture", emitterTexture);
+    m_emitterTexture = emitterTexture;
+    
+    int particleDownsampleRate = 1;
+    spell.get("particleDownsampleRate", particleDownsampleRate);
+    m_particleDownsampleRate = particleDownsampleRate;
 
     return true;
 }

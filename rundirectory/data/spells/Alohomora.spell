@@ -5,3 +5,7 @@ name = Alohomora
 path = Alohomora.svg
 
 backgroundTextureName = door
+
+emitterTexture = key
+
+emitter = circularEmitter

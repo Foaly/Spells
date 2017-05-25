@@ -85,11 +85,14 @@ public:
     /// @brief Sets the initial particle texture index.
     /// @param particleTextureIndex Constant or function returning the initial index of the particle's texture rectangle.
     void                        setParticleTextureIndex(thor::Distribution<unsigned int> particleTextureIndex);
+    
+    /// @brief Flips the texture of the particle horizontally in the direction it is moving. Texture has to face towards the left by default.
+    void                        setFlipTowardsDirection(bool flipTowardsDirection);
 
 
     // ---------------------------------------------------------------------------------------------------------------------------
     // Private member functions
-    private:
+private:
     // Returns the number of particles to emit during this frame.
     std::size_t                    computeParticleCount(sf::Time dt);
 
@@ -101,6 +104,7 @@ public:
 private:
     std::vector<sf::Vector2f>&          m_points;
 
+    bool                                m_flipTowardsDirection;
     bool                                m_firstEmission;
     float                               mEmissionRate;
     float                               mEmissionDifference;

@@ -18,11 +18,15 @@
 
 #include <Thor/Particles/Particle.hpp>
 #include <Thor/Math/Random.hpp>
+#include <Thor/Vectors/VectorAlgebra2D.hpp>
+
+#include <cmath>
 
 #include "VectorEmitter.hpp"
 
 VectorEmitter::VectorEmitter(std::vector<sf::Vector2f>& points)
         : m_points(points)
+        , m_flipTowardsDirection(false)
         , m_firstEmission(true)
         , mEmissionRate(1.f)
         , mEmissionDifference(0.f)
@@ -71,6 +75,17 @@ void VectorEmitter::emitParticle(thor::EmissionInterface& system, sf::Vector2f p
     particle.scale = mParticleScale();
     particle.color = mParticleColor();
     particle.textureIndex = mParticleTextureIndex();
+    
+    if (m_flipTowardsDirection)
+    {
+        sf::Vector2f up(0.f, -1.f);
+        sf::Vector2f dir = thor::unitVector(particle.velocity);
+        
+        float angle = std::atan2(up.y, up.x) - std::atan2(dir.y, dir.x);
+        
+        if (angle < 0.f)
+            particle.scale.x *= -1.f;
+    }
 
     system.emitParticle(particle);
 }
@@ -131,4 +146,9 @@ std::size_t VectorEmitter::computeParticleCount(sf::Time dt)
     // Compute difference for next frame, return current amount
     mEmissionDifference = particleAmount - nbParticles;
     return nbParticles;
+}
+
+void VectorEmitter::setFlipTowardsDirection(bool flipTowardsDirection)
+{
+    m_flipTowardsDirection = flipTowardsDirection;
 }

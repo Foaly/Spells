@@ -29,6 +29,9 @@ public:
     std::string m_name;
     std::string m_svgPath;
     std::string m_backgroundTextureName;
+    std::string m_emitterName;
+    std::string m_emitterTexture;
+    int         m_particleDownsampleRate;
 };
 
 #endif // SPELLS_LEVEL_H

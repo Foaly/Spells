@@ -5,3 +5,9 @@ name = Avis
 path = Avis.svg
 
 backgroundTextureName = green house
+
+emitterTexture = yellow bird
+
+emitter = upEmitter
+
+particleDownsampleRate = 2

@@ -20,6 +20,10 @@
 #include "Util.hpp"
 #include "BezierCurve.hpp"
 
+#include <Thor/Math/Random.hpp>
+#include <Thor/Vectors/VectorAlgebra2D.hpp>
+#include <Thor/Vectors/PolarVector2.hpp>
+
 #include <iostream>
 #include <iterator>
 
@@ -45,11 +49,32 @@ namespace util
                 return center + radiusVector;
             };
         }
-
+        
+        
+        thor::Distribution<sf::Vector2f> deflect( thor::Distribution<sf::Vector2f> direction, float maxAngle)
+        {
+            return [=] () -> sf::Vector2f
+            {
+                return thor::rotatedVector(direction(), thor::randomDev(0.f, maxAngle));
+            };
+        }
+        
+        
+        thor::Distribution<sf::Vector2f> uniform (sf::Vector2f min, sf::Vector2f max)
+        {
+            return [=] () -> sf::Vector2f
+            {
+                return sf::Vector2f(thor::random(min.x, max.x), thor::random(min.y, max.y));
+            };
+        }
+        
 
         thor::Distribution<sf::Time> constant(sf::Time time)
         {
-            return time;
+            return [=] () -> sf::Time
+            {
+                return time;
+            };
         }
 
 

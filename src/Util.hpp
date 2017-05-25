@@ -24,13 +24,11 @@
 #include <SFML/Graphics/Color.hpp>
 
 #include <Thor/Math/Distributions.hpp>
-#include <Thor/Math/Random.hpp>
-#include <Thor/Vectors/VectorAlgebra2D.hpp>
-#include <Thor/Vectors/PolarVector2.hpp>
 
 #include <cassert>
 #include <vector>
 #include <string>
+#include <iterator>
 
 namespace util
 {
@@ -40,6 +38,16 @@ namespace util
         /// \brief A uniform random distribution in a certain range of a circle. Comparable to a disk.
         ///
         thor::Distribution<sf::Vector2f> disk(float minRadius, float maxRadius, sf::Vector2f center = sf::Vector2f(0.f, 0.f));
+        
+        ///
+        /// \brief A distribution towards a direction with a deviation of maxAngle
+        ///
+        thor::Distribution<sf::Vector2f> deflect( thor::Distribution<sf::Vector2f> direction, float maxAngle);
+        
+        ///
+        /// \brief A uniform distribution between two vectors
+        ///
+        thor::Distribution<sf::Vector2f> uniform (sf::Vector2f min, sf::Vector2f max);
 
         ///
         /// \brief A constant "distribution". Always returns the same value
@@ -48,7 +56,27 @@ namespace util
     }
 }
 
+
 std::vector<sf::Vector2f> loadPathsFromFile(std::string filename);
+
+
+///
+/// \brief Returns a container with every n element of the input container
+///
+template<class in_it, class out_it>
+out_it downsample( in_it begin, in_it end, out_it result, std::size_t n)
+{
+    for (std::size_t i = std::distance(begin, end) / n; i--; std::advance(begin, n))
+        *result++ = *begin;
+    return result;
+}
+
+
+template <typename T>
+T clamp(T value, T min, T max) {
+    assert(min < max);
+    return std::max(min, std::min(value, max));
+}
 
 
 #endif //SPELLS_UTIL_H

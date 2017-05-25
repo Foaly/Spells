@@ -23,7 +23,9 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+
 #include <Thor/Math.hpp>
+#include <Thor/Vectors/VectorAlgebra2D.hpp>
 #include <Thor/Resources/SfmlLoaders.hpp>
 #include <Thor/Particles/Affectors.hpp>
 #include <Thor/Animations/ColorAnimation.hpp>
@@ -63,6 +65,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
     m_textures.acquire("green house", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green house.png")), thor::Resources::Reuse);
     m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
+    m_textures.acquire("yellow bird", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/yellow bird.png")), thor::Resources::Reuse);
 
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
@@ -77,8 +80,6 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wand.setOrigin(94.f, 3.f);
 
     // set up the particle systems
-    m_winParticleSystem.setTexture(m_textures["key"]);
-
     m_failParticleSystem.setTexture(m_textures["circle"]);
 
     m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
@@ -147,6 +148,7 @@ Spells::Spells() : m_isUserDrawing(false),
     //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
 
+    loadEmitters();
     loadSpells(resolvePath("data/spells/"));
 
     m_currentSpell = m_level.begin();
@@ -274,7 +276,7 @@ void Spells::update()
 
     // update wand
     m_wand.setPosition(mousePosition);
-    m_wandEmitter.setParticlePosition(mousePosition );
+    m_wandEmitter.setParticlePosition(mousePosition);
 
     if(m_isUserDrawing)
     {
@@ -348,13 +350,11 @@ void Spells::update()
                 // if more than 70% are covered play an animation
                 if(percent > 70.f)
                 {
-                    VectorEmitter emitter(m_spellPoints);
-                    emitter.setEmissionRate(20);
-                    emitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
-                    emitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
-                    emitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
-                    emitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
-                    m_winParticleSystem.addEmitter(emitter, sf::seconds(2.f));
+                    int downsampleRate = m_currentSpell->second.m_particleDownsampleRate;
+                    m_winPoints.resize(m_userPoints.size() / downsampleRate);
+                    downsample(m_userPoints.begin(), m_userPoints.end(), m_winPoints.begin(), downsampleRate);
+                    
+                    m_winParticleSystem.addEmitter(m_emitters[m_currentSpell->second.m_emitterName], sf::seconds(2.f));
                 }
                 else
                 {
@@ -469,7 +469,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         if (!level.loadFromFile(file))
             break;
 
-        if (level.m_name.empty() || level.m_svgPath.empty() || level.m_backgroundTextureName.empty())
+        if (level.m_name.empty() || level.m_svgPath.empty())
             break;
 
         // make sure background texture key is valid
@@ -478,6 +478,18 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         } catch (thor::ResourceAccessException& e) {
             level.m_backgroundTextureName = "arches"; // default
         }
+        
+        // make sure emitter texture key is valid
+        try {
+            m_textures[level.m_emitterTexture].setSmooth(true);
+        } catch (thor::ResourceAccessException& e) {
+            level.m_emitterTexture = "circle"; // default
+        }
+        
+        if (m_emitters.find(level.m_emitterName) == m_emitters.end())
+            level.m_emitterName = "circularEmitter";
+        
+        level.m_particleDownsampleRate = clamp(level.m_particleDownsampleRate, 1, 10);
 
         m_level[level.m_name] = level;
     }
@@ -500,4 +512,29 @@ void Spells::setSpell(Level& spell)
 
     // set up path
     m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + spell.m_svgPath));
+    
+    // set the win particle system texture
+    m_winParticleSystem.setTexture(m_textures[spell.m_emitterTexture]);
+    m_winParticleSystem.clearParticles();
+    m_winParticleSystem.clearEmitters();
+}
+
+
+void Spells::loadEmitters()
+{
+    VectorEmitter circularEmitter(m_winPoints);
+    circularEmitter.setEmissionRate(20);
+    circularEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
+    circularEmitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
+    circularEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
+    circularEmitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
+    m_emitters["circularEmitter"] = circularEmitter;
+    
+    VectorEmitter upEmitter(m_winPoints);
+    upEmitter.setFlipTowardsDirection(true);
+    upEmitter.setEmissionRate(10);
+    upEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.0f), sf::seconds(1.2f)) );
+    auto verticalSpeed = util::Distributions::uniform(sf::Vector2f(0.f, -250.f), sf::Vector2f(0.f, -200.f));
+    upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 60.f) );
+    m_emitters["upEmitter"] = upEmitter;
 }
