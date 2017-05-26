@@ -1,0 +1,6 @@
+# Dummy spell
+# this spell is a test to check all the fallbacks are working
+
+name = Dummy
+
+path = Alohomora.svg

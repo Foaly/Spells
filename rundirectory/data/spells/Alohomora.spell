@@ -4,9 +4,9 @@ name = Alohomora
 
 path = Alohomora.svg
 
-backgroundTextureName = door
+backgroundTextureName = door.png
 
-emitterTexture = key
+emitterTexture = key.png
 
 emitter = circularEmitter
 

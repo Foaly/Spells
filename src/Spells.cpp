@@ -57,36 +57,36 @@ Spells::Spells() : m_isUserDrawing(false),
     m_window.setFramerateLimit(60);
 
     // load textures
-    m_textures.acquire("circle", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Circle.png")), thor::Resources::Reuse);
-    m_textures.acquire("rect", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Rect.png")), thor::Resources::Reuse);
-    m_textures.acquire("star", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/Star.png")), thor::Resources::Reuse);
-    m_textures.acquire("key", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/old key small.png")), thor::Resources::Reuse);
-    m_textures.acquire("arches", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")), thor::Resources::Reuse);
-    m_textures.acquire("door", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")), thor::Resources::Reuse);
-    m_textures.acquire("green house", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green house.png")), thor::Resources::Reuse);
-    m_textures.acquire("wand", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")), thor::Resources::Reuse);
-    m_textures.acquire("yellow bird", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/yellow bird.png")), thor::Resources::Reuse);
+    m_textures.acquire("circle.png",      thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/circle.png")),      thor::Resources::Reuse);
+    m_textures.acquire("rect.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/rect.png")),        thor::Resources::Reuse);
+    m_textures.acquire("star.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/star.png")),        thor::Resources::Reuse);
+    m_textures.acquire("key.png",         thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/key.png")),         thor::Resources::Reuse);
+    m_textures.acquire("arches.png",      thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")),      thor::Resources::Reuse);
+    m_textures.acquire("door.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")),        thor::Resources::Reuse);
+    m_textures.acquire("green_house.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green_house.png")), thor::Resources::Reuse);
+    m_textures.acquire("wand.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")),        thor::Resources::Reuse);
+    m_textures.acquire("yellow_bird.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/yellow_bird.png")), thor::Resources::Reuse);
 
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
     m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
-    m_overlayRect.setTexture(&m_textures["rect"]);
+    m_overlayRect.setTexture(&m_textures["rect.png"]);
 
     m_window.setMouseCursorVisible(false);
-    m_textures["wand"].setSmooth(true);
-    m_wand.setTexture(m_textures["wand"]);
+    m_textures["wand.png"].setSmooth(true);
+    m_wand.setTexture(m_textures["wand.png"]);
     m_wand.setScale(-1.f, 1.f); // uncomment for left hand
     m_wand.setOrigin(94.f, 3.f);
 
     // set up the particle systems
-    m_failParticleSystem.setTexture(m_textures["circle"]);
+    m_failParticleSystem.setTexture(m_textures["circle.png"]);
 
-    m_fallingPointParticleSystem.setTexture(m_textures["circle"]);
+    m_fallingPointParticleSystem.setTexture(m_textures["circle.png"]);
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
 
-    m_textures["star"].setRepeated(false);
-    m_wandParticles.setTexture(m_textures["star"]);
+    m_textures["star.png"].setRepeated(false);
+    m_wandParticles.setTexture(m_textures["star.png"]);
     m_wandParticles.addTextureRect(sf::IntRect(0, 0, 12, 12));
     m_wandParticles.addTextureRect(sf::IntRect(12, 0, 24, 12));
     m_wandEmitter.setEmissionRate(30.f);
@@ -415,7 +415,7 @@ void Spells::draw()
 
     // draw the spell
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
-    sf::Sprite circle(m_textures["circle"]);
+    sf::Sprite circle(m_textures["circle.png"]);
     circle.setOrigin(25, 25);
     circle.setColor(sf::Color(255, 255, 255, 100));
     for(auto position: m_spellPoints)
@@ -462,6 +462,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
     std::vector<std::string> files;
     files.push_back(resolvePath("data/spells/Alohomora.spell"));
     files.push_back(resolvePath("data/spells/Avis.spell"));
+    files.push_back(resolvePath("data/spells/Dummy.spell"));
 
     for (auto &file: files)
     {
@@ -469,6 +470,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         if (!level.loadFromFile(file))
             break;
 
+        // name and SVG path are mandatory
         if (level.m_name.empty() || level.m_svgPath.empty())
             break;
 
@@ -476,14 +478,14 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         try {
             m_textures[level.m_backgroundTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
         } catch (thor::ResourceAccessException& e) {
-            level.m_backgroundTextureName = "arches"; // default
+            level.m_backgroundTextureName = "arches.png"; // default
         }
         
         // make sure emitter texture key is valid
         try {
             m_textures[level.m_emitterTexture].setSmooth(true);
         } catch (thor::ResourceAccessException& e) {
-            level.m_emitterTexture = "circle"; // default
+            level.m_emitterTexture = "circle.png"; // default
         }
         
         if (m_emitters.find(level.m_emitterName) == m_emitters.end())

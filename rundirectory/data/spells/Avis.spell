@@ -4,9 +4,9 @@ name = Avis
 
 path = Avis.svg
 
-backgroundTextureName = green house
+backgroundTextureName = green_house.png
 
-emitterTexture = yellow bird
+emitterTexture = yellow_bird.png
 
 emitter = upEmitter
 
