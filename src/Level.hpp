@@ -18,6 +18,7 @@
 #define SPELLS_LEVEL_H
 
 #include <string>
+#include <vector>
 
 #include <SFML/Graphics/Color.hpp>
 
@@ -28,13 +29,14 @@ public:
 
     bool loadFromFile(std::string& filename);
 
-    std::string m_name;
-    std::string m_svgPath;
-    std::string m_backgroundTextureName;
-    std::string m_emitterName;
-    std::string m_emitterTexture;
-    int         m_particleDownsampleFactor;
-    sf::Color   m_spellColor;
+    std::string              m_name;
+    std::string              m_svgPath;
+    std::string              m_backgroundTextureName;
+    std::string              m_emitterName;
+    std::string              m_emitterTexture;
+    std::vector<std::string> m_affectors;
+    int                      m_particleDownsampleFactor;
+    sf::Color                m_spellColor;
 };
 
 #endif // SPELLS_LEVEL_H

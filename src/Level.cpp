@@ -21,7 +21,8 @@
 
 #include <iostream>
 
-Level::Level()
+Level::Level() :
+    m_particleDownsampleFactor(1)
 {
 
 }
@@ -54,6 +55,10 @@ bool Level::loadFromFile(std::string& filename)
     std::string emitterTexture;
     spell.get("emitterTexture", emitterTexture);
     m_emitterTexture = emitterTexture;
+    
+    std::vector<std::string> affectors;
+    spell.get("affectors", affectors);
+    m_affectors = affectors;
     
     int particleDownsampleFactor = 1;
     spell.get("particleDownsampleFactor", particleDownsampleFactor);

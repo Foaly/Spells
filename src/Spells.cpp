@@ -344,6 +344,9 @@ void Spells::update()
                     downsample(m_userPoints.begin(), m_userPoints.end(), m_winPoints.begin(), downsampleFactor);
                     
                     m_winParticleSystem.addEmitter(m_emitters[m_currentSpell->second.m_emitterName], sf::seconds(2.f));
+                    
+                    for (auto& affector: m_currentSpell->second.m_affectors)
+                        m_winParticleSystem.addAffector(m_affectors[affector], sf::seconds(4.f));
                 }
                 else
                 {
@@ -477,8 +480,19 @@ void Spells::loadSpells(std::string spellsFileDirectory)
             level.m_emitterTexture = "circle.png"; // default
         }
         
+        // make sure the emitter names are valid
         if (m_emitters.find(level.m_emitterName) == m_emitters.end())
             level.m_emitterName = "circularEmitter";
+        
+        // remove the affectors from the level that are not valid
+        for (auto affectorIter = std::begin(level.m_affectors); affectorIter != std::end(level.m_affectors); )
+        {
+            auto affector = trim(*affectorIter);
+            if (m_affectors.find(affector) == m_affectors.end())
+                affectorIter = level.m_affectors.erase(affectorIter);
+            else
+                affectorIter++;
+        }
         
         level.m_particleDownsampleFactor = clamp(level.m_particleDownsampleFactor, 1, 10);
 

@@ -103,3 +103,4 @@ By default for every spell point one particle is created during the successful s
 This variable controls how many point are discarded.
 For example a value of 2 only creates a particle for every second spell point.
 The default value is 1.
+The dowsample factor is clamped to the range [1, 10].
