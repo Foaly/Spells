@@ -41,6 +41,7 @@
 #include "SpellGenerator.hpp"
 #include "FallingPointEmitter.hpp"
 #include "Level.hpp"
+#include "LoadHelpers.hpp"
 
 class Spells {
 public:
@@ -55,7 +56,6 @@ private:
     void draw();
     void loadSpells(std::string spellsFileDirectory);
     void setSpell(Level& spell);
-    void loadEmitters();
 
     bool m_isUserDrawing;
     bool m_isComputing;
@@ -94,7 +94,8 @@ private:
 
     std::map<std::string, Level> m_level;
     std::map<std::string, Level>::iterator m_currentSpell;
-    std::map<std::string, std::function<void(thor::EmissionInterface&, sf::Time)>> m_emitters;
+    EmitterMap m_emitters;
+    AffectorMap m_affectors;
 
     sf::Font m_font;
     sf::Text m_percentageText;

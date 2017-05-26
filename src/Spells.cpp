@@ -26,7 +26,6 @@
 
 #include <Thor/Math.hpp>
 #include <Thor/Vectors/VectorAlgebra2D.hpp>
-#include <Thor/Resources/SfmlLoaders.hpp>
 #include <Thor/Particles/Affectors.hpp>
 #include <Thor/Animations/ColorAnimation.hpp>
 
@@ -57,16 +56,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_window.setFramerateLimit(60);
 
     // load textures
-    m_textures.acquire("circle.png",      thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/circle.png")),      thor::Resources::Reuse);
-    m_textures.acquire("rect.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/rect.png")),        thor::Resources::Reuse);
-    m_textures.acquire("star.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/star.png")),        thor::Resources::Reuse);
-    m_textures.acquire("key.png",         thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/key.png")),         thor::Resources::Reuse);
-    m_textures.acquire("arches.png",      thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/arches.png")),      thor::Resources::Reuse);
-    m_textures.acquire("door.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/door.png")),        thor::Resources::Reuse);
-    m_textures.acquire("green_house.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green_house.png")), thor::Resources::Reuse);
-    m_textures.acquire("wand.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")),        thor::Resources::Reuse);
-    m_textures.acquire("yellow_bird.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/yellow_bird.png")), thor::Resources::Reuse);
-    m_textures.acquire("orange_orb.png",  thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/orange_orb.png")),  thor::Resources::Reuse);
+    m_textures = loadTextures();
     
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
@@ -79,6 +69,10 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wand.setTexture(m_textures["wand.png"]);
     m_wand.setScale(-1.f, 1.f); // uncomment for left hand
     m_wand.setOrigin(94.f, 3.f);
+    
+    // load emitters and affectors for the particle systems
+    m_emitters = setupEmitters(m_winPoints);
+    m_affectors = setupAffectors();
 
     // set up the particle systems
     m_failParticleSystem.setTexture(m_textures["circle.png"]);
@@ -101,15 +95,8 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wandEmitter.setParticleScale( util::Distributions::constant(sf::Vector2f(0.25f, 0.25f)) );
     m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
 
-    thor::ForceAffector forceAffector(sf::Vector2f(0, 150));
-    m_wandParticles.addAffector(forceAffector);
-
-    thor::ColorGradient goldGradient;
-    goldGradient[0.0f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
-    goldGradient[0.8f] = sf::Color(255, 200, 50, 200);
-    goldGradient[1.0f] = sf::Color(255, 200, 50,   0); // transparent gold
-    thor::ColorAnimation goldToTransparent(goldGradient);
-    m_wandParticles.addAffector(thor::AnimationAffector(goldToTransparent));
+    m_wandParticles.addAffector(m_affectors["downwards"]);
+    m_wandParticles.addAffector(m_affectors["goldToTransparent"]);
 
     // font loading and text setup
     if(!m_font.loadFromFile(resolvePath("data/fonts/BilboSwashCaps-Regular.otf")))
@@ -151,7 +138,6 @@ Spells::Spells() : m_isUserDrawing(false),
     //BezierCurve curve(sf::Vector2f(300, 400), sf::Vector2f(500, 100), sf::Vector2f(700, 700), sf::Vector2f(900, 400));
     //m_spellPoints = curve.generateEvenlySpacedPoints(20.f); // distance of 20px between points
 
-    loadEmitters();
     loadSpells(resolvePath("data/spells/"));
 
     m_currentSpell = m_level.begin();
@@ -371,8 +357,7 @@ void Spells::update()
                     m_failParticleSystem.addEmitter(emitter, sf::seconds(2.f));
 
                     // scale the particles up
-                    thor::ScaleAffector scaleUp(sf::Vector2f(1.1, 1.1));
-                    m_failParticleSystem.addAffector(scaleUp, sf::seconds(2.f));
+                    m_failParticleSystem.addAffector(m_affectors["fastScaleUp"], sf::seconds(2.f));
 
                     // fade the points to black to transparent
                     thor::ColorGradient toBlackGradient;
@@ -526,27 +511,4 @@ void Spells::setSpell(Level& spell)
     
     // set up color for falling particles
     m_fallingPointEmitter.setColor(spell.m_spellColor);
-}
-
-
-void Spells::loadEmitters()
-{
-    VectorEmitter circularEmitter(m_winPoints);
-    circularEmitter.setEmissionRate(20);
-    circularEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
-    circularEmitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
-    circularEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
-    circularEmitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
-    m_emitters["circularEmitter"] = circularEmitter;
-    
-    circularEmitter.setParticleScale( util::Distributions::uniformScale(0.6f, 0.7f) ); // start with a lower scale
-    m_emitters["scaledCircularEmitter"] = circularEmitter;
-    
-    VectorEmitter upEmitter(m_winPoints);
-    upEmitter.setFlipTowardsDirection(true);
-    upEmitter.setEmissionRate(10);
-    upEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.0f), sf::seconds(1.2f)) );
-    auto verticalSpeed = util::Distributions::uniform(sf::Vector2f(0.f, -250.f), sf::Vector2f(0.f, -200.f));
-    upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 60.f) );
-    m_emitters["upEmitter"] = upEmitter;
 }

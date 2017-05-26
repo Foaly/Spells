@@ -38,6 +38,8 @@ set(SOURCE_FILES src/main.cpp
                  src/SettingsParser/SettingsParser.cpp
                  src/Level.hpp
                  src/Level.cpp
+                 src/LoadHelpers.hpp
+                 src/LoadHelpers.cpp
                  )
 
 # when we are on MacOS create a bundle and
