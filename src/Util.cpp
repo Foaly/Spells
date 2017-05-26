@@ -68,12 +68,13 @@ namespace util
             };
         }
         
-
-        thor::Distribution<sf::Time> constant(sf::Time time)
+        
+        thor::Distribution<sf::Vector2f> uniformScale (float min, float max)
         {
-            return [=] () -> sf::Time
+            return [=] () -> sf::Vector2f
             {
-                return time;
+                auto n = thor::random(min, max);
+                return sf::Vector2f(n, n);
             };
         }
 

@@ -537,6 +537,9 @@ void Spells::loadEmitters()
     circularEmitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
     m_emitters["circularEmitter"] = circularEmitter;
     
+    circularEmitter.setParticleScale( util::Distributions::uniformScale(0.6f, 0.7f) ); // start with a lower scale
+    m_emitters["scaledCircularEmitter"] = circularEmitter;
+    
     VectorEmitter upEmitter(m_winPoints);
     upEmitter.setFlipTowardsDirection(true);
     upEmitter.setEmissionRate(10);

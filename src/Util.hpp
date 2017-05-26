@@ -48,11 +48,23 @@ namespace util
         /// \brief A uniform distribution between two vectors
         ///
         thor::Distribution<sf::Vector2f> uniform (sf::Vector2f min, sf::Vector2f max);
-
+        
+        ///
+        /// \brief A uniform distribution where both vector elements are the same random value
+        ///
+        thor::Distribution<sf::Vector2f> uniformScale (float min, float max);
+  
         ///
         /// \brief A constant "distribution". Always returns the same value
         ///
-        thor::Distribution<sf::Time> constant(sf::Time time);
+        template<class T>
+        thor::Distribution<T> constant(T value)
+        {
+            return [=] () -> T
+            {
+                return value;
+            };
+        }
     }
 }
 
