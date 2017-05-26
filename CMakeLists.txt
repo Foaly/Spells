@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.1)
 set(PROJECT_NAME "Spells")
 project(${PROJECT_NAME})
 
+# include helpers
+include(${CMAKE_CURRENT_SOURCE_DIR}/helpers.cmake)
 
 # Enable debug symbols by default
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -40,16 +42,14 @@ set(SOURCE_FILES src/main.cpp
 
 # when we are on MacOS create a bundle and
 # put the rescources in it
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES}
                      src/osx/PathResolver.mm)
 
-    file(GLOB_RECURSE RESOURCE_FILES "rundirectory/data/*")
+    add_executable(${EXECUTABLE_NAME} MACOSX_BUNDLE ${SOURCE_FILES})
 
-    add_executable(${EXECUTABLE_NAME} MACOSX_BUNDLE ${SOURCE_FILES} ${RESOURCE_FILES})
-
-    set_source_files_properties(${RESOURCE_FILES}
-        PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    # copy resource files into bundle
+    copy_resource_folder_to_bundle(${EXECUTABLE_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/rundirectory/data data)
   	set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/osx/Info.plist.in)
 else()
     # on windows there are no bundles

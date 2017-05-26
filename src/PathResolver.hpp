@@ -21,7 +21,7 @@
 
 ////////////////////////////////////////////////////////////
 /// \brief This function takes a path to a resource (like: data/images/image.png)
-///        On OSX the folder structure is removed and the path to the resource folder
+///        On OSX the path to the resource folder
 ///        associated with the main bundle is prepended.
 ///        On windows the input path is simply returned.
 ////////////////////////////////////////////////////////////
