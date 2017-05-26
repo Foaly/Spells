@@ -66,7 +66,8 @@ Spells::Spells() : m_isUserDrawing(false),
     m_textures.acquire("green_house.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/green_house.png")), thor::Resources::Reuse);
     m_textures.acquire("wand.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/wand.png")),        thor::Resources::Reuse);
     m_textures.acquire("yellow_bird.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/yellow_bird.png")), thor::Resources::Reuse);
-
+    m_textures.acquire("orange_orb.png",  thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/orange_orb.png")),  thor::Resources::Reuse);
+    
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
@@ -462,7 +463,8 @@ void Spells::loadSpells(std::string spellsFileDirectory)
     std::vector<std::string> files;
     files.push_back(resolvePath("data/spells/Alohomora.spell"));
     files.push_back(resolvePath("data/spells/Avis.spell"));
-    files.push_back(resolvePath("data/spells/Dummy.spell"));
+    files.push_back(resolvePath("data/spells/Wingardium_Leviosa.spell"));
+    //files.push_back(resolvePath("data/spells/Dummy.spell"));
 
     for (auto &file: files)
     {

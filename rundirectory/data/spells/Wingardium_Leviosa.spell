@@ -1,0 +1,11 @@
+# Wingardium Leviosa
+
+name = Wingardium Leviosa
+
+path = Wingardium_Leviosa.svg
+
+backgroundTextureName = arches.png
+
+emitterTexture = orange_orb.png
+
+emitter = circularEmitter

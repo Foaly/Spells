@@ -6,10 +6,11 @@ License
 | arches.png      | [CC BY-SA 2.0][by-sa-2.0] | Frank Schulenburg | `8377772511_74c076f4f4_o.jpg`  | https://www.flickr.com/photos/frank_schulenburg/8377772511/ |
 | circle.png      | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
 | wand.png        | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
-| Star.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
-| Rect.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
-| green house.png | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
-| yellow bird.png | [CC BY-ND 2.0][by-nd-2.0] | Kelly Colgan Azar | `14111155059_15ce49a311_o.jpg` | https://www.flickr.com/photos/puttefin/14111155059/         |
+| star.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| rect.png        | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| green_house.png | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
+| yellow_bird.png | [CC BY-ND 2.0][by-nd-2.0] | Kelly Colgan Azar | `14111155059_15ce49a311_o.jpg` | https://www.flickr.com/photos/puttefin/14111155059/         |
+| orange_orb.png  | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
 
 
 
