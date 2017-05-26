@@ -15,21 +15,9 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.0 r"
-   sodipodi:docname="Wingardium_Leviosa.svg">
+   sodipodi:docname="Lumos.svg">
   <defs
-     id="defs2">
-    <inkscape:path-effect
-       effect="mirror_symmetry"
-       start_point="165.59,143.31665"
-       end_point="165.59,250.16871"
-       center_point="165.59,196.74268"
-       id="path-effect378"
-       is_visible="true"
-       mode="free"
-       discard_orig_path="false"
-       fuse_paths="false"
-       oposite_fuse="false" />
-  </defs>
+     id="defs2" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -37,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="424.27718"
-     inkscape:cy="492.68451"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="684.46042"
+     inkscape:cy="358.80563"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,12 +55,10 @@
      id="layer1"
      transform="translate(0,-85.333317)">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.31567293px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 77.695028,143.31664 46.059502,106.85206 41.83546,-91.17932 m 87.89498,-15.67274 -46.0595,106.85206 -41.83546,-91.17932"
-       id="path103"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 160.18635,123.13093 c -40.59754,74.0873 0.95214,119.25672 65.0119,125.11012 -95.13006,77.47977 -184.355826,-69.20148 -65.0119,-125.11012"
+       id="path73"
        inkscape:connector-curvature="0"
-       inkscape:path-effect="#path-effect378"
-       inkscape:original-d="M 77.695028,143.31664 123.75453,250.1687 165.58999,158.98938"
        sodipodi:nodetypes="ccc" />
   </g>
 </svg>

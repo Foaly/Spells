@@ -1,0 +1,13 @@
+# Lumos
+
+name = Lumos
+
+path = Lumos.svg
+
+backgroundTextureName = arches.png
+
+emitterTexture = orange_orb.png
+
+emitter = scaledCircularEmitter
+
+affectors = toTransparent, slowScaleUp

@@ -453,6 +453,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
     std::vector<std::string> files;
     files.push_back(resolvePath("data/spells/Alohomora.spell"));
     files.push_back(resolvePath("data/spells/Avis.spell"));
+    files.push_back(resolvePath("data/spells/Lumos.spell"));
     files.push_back(resolvePath("data/spells/Wingardium_Leviosa.spell"));
     //files.push_back(resolvePath("data/spells/Dummy.spell"));
 

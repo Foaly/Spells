@@ -8,6 +8,6 @@ backgroundTextureName = arches.png
 
 emitterTexture = orange_orb.png
 
-emitter = scaledCircularEmitter
+emitter = upEmitter
 
-affectors = toTransparent, slowScaleUp, big pile of lulu
+affectors = toTransparent
