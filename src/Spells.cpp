@@ -87,9 +87,10 @@ Spells::Spells() : m_isUserDrawing(false),
     m_fallingPointParticleSystem.addEmitter(thor::refEmitter(m_fallingPointEmitter));
 
     m_textures["star.png"].setRepeated(false);
+    m_textures["star.png"].setSmooth(true);
     m_wandParticles.setTexture(m_textures["star.png"]);
-    m_wandParticles.addTextureRect(sf::IntRect(0, 0, 12, 12));
-    m_wandParticles.addTextureRect(sf::IntRect(12, 0, 24, 12));
+    m_wandParticles.addTextureRect(sf::IntRect(0, 0, 48, 48));
+    m_wandParticles.addTextureRect(sf::IntRect(48, 0, 96, 48));
     m_wandEmitter.setEmissionRate(30.f);
     m_wandEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(0.8f), sf::seconds(1.0f)));
     m_wandEmitter.setParticlePosition( thor::Distributions::circle(sf::Vector2f(300, 300), 10) );
@@ -97,6 +98,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wandEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );
     m_wandEmitter.setParticleRotationSpeed( thor::Distributions::uniform(40.f, 60.f));
     m_wandEmitter.setParticleTextureIndex( thor::Distributions::uniform(0, 1));
+    m_wandEmitter.setParticleScale( util::Distributions::constant(sf::Vector2f(0.25f, 0.25f)) );
     m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
 
     thor::ForceAffector forceAffector(sf::Vector2f(0, 150));
