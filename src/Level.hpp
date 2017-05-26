@@ -33,7 +33,7 @@ public:
     std::string m_backgroundTextureName;
     std::string m_emitterName;
     std::string m_emitterTexture;
-    int         m_particleDownsampleRate;
+    int         m_particleDownsampleFactor;
     sf::Color   m_spellColor;
 };
 

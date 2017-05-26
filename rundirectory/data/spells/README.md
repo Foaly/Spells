@@ -92,3 +92,14 @@ You can currently choose:
 |:---------------:|:-------------------------------------------------------|
 | circularEmitter | Emits randomly rotating particles in all directions    |
 |    upEmitter    | Emits particles going upwards with a deflection of 60° |
+
+
+`particleDownsampleFactor`
+--------------------------
+
+Example: `particleDownsampleFactor = 2`
+
+By default for every spell point one particle is created during the successful spell effect.
+This variable controls how many point are discarded.
+For example a value of 2 only creates a particle for every second spell point.
+The default value is 1.

@@ -351,9 +351,9 @@ void Spells::update()
                 // if more than 70% are covered play an animation
                 if(percent > 70.f)
                 {
-                    int downsampleRate = m_currentSpell->second.m_particleDownsampleRate;
-                    m_winPoints.resize(m_userPoints.size() / downsampleRate);
-                    downsample(m_userPoints.begin(), m_userPoints.end(), m_winPoints.begin(), downsampleRate);
+                    int downsampleFactor = m_currentSpell->second.m_particleDownsampleFactor;
+                    m_winPoints.resize(m_userPoints.size() / downsampleFactor);
+                    downsample(m_userPoints.begin(), m_userPoints.end(), m_winPoints.begin(), downsampleFactor);
                     
                     m_winParticleSystem.addEmitter(m_emitters[m_currentSpell->second.m_emitterName], sf::seconds(2.f));
                 }
@@ -493,7 +493,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         if (m_emitters.find(level.m_emitterName) == m_emitters.end())
             level.m_emitterName = "circularEmitter";
         
-        level.m_particleDownsampleRate = clamp(level.m_particleDownsampleRate, 1, 10);
+        level.m_particleDownsampleFactor = clamp(level.m_particleDownsampleFactor, 1, 10);
 
         m_level[level.m_name] = level;
     }

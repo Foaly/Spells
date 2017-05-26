@@ -55,9 +55,9 @@ bool Level::loadFromFile(std::string& filename)
     spell.get("emitterTexture", emitterTexture);
     m_emitterTexture = emitterTexture;
     
-    int particleDownsampleRate = 1;
-    spell.get("particleDownsampleRate", particleDownsampleRate);
-    m_particleDownsampleRate = particleDownsampleRate;
+    int particleDownsampleFactor = 1;
+    spell.get("particleDownsampleFactor", particleDownsampleFactor);
+    m_particleDownsampleFactor = particleDownsampleFactor;
     
     sf::Color defaultSpellColor(165, 0, 0, 200); // slightly transparent red
     std::vector<int> spellColor;
