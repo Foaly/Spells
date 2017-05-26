@@ -116,4 +116,18 @@ static inline std::string &trim(std::string &s) {
 }
 
 
+// taken from: https://stackoverflow.com/questions/1489830/efficient-way-to-determine-number-of-digits-in-an-integer
+template <class T>
+int numDigits(T number)
+{
+    int digits = 0;
+    if (number < 0) digits = 1; // remove this line if '-' counts as a digit
+    while (number) {
+        number /= 10;
+        digits++;
+    }
+    return digits;
+}
+
+
 #endif //SPELLS_UTIL_H

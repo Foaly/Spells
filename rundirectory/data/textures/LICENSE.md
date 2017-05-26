@@ -11,6 +11,7 @@ License
 | green_house.png | [CC BY-SA 4.0][by-sa-4.0] | Foaly             | ---                            | Image was created for this game                             |
 | yellow_bird.png | [CC BY-ND 2.0][by-nd-2.0] | Kelly Colgan Azar | `14111155059_15ce49a311_o.jpg` | https://www.flickr.com/photos/puttefin/14111155059/         |
 | orange_orb.png  | [CC0][cc0]                | Foaly             | ---                            | Image was created for this game                             |
+| parchment.png   | [CC BY 2.0][by-2.0]       | Diego da Silva    | `4306058967_2918d59463_o.jpg`  | https://www.flickr.com/photos/natura_pagana/4306058967/     |
 
 
 

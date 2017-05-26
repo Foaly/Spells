@@ -99,6 +99,7 @@ private:
 
     sf::Font m_font;
     sf::Text m_percentageText;
+    sf::Sprite m_percentBackground;
 
     sf::Shader m_radialGradientShader;
     sf::Shader m_rectangleGradientShader;

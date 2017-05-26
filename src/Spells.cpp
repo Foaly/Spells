@@ -34,16 +34,7 @@
 #include "VectorEmitter.hpp"
 #include "PathResolver.hpp"
 
-namespace
-{
-    template <typename T>
-    std::string toString ( T Number )
-    {
-        std::stringstream ss;
-        ss << Number;
-        return ss.str();
-    }
-}
+
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
@@ -103,11 +94,13 @@ Spells::Spells() : m_isUserDrawing(false),
     {
         std::cerr << "Failed to load font!" << std::endl;
     }
+    
+    m_percentBackground.setTexture(m_textures["parchment.png"]);
+    m_percentBackground.setPosition(5, 10);
 
     m_percentageText.setFont(m_font);
-    m_percentageText.setString("0%");
     m_percentageText.setCharacterSize(50);
-    m_percentageText.setPosition(30, 10);
+    m_percentageText.setPosition(35, 30);
     m_percentageText.setStyle(sf::Text::Style::Bold);
     // TODO horizontal character spacing
 
@@ -191,7 +184,7 @@ void Spells::handleEvents()
                 // delete all the user points
                 case sf::Keyboard::C:
                     m_userPoints.clear();
-                    m_percentageText.setString("0%");
+                    m_percentageText.setString("  0%");
                     break;
                 // switch to the next spell
                 case sf::Keyboard::Right:
@@ -326,10 +319,12 @@ void Spells::update()
             }
 
             // calculate the percentage of points hit
-            const float percent = std::round(static_cast<float>(m_numberOfPointsHit) / m_spellPoints.size() * 100.f);
+            const int percent = std::round(static_cast<float>(m_numberOfPointsHit) / m_spellPoints.size() * 100.f);
 
-            // TODO: this should use std::to_string. This is a compiler error an update should help
-            m_percentageText.setString(toString(percent) + "%");
+            // pad the percent string with whitespace
+            auto percentString = std::to_string(percent) + "%";
+            percentString.insert(0, 3 - numDigits(percent), ' ');
+            m_percentageText.setString(percentString);
 
             // if we have checked all user points play an animation if enough percent are covert
             if (m_userPointIter == m_userPoints.end())
@@ -372,7 +367,7 @@ void Spells::update()
 
                     // play a fail sound and reset the percent text
                     m_failSound.play();
-                    m_percentageText.setString("0%");
+                    m_percentageText.setString("  0%");
                 }
 
                 m_isComputing = false;
@@ -431,7 +426,8 @@ void Spells::draw()
         m_window.draw(circle, &m_radialGradientShader);
     }
 
-    // draw percentage text
+    // draw percentage
+    m_window.draw(m_percentBackground);
     m_window.draw(m_percentageText);
 
     // draw wand
@@ -506,7 +502,7 @@ void Spells::setSpell(Level& spell)
 {
     // reset
     m_userPoints.clear();
-    m_percentageText.setString("0%");
+    m_percentageText.setString("  0%");
 
     // set up background
     std::string bgTextureName = spell.m_backgroundTextureName;
