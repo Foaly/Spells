@@ -4,7 +4,7 @@ name = Wingardium Leviosa
 
 path = Wingardium_Leviosa.svg
 
-backgroundTextureName = arches.png
+backgroundTextureName = stairs_top.png
 
 emitterTexture = orange_orb.png
 
