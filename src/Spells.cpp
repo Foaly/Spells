@@ -118,12 +118,9 @@ Spells::Spells() : m_isUserDrawing(false),
         m_rectangleGradientShader.setUniform("rightBottom", sf::Vector2f(0.95f, 1.0));
     }
 
-    if(!m_failSoundBuffer.loadFromFile(resolvePath("data/sounds/fail.wav")))
-    {
-        std::cerr << "Failed to load the fail sound!" << std::endl;
-    }
-
-    m_failSound.setBuffer(m_failSoundBuffer);
+    // load sounds
+    m_sounds = loadSounds();
+    m_failSound.setBuffer(m_sounds["fail.wav"]);
 
     //m_spellPoints = m_spellGenerator.generateSpirale();
     //m_spellPoints = m_spellGenerator.generateWave();
@@ -342,6 +339,8 @@ void Spells::update()
                     
                     for (auto& affector: m_currentSpell->second.m_affectors)
                         m_winParticleSystem.addAffector(m_affectors[affector], sf::seconds(4.f));
+                    
+                    m_winSound.play();
                 }
                 else
                 {
@@ -441,8 +440,6 @@ void Spells::draw()
 
 void Spells::loadSpells(std::string spellsFileDirectory)
 {
-    // TODO: resolvePath should return the bundle path when no file is entered
-
     // TODO: boost filesystem: get all files in spellsFileDirectory
     // filter: get only *.svg files
 
@@ -468,6 +465,13 @@ void Spells::loadSpells(std::string spellsFileDirectory)
             m_textures[level.m_backgroundTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
         } catch (thor::ResourceAccessException& e) {
             level.m_backgroundTextureName = "arches.png"; // default
+        }
+        
+        // make sure the sound names are valid
+        try {
+            m_sounds[level.m_sound].getChannelCount();
+        } catch (thor::ResourceAccessException& e) {
+            level.m_sound = "none"; // default
         }
         
         // make sure emitter texture key is valid
@@ -519,6 +523,9 @@ void Spells::setSpell(Level& spell)
     m_winParticleSystem.setTexture(m_textures[spell.m_emitterTexture]);
     m_winParticleSystem.clearParticles();
     m_winParticleSystem.clearEmitters();
+    
+    // set the win sound
+    m_winSound.setBuffer(m_sounds[spell.m_sound]);
     
     // set up color for falling particles
     m_fallingPointEmitter.setColor(spell.m_spellColor);

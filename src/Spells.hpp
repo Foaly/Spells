@@ -65,6 +65,7 @@ private:
     const sf::Vector2f m_windowCenter;
 
     thor::ResourceHolder<sf::Texture, std::string> m_textures;
+    thor::ResourceHolder<sf::SoundBuffer, std::string> m_sounds;
     const float m_userPointRadius;
     SpellGenerator m_spellGenerator;
     std::vector<sf::Vector2f> m_spellPoints;
@@ -76,7 +77,7 @@ private:
     thor::ParticleSystem m_fallingPointParticleSystem;
     FallingPointEmitter m_fallingPointEmitter;
 
-    sf::SoundBuffer m_failSoundBuffer;
+    sf::Sound m_winSound;
     sf::Sound m_failSound;
     thor::ParticleSystem m_failParticleSystem;
     std::vector<sf::Vector2f> m_failedPoints;

@@ -77,6 +77,19 @@ The default color is a slightly transparent red (`165, 0, 0, 200`).
 
 
 
+Sounds
+======
+
+`sound`
+-------
+
+Example: `sound = birds_taking_off.wav`
+
+Filename of the sound that is played when the spell is successfully finished.
+The sound files have to be located in the `data/sounds/` folder.
+
+
+
 Emitters
 ========
 
@@ -86,12 +99,29 @@ Emitters
 Example: `emitter = circularEmitter`
 
 Chooses the emitter that is used for the successful spell effect.
+Currently it is only possible to choose one emitter.
 You can currently choose:
 
-|      Name       | Effect                                                 |
-|:---------------:|:-------------------------------------------------------|
-| circularEmitter | Emits randomly rotating particles in all directions    |
-|    upEmitter    | Emits particles going upwards with a deflection of 60° |
+|      Name       | Effect                                                  |
+|:---------------:|:--------------------------------------------------------|
+| circularEmitter | Emits randomly rotating particles in all directions.    |
+|    upEmitter    | Emits particles going upwards with a deflection of 60°. |
+
+
+`affectors`
+-----------
+
+Example: `affectors = toTransparent, slowScaleUp`
+
+Affectors affect the particles in the successful spell effect, after they have been created.
+You can choose as many of the following affectors as you like:
+
+|     Name      | Effect                                        |
+|:-------------:|:----------------------------------------------|
+|   downward    | Lets the particle fall downward.              |
+| toTransparent | Changes the particles opacity to transparent. |
+|  slowScaleUp  | Slowly scales the particle up.                |
+|  slowScaleUp  | Scales the particle up fast.                  |
 
 
 `particleDownsampleFactor`

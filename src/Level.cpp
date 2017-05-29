@@ -48,6 +48,10 @@ bool Level::loadFromFile(std::string& filename)
     spell.get("backgroundTextureName", backgroundTextureName);
     m_backgroundTextureName = backgroundTextureName;
     
+    std::string sound;
+    spell.get("sound", sound);
+    m_sound = sound;
+    
     std::string emitterName;
     spell.get("emitter", emitterName);
     m_emitterName = emitterName;

@@ -6,6 +6,8 @@ path = Avis.svg
 
 backgroundTextureName = green_house.png
 
+sound = birds_taking_off.wav
+
 emitterTexture = yellow_bird.png
 
 emitter = upEmitter

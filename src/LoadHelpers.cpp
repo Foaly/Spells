@@ -108,3 +108,23 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     
     return textures;
 }
+
+
+thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
+{
+    thor::ResourceHolder<sf::SoundBuffer, std::string> sounds;
+    
+    // load sounds
+    sounds.acquire("fail.wav",             thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/fail.wav")),             thor::Resources::Reuse);
+    sounds.acquire("birds_taking_off.wav", thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/birds_taking_off.wav")), thor::Resources::Reuse);
+    
+    // create an empty Soundbuffer as a fallback
+    auto emptySoundbuffer = [=] () -> std::unique_ptr<sf::SoundBuffer>
+    {
+        return std::unique_ptr<sf::SoundBuffer>(new sf::SoundBuffer());
+    };
+    thor::ResourceLoader<sf::SoundBuffer> emptyLoader(emptySoundbuffer, "AudioNone");
+    sounds.acquire("none", emptyLoader);
+    
+    return sounds;
+}

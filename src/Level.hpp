@@ -32,6 +32,7 @@ public:
     std::string              m_name;
     std::string              m_svgPath;
     std::string              m_backgroundTextureName;
+    std::string              m_sound;
     std::string              m_emitterName;
     std::string              m_emitterTexture;
     std::vector<std::string> m_affectors;
