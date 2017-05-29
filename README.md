@@ -27,7 +27,7 @@ SettingsParser (which can be found in `src/SettingsParser/`) is also licensed un
 
 The content of this game (textures, sound, settings, etc.) can be found in the `rundirectory/data/` folder.
 The contents are licensed under Creative Commons licenses.
-For the specific license used for a file, please refer the `LICENSE.md` file in the folder containing the file.
+For the specific license used for a file, please refer to the `LICENSE.md` file in the folder containing the file.
 
 
 [zlib]: https://en.wikipedia.org/wiki/Zlib_License
