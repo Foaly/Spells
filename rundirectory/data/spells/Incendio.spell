@@ -1,0 +1,15 @@
+# Incendio
+
+name = Incendio
+
+path = Incendio.svg
+
+backgroundTextureName = stairs_top.png
+
+sound = fire.wav
+
+emitterTexture = fire.png
+
+emitter = scaledRotatedUpEmitter
+
+affectors = toTransparent, slowScaleUp

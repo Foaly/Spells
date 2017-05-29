@@ -32,8 +32,8 @@ EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
     VectorEmitter circularEmitter(winPointVector);
     circularEmitter.setEmissionRate(20);
     circularEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.2f), sf::seconds(1.6f)) );
-    circularEmitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );   // Emit particles with a velocity between 100.f and 200.f in a random direction
-    circularEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // Rotate randomly
+    circularEmitter.setParticleVelocity( util::Distributions::disk(100.f, 200.f) );       // emit particles with a velocity between 100.f and 200.f in a random direction
+    circularEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // rotate randomly
     circularEmitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
     emitters["circularEmitter"] = circularEmitter;
         
@@ -47,6 +47,12 @@ EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
     auto verticalSpeed = util::Distributions::uniform(sf::Vector2f(0.f, -250.f), sf::Vector2f(0.f, -200.f));
     upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 60.f) );
     emitters["upEmitter"] = upEmitter;
+    
+    upEmitter.setFlipTowardsDirection(false); // turn flipping off, otherwise scaling looks weird
+    upEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );   // rotate randomly
+    upEmitter.setParticleScale( util::Distributions::uniformScale(0.5f, 0.8f) ); // start with a lower scale
+    upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 40.f) );
+    emitters["scaledRotatedUpEmitter"] = upEmitter;
     
     return emitters;
 }
@@ -105,6 +111,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     textures.acquire("orange_orb.png",  thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/orange_orb.png")),  thor::Resources::Reuse);
     textures.acquire("parchment.png",   thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/parchment.png")),   thor::Resources::Reuse);
     textures.acquire("stairs_top.png",  thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/stairs_top.png")),  thor::Resources::Reuse);
+    textures.acquire("fire.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/fire.png")),        thor::Resources::Reuse);
     
     return textures;
 }
@@ -117,6 +124,7 @@ thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
     // load sounds
     sounds.acquire("fail.wav",             thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/fail.wav")),             thor::Resources::Reuse);
     sounds.acquire("birds_taking_off.wav", thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/birds_taking_off.wav")), thor::Resources::Reuse);
+    sounds.acquire("fire.wav",             thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/fire.wav")), thor::Resources::Reuse);
     
     // create an empty Soundbuffer as a fallback
     auto emptySoundbuffer = [=] () -> std::unique_ptr<sf::SoundBuffer>

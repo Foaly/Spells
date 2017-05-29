@@ -17,7 +17,16 @@ Remixes
 | `360409__nakhas__pigeons-taking-off.wav`          | [CC BY-NC 3.0][by-nc-3.0] | Nakhas          | https://freesound.org/people/Nakhas/sounds/360409/              |
 
 
+### fire.wav ([CC BY-SA 4.0][by-sa-4.0])
+
+| Based on                                       | License     | Author      | Link                                                    |
+|:-----------------------------------------------|:------------|:------------|:--------------------------------------------------------|
+| `186316__samararaine__nighttime-bonfire-1.wav` | [CC 0][cc0] | samararaine | https://freesound.org/people/samararaine/sounds/186316/ |
+| `186374__samararaine__bonfire-being-lit.wav`   | [CC 0][cc0] | samararaine | https://freesound.org/people/samararaine/sounds/186374/ |
+
+
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/
 [by-3.0]: https://creativecommons.org/licenses/by/3.0/
+[by-sa-4.0]: https://creativecommons.org/licenses/by-sa/4.0/
 [by-nc-3.0]: https://creativecommons.org/licenses/by-nc/3.0/
 [by-nc-sa-4.0]: https://creativecommons.org/licenses/by-nc-sa/4.0/

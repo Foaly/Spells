@@ -102,10 +102,12 @@ Chooses the emitter that is used for the successful spell effect.
 Currently it is only possible to choose one emitter.
 You can currently choose:
 
-|      Name       | Effect                                                  |
-|:---------------:|:--------------------------------------------------------|
-| circularEmitter | Emits randomly rotating particles in all directions.    |
-|    upEmitter    | Emits particles going upwards with a deflection of 60°. |
+|          Name          | Effect                                                                                                                     |
+|:----------------------:|:---------------------------------------------------------------------------------------------------------------------------|
+|    circularEmitter     | Emits randomly rotating particles in all directions.                                                                       |
+| scaledCircularEmitter  | Emits randomly rotating particles in all directions scaled between 0.6 and 0.7.                                            |
+|       upEmitter        | Emits particles going upwards with a deflection of 60°. The particle texture is flipped into the moving direction.         |
+| scaledRotatedUpEmitter | Emits particles going upwards with a deflection of 40°. The particles are randomly rotated and sclaed between 0.5 and 0.8. |
 
 
 `affectors`
@@ -121,7 +123,7 @@ You can choose as many of the following affectors as you like:
 |   downward    | Lets the particle fall downward.              |
 | toTransparent | Changes the particles opacity to transparent. |
 |  slowScaleUp  | Slowly scales the particle up.                |
-|  slowScaleUp  | Scales the particle up fast.                  |
+|  fastScaleUp  | Scales the particle up fast.                  |
 
 
 `particleDownsampleFactor`

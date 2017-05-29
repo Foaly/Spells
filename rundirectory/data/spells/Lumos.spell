@@ -6,6 +6,8 @@ path = Lumos.svg
 
 backgroundTextureName = arches.png
 
+sound = fire.wav
+
 emitterTexture = orange_orb.png
 
 emitter = scaledCircularEmitter
