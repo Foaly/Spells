@@ -14,6 +14,7 @@ License
 | parchment.png   | [CC BY 2.0][by-2.0]             | Diego da Silva    | `4306058967_2918d59463_o.jpg`  | https://www.flickr.com/photos/natura_pagana/4306058967/     |
 | stairs_top.png  | [CC BY 2.0][by-2.0]             | Jason Tong        | `14833550654_d7c8ba5157_o.jpg` | https://www.flickr.com/photos/sidneiensis/14833550654/      |
 | fire.png        | [CC BY-NC-SA 2.0][by-nc-sa-2.0] | Pipistrula        | `2998214564_58bc200cfc_o.jpg`  | https://www.flickr.com/photos/pipistrula/2998214564/        |
+| feather.png     | [CC BY-NC 2.0][by-nc-2.0]       | César Astudillo   | `2313391044_812f96f1ba_o.jpg`  | https://www.flickr.com/photos/cesarastudillo/2313391044/    |
 
 
 
@@ -30,9 +31,10 @@ Remixes
 
 
 
-[by-sa-2.0]: https://creativecommons.org/licenses/by-sa/2.0/
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/
 [by-2.0]: https://creativecommons.org/licenses/by/2.0/
+[by-sa-2.0]: https://creativecommons.org/licenses/by-sa/2.0/
 [by-sa-4.0]: https://creativecommons.org/licenses/by-sa/4.0/
 [by-nd-2.0]: https://creativecommons.org/licenses/by-nd/2.0/
+[by-nc-2.0]: https://creativecommons.org/licenses/by-nc/2.0/
 [by-nc-sa-2.0]: https://creativecommons.org/licenses/by-nc-sa/2.0/

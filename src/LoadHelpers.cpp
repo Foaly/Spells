@@ -112,6 +112,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     textures.acquire("parchment.png",   thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/parchment.png")),   thor::Resources::Reuse);
     textures.acquire("stairs_top.png",  thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/stairs_top.png")),  thor::Resources::Reuse);
     textures.acquire("fire.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/fire.png")),        thor::Resources::Reuse);
+    textures.acquire("feather.png",     thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/feather.png")),       thor::Resources::Reuse);
     
     return textures;
 }

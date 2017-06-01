@@ -6,8 +6,10 @@ path = Wingardium_Leviosa.svg
 
 backgroundTextureName = stairs_top.png
 
-emitterTexture = orange_orb.png
+emitterTexture = feather.png
 
 emitter = upEmitter
+
+particleDownsampleFactor = 2
 
 affectors = toTransparent
