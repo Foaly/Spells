@@ -120,7 +120,7 @@ You can choose as many of the following affectors as you like:
 
 |     Name      | Effect                                        |
 |:-------------:|:----------------------------------------------|
-|   downward    | Lets the particle fall downward.              |
+|   downwards   | Lets the particle fall downward.              |
 | toTransparent | Changes the particles opacity to transparent. |
 |  slowScaleUp  | Slowly scales the particle up.                |
 |  fastScaleUp  | Scales the particle up fast.                  |

@@ -1,5 +1,5 @@
 /// Spells - a game about magic spells
-/// Copyright (C) 2015 - 2017  Foaly
+/// Copyright (C) 2015 - 2018  Foaly
 
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by

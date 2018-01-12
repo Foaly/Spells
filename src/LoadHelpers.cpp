@@ -1,5 +1,5 @@
 /// Spells - a game about magic spells
-/// Copyright (C) 2015 - 2017  Foaly
+/// Copyright (C) 2015 - 2018  Foaly
 
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ AffectorMap setupAffectors()
     thor::ForceAffector downwardsAffector(sf::Vector2f(0, 150));
     affectors["downwards"] = downwardsAffector;
     
-    // golden color tha fades to transparent
+    // golden color that fades to transparent
     thor::ColorGradient goldGradient;
     goldGradient[0.0f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
     goldGradient[0.8f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
