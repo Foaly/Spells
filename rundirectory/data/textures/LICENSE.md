@@ -30,10 +30,19 @@ Remixes
 | `6985875129_770c7a9989_o.jpg` | [CC BY 2.0][by-2.0] | Elliott Brown | https://www.flickr.com/photos/ell-r-brown/6985875129/ |
 
 
+### clock.png
+
+| Based on                 | License                             | Author                                      | Link                                                |
+|:-------------------------|:------------------------------------|:--------------------------------------------|:----------------------------------------------------|
+| `Eisenl2.png`            | [CC BY-SA 3.0][by-sa-3.0]           | Deutsches Uhrenmuseum, Furtwangen (Germany) | https://commons.wikimedia.org/wiki/File:Eisenl2.png |
+
+
+
 
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/
 [by-2.0]: https://creativecommons.org/licenses/by/2.0/
 [by-sa-2.0]: https://creativecommons.org/licenses/by-sa/2.0/
+[by-sa-3.0]: https://creativecommons.org/licenses/by-sa/3.0/
 [by-sa-4.0]: https://creativecommons.org/licenses/by-sa/4.0/
 [by-nd-2.0]: https://creativecommons.org/licenses/by-nd/2.0/
 [by-nc-2.0]: https://creativecommons.org/licenses/by-nc/2.0/

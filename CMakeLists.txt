@@ -40,6 +40,8 @@ set(SOURCE_FILES src/main.cpp
                  src/Level.cpp
                  src/LoadHelpers.hpp
                  src/LoadHelpers.cpp
+                 src/Clock.hpp
+                 src/Clock.cpp
                  )
 
 # when we are on MacOS create a bundle and

@@ -42,6 +42,7 @@
 #include "FallingPointEmitter.hpp"
 #include "Level.hpp"
 #include "LoadHelpers.hpp"
+#include "Clock.hpp"
 
 class Spells {
 public:
@@ -101,6 +102,8 @@ private:
     sf::Font m_font;
     sf::Text m_percentageText;
     sf::Sprite m_percentBackground;
+
+    Clock m_clock;
 
     sf::Shader m_radialGradientShader;
     sf::Shader m_rectangleGradientShader;

@@ -41,13 +41,12 @@ Spells::Spells() : m_isUserDrawing(false),
                    m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
-                   m_spellGenerator(m_windowCenter)
+                   m_spellGenerator(m_windowCenter),
+                   m_textures(loadTextures()),    // load textures
+                   m_clock(m_textures)
 {
     // limit frame time
     m_window.setFramerateLimit(60);
-
-    // load textures
-    m_textures = loadTextures();
     
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
@@ -97,6 +96,10 @@ Spells::Spells() : m_isUserDrawing(false),
     
     m_percentBackground.setTexture(m_textures["parchment.png"]);
     m_percentBackground.setPosition(5, 10);
+
+    // move clock to correct position
+    const int clockXOffset = m_window.getSize().x - m_clock.getSize().x - 5;
+    m_clock.setPosition(sf::Vector2f(clockXOffset, 1));
 
     m_percentageText.setFont(m_font);
     m_percentageText.setCharacterSize(50);
@@ -428,6 +431,9 @@ void Spells::draw()
     // draw percentage
     m_window.draw(m_percentBackground);
     m_window.draw(m_percentageText);
+
+    // draw clock
+    m_window.draw(m_clock);
 
     // draw wand
     m_window.draw(m_wandParticles);
