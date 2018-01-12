@@ -4,6 +4,9 @@ rundirectory/*.dll
 # sketches
 gimps/
 
+# CMake
+CMakeLists.txt.user
+
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion
 
 *.iml

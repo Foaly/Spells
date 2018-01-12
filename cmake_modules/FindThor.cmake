@@ -2,23 +2,23 @@
 ##
 ## Thor C++ Library
 ## Copyright (c) 2011-2015 Jan Haller
-## 
+##
 ## This software is provided 'as-is', without any express or implied
 ## warranty. In no event will the authors be held liable for any damages
 ## arising from the use of this software.
-## 
+##
 ## Permission is granted to anyone to use this software for any purpose,
 ## including commercial applications, and to alter it and redistribute it
 ## freely, subject to the following restrictions:
-## 
+##
 ## 1. The origin of this software must not be misrepresented; you must not
 ##    claim that you wrote the original software. If you use this software
 ##    in a product, an acknowledgment in the product documentation would be
 ##    appreciated but is not required.
-## 
+##
 ## 2. Altered source versions must be plainly marked as such, and must not be
 ##    misrepresented as being the original software.
-## 
+##
 ## 3. This notice may not be removed or altered from any source distribution.
 ##
 ## Thanks to Jeremiah Griffin (nokurn) for writing the original FindThor module.
@@ -50,7 +50,7 @@
 # - THOR_FOUND:		      Is TRUE if at least one of the debug or release library is found
 #
 # Usage example:
-# 
+#
 #   find_package(Thor 2 REQUIRED)
 #   include_directories(${THOR_INCLUDE_DIR})
 #   target_link_libraries(MyProject ${THOR_LIBRARY})
@@ -136,7 +136,7 @@ mark_as_advanced(THOR_INCLUDE_DIR
 # Result
 if(THOR_FOUND)
 	# Success
-	message("Found Thor: ${THOR_INCLUDE_DIR}")
+	message(STATUS "Found Thor: ${THOR_INCLUDE_DIR}")
 else()
 	# include directory or library not found
 	set(FINDTHOR_ERROR "Could NOT find Thor (missing: ${FINDTHOR_MISSING})")

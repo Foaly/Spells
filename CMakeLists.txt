@@ -49,6 +49,7 @@ if(APPLE)
                      src/osx/PathResolver.mm)
 
     add_executable(${EXECUTABLE_NAME} MACOSX_BUNDLE ${SOURCE_FILES})
+    target_link_libraries( ${EXECUTABLE_NAME} "-framework Foundation" )
 
     # copy resource files into bundle
     copy_resource_folder_to_bundle(${EXECUTABLE_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/rundirectory/data data)
@@ -73,7 +74,7 @@ if(SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 else()
-	  message(FATAL_ERROR "Unable to find SFML!")
+    message(FATAL_ERROR "Unable to find SFML!")
 endif()
 
 
@@ -83,5 +84,5 @@ if(THOR_FOUND)
     include_directories(${THOR_INCLUDE_DIR})
     target_link_libraries(${EXECUTABLE_NAME} ${THOR_LIBRARY})
 else()
-	  message(FATAL_ERROR "Unable to find Thor!")
+    message(FATAL_ERROR "Unable to find Thor!")
 endif()
