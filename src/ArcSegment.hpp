@@ -33,12 +33,13 @@ class ArcSegment : public sf::Drawable, public sf::Transformable
 {
 public:
     ArcSegment(float radius, float width);
-    const sf::FloatRect& getLocalBounds() const;
+    const sf::FloatRect& getCircleSize() const;
     void setColor(sf::Color color);
+    void setArcLength(float length);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    void computeBounds();
+    void computeCircleSize();
 
     std::vector<sf::Vertex>    m_vertices;
     sf::FloatRect              m_bounds;

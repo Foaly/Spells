@@ -260,6 +260,8 @@ void Spells::update()
     m_wand.setPosition(mousePosition);
     m_wandEmitter.setParticlePosition(mousePosition);
 
+    m_clock.update();
+
     if(m_isUserDrawing)
     {
         const sf::Vector2f delta(mousePosition - m_lastPosition);

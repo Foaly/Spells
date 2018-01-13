@@ -27,16 +27,37 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_clockSprite(m_textureHolder["clock.png"]),
     m_arc(48.f, 9.f)
 {
-    sf::Vector2f halfSize = { m_arc.getLocalBounds().width / 2, m_arc.getLocalBounds().height / 2 };
+    m_gradient[0.0f] = sf::Color( 20, 173,  0); // green
+    m_gradient[0.4f] = sf::Color(220, 232, 13); // yellow
+    m_gradient[0.5f] = sf::Color(239, 167,  0); // orange
+    m_gradient[0.9f] = sf::Color(198,   0,  0); // red
+    m_gradient[1.0f] = sf::Color(198,   0,  0); // red
+
+    sf::Vector2f halfSize = { m_arc.getCircleSize().width / 2, m_arc.getCircleSize().height / 2 };
     m_arc.setOrigin(halfSize);
-    m_arc.setPosition(sf::Vector2f(112, 166));
-    m_arc.setColor(sf::Color(30, 175, 11)); // green
+    m_arc.setPosition(sf::Vector2f(112, 165));
+    m_arc.setColor(m_gradient.sampleColor(0.f));
 }
 
 
 const sf::Vector2f Clock::getSize() const
 {
     return sf::Vector2f(m_clockSprite.getTexture()->getSize());
+}
+
+
+void Clock::update()
+{
+    if (m_clock.getElapsedTime() < sf::seconds(8.f))
+    {
+        float amount = m_clock.getElapsedTime() / sf::seconds(8.f);
+        m_arc.setArcLength(amount);
+        m_arc.setColor(m_gradient.sampleColor(amount));
+    }
+    else
+    {
+        m_clock.restart();
+    }
 }
 
 

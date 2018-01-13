@@ -23,11 +23,13 @@
 #include "ArcSegment.hpp"
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
 #include <Thor/Resources/ResourceHolder.hpp>
+#include <Thor/Graphics/ColorGradient.hpp>
 
 
 class Clock : public sf::Drawable, public sf::Transformable
@@ -35,6 +37,7 @@ class Clock : public sf::Drawable, public sf::Transformable
 public:
     Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder);
     const sf::Vector2f getSize() const;
+    void update();
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -42,6 +45,8 @@ private:
     thor::ResourceHolder<sf::Texture, std::string>&    m_textureHolder;
     sf::Sprite                                         m_clockSprite;
     ArcSegment                                         m_arc;
+    sf::Clock                                          m_clock;
+    thor::ColorGradient                                m_gradient;
 };
 
 
