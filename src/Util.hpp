@@ -33,6 +33,7 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+#include <cmath>
 
 namespace util
 {
@@ -74,6 +75,18 @@ namespace util
 
 
 std::vector<sf::Vector2f> loadPathsFromFile(std::string filename);
+
+
+// Compute the normal of a segment
+template<typename T>
+sf::Vector2<T> computeNormal(const sf::Vector2<T>& p1, const sf::Vector2<T>& p2)
+{
+    sf::Vector2<T> normal(p1.y - p2.y, p2.x - p1.x);
+    float length = std::sqrt(normal.x * normal.x + normal.y * normal.y);
+    if (length != 0.f)
+        normal /= length;
+    return normal;
+}
 
 
 ///

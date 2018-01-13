@@ -38,7 +38,7 @@
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
-                   m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen),
+                   m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen, sf::ContextSettings(0, 0, 8)),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
                    m_userPointRadius(20.f),
                    m_spellGenerator(m_windowCenter),

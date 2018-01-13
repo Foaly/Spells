@@ -17,33 +17,35 @@
 // File created by Maximilian on 12.01.2018.
 
 
-#ifndef SPELLS_CLOCK_H
-#define SPELLS_CLOCK_H
+#ifndef SPELLS_ARCSEGMENT_H
+#define SPELLS_ARCSEGMENT_H
 
-#include "ArcSegment.hpp"
-
-#include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
-#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Vertex.hpp>
 
 #include <Thor/Resources/ResourceHolder.hpp>
 
+#include <vector>
 
-class Clock : public sf::Drawable, public sf::Transformable
+
+class ArcSegment : public sf::Drawable, public sf::Transformable
 {
 public:
-    Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder);
-    const sf::Vector2f getSize() const;
+    ArcSegment(float radius, float width);
+    const sf::FloatRect& getLocalBounds() const;
+    void setColor(sf::Color color);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void computeBounds();
 
-    thor::ResourceHolder<sf::Texture, std::string>&    m_textureHolder;
-    sf::Sprite                                         m_clockSprite;
-    ArcSegment                                         m_arc;
+    std::vector<sf::Vertex>    m_vertices;
+    sf::FloatRect              m_bounds;
+    float                      m_radius;
+    float                      m_width;
 };
 
 
 
-#endif //SPELLS_CLOCK_H
+#endif //SPELLS_ARCSEGMENT_H

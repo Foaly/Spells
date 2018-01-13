@@ -24,9 +24,13 @@
 
 Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_textureHolder(textureHolder),
-    m_clockSprite(m_textureHolder["clock.png"])
+    m_clockSprite(m_textureHolder["clock.png"]),
+    m_arc(48.f, 9.f)
 {
-
+    sf::Vector2f halfSize = { m_arc.getLocalBounds().width / 2, m_arc.getLocalBounds().height / 2 };
+    m_arc.setOrigin(halfSize);
+    m_arc.setPosition(sf::Vector2f(112, 166));
+    m_arc.setColor(sf::Color(30, 175, 11)); // green
 }
 
 
@@ -41,4 +45,5 @@ void Clock::draw(sf::RenderTarget &target, sf::RenderStates states) const
     states.transform *= getTransform();
 
     target.draw(m_clockSprite, states);
+    target.draw(m_arc, states);
 }
