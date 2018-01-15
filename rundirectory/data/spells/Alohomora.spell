@@ -6,6 +6,8 @@ path = Alohomora.svg
 
 backgroundTextureName = door.png
 
+sound = opening_lock.wav
+
 emitterTexture = key.png
 
 emitter = circularEmitter

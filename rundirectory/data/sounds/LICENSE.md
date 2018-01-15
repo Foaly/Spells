@@ -25,6 +25,16 @@ Remixes
 | `186374__samararaine__bonfire-being-lit.wav`   | [CC 0][cc0] | samararaine | https://freesound.org/people/samararaine/sounds/186374/ |
 
 
+### opening_lock.wav ([CC BY-SA 4.0][by-sa-4.0])
+
+| Based on                                                   | License     | Author              | Link                                                            |
+|:-----------------------------------------------------------|:------------|:--------------------|:----------------------------------------------------------------|
+| `242187__thebrendanbrown__locked-box.wav`                  | [CC 0][cc0] | thebrendanbrown     | https://freesound.org/people/thebrendanbrown/sounds/242187/     |
+| `249935__hintringer__unlock-and-lock-a-door-with-keys.wav` | [CC 0][cc0] | hintringe           | https://freesound.org/people/hintringer/sounds/249935/          |
+| `173943__johnsonbrandediting__key-jingle.mp3`              | [CC 0][cc0] | JohnsonBrandEditing | https://freesound.org/people/JohnsonBrandEditing/sounds/173943/ |
+
+
+
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/
 [by-3.0]: https://creativecommons.org/licenses/by/3.0/
 [by-sa-4.0]: https://creativecommons.org/licenses/by-sa/4.0/
