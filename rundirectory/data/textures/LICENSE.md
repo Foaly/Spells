@@ -35,6 +35,7 @@ Remixes
 | Based on                 | License                             | Author                                      | Link                                                |
 |:-------------------------|:------------------------------------|:--------------------------------------------|:----------------------------------------------------|
 | `Eisenl2.png`            | [CC BY-SA 3.0][by-sa-3.0]           | Deutsches Uhrenmuseum, Furtwangen (Germany) | https://commons.wikimedia.org/wiki/File:Eisenl2.png |
+| `KSC-2012-2734~orig.jpg` | no copyright for non-commercial use | NASA                                        | https://images.nasa.gov/details-KSC-2012-2734.html  |
 
 
 
