@@ -21,11 +21,19 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <Thor/Math/Trigonometry.hpp>
+#include <Thor/Math/Random.hpp>
+
+#include <cmath>
+
 
 Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
-    m_textureHolder(textureHolder),
-    m_clockSprite(m_textureHolder["clock.png"]),
-    m_arc(48.f, 9.f)
+    m_clockSprite(textureHolder["clock.png"]),
+    m_jupiterSprite(textureHolder["jupiter.png"]),
+    m_arc(48.f, 9.f),
+    m_origin(108, 162),
+    m_planetRadius(34.f),
+    m_jupiterAngle(thor::random(-2.f * thor::Pi, 0.f))
 {
     m_gradient[0.0f] = sf::Color( 20, 173,  0); // green
     m_gradient[0.4f] = sf::Color(220, 232, 13); // yellow
@@ -37,6 +45,9 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_arc.setOrigin(halfSize);
     m_arc.setPosition(sf::Vector2f(112, 165));
     m_arc.setColor(m_gradient.sampleColor(0.f));
+
+    m_jupiterSprite.setOrigin(sf::Vector2f(textureHolder["jupiter.png"].getSize()) / 2.f);
+    m_jupiterSprite.setPosition(108, 128);
 }
 
 
@@ -46,7 +57,7 @@ const sf::Vector2f Clock::getSize() const
 }
 
 
-void Clock::update()
+void Clock::update(sf::Time frameTime)
 {
     if (m_clock.getElapsedTime() < sf::seconds(8.f))
     {
@@ -58,6 +69,13 @@ void Clock::update()
     {
         m_clock.restart();
     }
+
+    m_jupiterAngle -= 0.3f * frameTime.asSeconds();
+    if (m_jupiterAngle < -2.f * thor::Pi)
+        m_jupiterAngle = 0.f;
+
+    auto jupiterPosition = m_origin + m_planetRadius * sf::Vector2f(std::cos(m_jupiterAngle), std::sin(m_jupiterAngle));
+    m_jupiterSprite.setPosition(jupiterPosition);
 }
 
 
@@ -67,4 +85,5 @@ void Clock::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
     target.draw(m_clockSprite, states);
     target.draw(m_arc, states);
+    target.draw(m_jupiterSprite, states);
 }

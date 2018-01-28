@@ -260,7 +260,7 @@ void Spells::update()
     m_wand.setPosition(mousePosition);
     m_wandEmitter.setParticlePosition(mousePosition);
 
-    m_clock.update();
+    m_clock.update(frameTime);
 
     if(m_isUserDrawing)
     {

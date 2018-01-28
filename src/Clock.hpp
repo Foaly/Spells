@@ -37,16 +37,19 @@ class Clock : public sf::Drawable, public sf::Transformable
 public:
     Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder);
     const sf::Vector2f getSize() const;
-    void update();
+    void update(sf::Time frameTime);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    thor::ResourceHolder<sf::Texture, std::string>&    m_textureHolder;
     sf::Sprite                                         m_clockSprite;
     ArcSegment                                         m_arc;
     sf::Clock                                          m_clock;
     thor::ColorGradient                                m_gradient;
+    const sf::Vector2f                                 m_origin;
+    const float                                        m_planetRadius;
+    sf::Sprite                                         m_jupiterSprite;
+    float                                              m_jupiterAngle;
 };
 
 

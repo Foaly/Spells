@@ -24,6 +24,8 @@
 #include <Thor/Animations/ColorAnimation.hpp>
 #include <Thor/Resources/SfmlLoaders.hpp>
 
+#include <SFML/Audio/SoundBuffer.hpp>
+
 
 EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
 {
@@ -114,6 +116,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     textures.acquire("fire.png",        thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/fire.png")),        thor::Resources::Reuse);
     textures.acquire("feather.png",     thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/feather.png")),     thor::Resources::Reuse);
     textures.acquire("clock.png",       thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/clock.png")),       thor::Resources::Reuse);
+    textures.acquire("jupiter.png",     thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/jupiter.png")),     thor::Resources::Reuse);
 
     return textures;
 }
