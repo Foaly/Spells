@@ -32,16 +32,3 @@ int main(int argc, char* argv[])
         return -1;
     }
 }
-
-/*#include <bitset>
-
-int main()
-{
-    sf::Image image;
-    sf::Color color(1, 2, 3, 4);
-    sf::Uint32 i = color.toInteger();
-    sf::Uint32 f = ((i) >> 24) | ((i & 0x00ff0000) >> 8) | ((i & 0x0000ff00) << 8) | ((i) << 24);
-
-    image.create(10, 10, color);
-    return 0;
-}*/
