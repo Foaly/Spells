@@ -44,6 +44,8 @@ set(SOURCE_FILES src/main.cpp
                  src/Clock.cpp
                  src/ArcSegment.hpp
                  src/ArcSegment.cpp
+                 src/Ellipse.hpp
+                 src/Ellipse.cpp
                  )
 
 # when we are on MacOS create a bundle and

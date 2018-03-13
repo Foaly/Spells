@@ -21,6 +21,7 @@
 #define SPELLS_CLOCK_H
 
 #include "ArcSegment.hpp"
+#include "Ellipse.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Clock.hpp>
@@ -50,6 +51,7 @@ private:
     const float                                        m_planetRadius;
     sf::Sprite                                         m_jupiterSprite;
     float                                              m_jupiterAngle;
+    Ellipse                                            m_moonShadow;
 };
 
 

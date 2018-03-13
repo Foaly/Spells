@@ -33,7 +33,8 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_arc(48.f, 9.f),
     m_origin(108, 162),
     m_planetRadius(34.f),
-    m_jupiterAngle(thor::random(-2.f * thor::Pi, 0.f))
+    m_jupiterAngle(thor::random(-2.f * thor::Pi, 0.f)),
+    m_moonShadow(/*-21*/ 15, 23, 22, 30)
 {
     m_gradient[0.0f] = sf::Color( 20, 173,  0); // green
     m_gradient[0.4f] = sf::Color(220, 232, 13); // yellow
@@ -48,6 +49,9 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
 
     m_jupiterSprite.setOrigin(sf::Vector2f(textureHolder["jupiter.png"].getSize()) / 2.f);
     m_jupiterSprite.setPosition(108, 128);
+
+    m_moonShadow.setPosition(m_origin + sf::Vector2f(0, 1.0));
+    m_moonShadow.rotate(-30);
 }
 
 
@@ -84,6 +88,7 @@ void Clock::draw(sf::RenderTarget &target, sf::RenderStates states) const
     states.transform *= getTransform();
 
     target.draw(m_clockSprite, states);
+    target.draw(m_moonShadow, states);
     target.draw(m_arc, states);
     target.draw(m_jupiterSprite, states);
 }
