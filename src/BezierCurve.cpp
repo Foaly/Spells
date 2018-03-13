@@ -84,17 +84,17 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
     // distances along a curve was solved with this very helpful post:
     // https://gamedev.stackexchange.com/questions/5373/moving-ships-between-two-planets-along-a-bezier-missing-some-equations-for-acce/5427#5427
 
-    const float numberOfSegments = 100.f; // this should never be below 1
-    std::vector<float> segmentLengths(numberOfSegments + 1);
+    const std::size_t segmentCount = 100; // this should never be below 1
+    std::vector<float> segmentLengths(segmentCount + 1);
     segmentLengths[0] = 0.f;
 
     // precalculate a number of points on the curve
     // measure the distance between them and store it
     float currentLength = 0.f;
     sf::Vector2f previousPoint = calculatePoint(0.f);
-    for(std::size_t i = 1; i <= numberOfSegments; i++)
+    for(std::size_t i = 1; i <= segmentCount; i++)
     {
-        sf::Vector2f currentPoint = calculatePoint(i / (numberOfSegments - 1));
+        sf::Vector2f currentPoint = calculatePoint(i / static_cast<float>(segmentCount - 1));
         sf::Vector2f delta = previousPoint - currentPoint;
         currentLength += std::sqrt(delta.x * delta.x + delta.y * delta.y);
         segmentLengths[i] = currentLength;
@@ -105,16 +105,16 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
     // map the normalized length on the curve back onto the interpolation parameter t
     auto map = [&](float u)
     {
-        float targetLength = u * segmentLengths[numberOfSegments];
-        unsigned int low = 0;
-        unsigned int high = numberOfSegments;
-        unsigned int index = 0;
+        float targetLength = u * segmentLengths[segmentCount];
+        std::size_t low = 0;
+        std::size_t high = segmentCount;
+        std::size_t index = 0;
         while (low < high)
         {
             index = low + static_cast<unsigned int>((high - low) / 2);
-            if (segmentLengths[index] < targetLength) {
+            if (segmentLengths[index] < targetLength)
+            {
                 low = index + 1;
-
             } else {
                 high = index;
             }
@@ -125,9 +125,9 @@ std::vector<sf::Vector2f> BezierCurve::generateEvenlySpacedPoints(float distance
 
         float lengthBefore = segmentLengths[index];
         if (lengthBefore == targetLength) {
-            return index / numberOfSegments;
+            return index / static_cast<float>(segmentCount);
         } else {
-            return (index + (targetLength - lengthBefore) / (segmentLengths[index + 1] - lengthBefore)) / numberOfSegments;
+            return (index + (targetLength - lengthBefore) / (segmentLengths[index + 1] - lengthBefore)) / segmentCount;
         }
     };
 
