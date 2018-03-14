@@ -45,9 +45,9 @@ void VectorEmitter::operator() (thor::EmissionInterface& system, sf::Time dt)
 {
     if(m_firstEmission)
     {
-        for(auto itor = m_points.begin(); itor != m_points.end(); itor++)
+        for(auto &point: m_points)
         {
-            emitParticle(system, *itor);
+            emitParticle(system, point);
         }
 
         m_firstEmission = false;

@@ -414,7 +414,7 @@ void Spells::draw()
     sf::Sprite circle(m_textures["circle.png"]);
     circle.setOrigin(25, 25);
     circle.setColor(sf::Color(255, 255, 255, 100));
-    for(auto position: m_spellPoints)
+    for(auto &position: m_spellPoints)
     {
         circle.setPosition(position);
         m_window.draw(circle, &m_radialGradientShader);
@@ -430,7 +430,7 @@ void Spells::draw()
     // draw the user spell
     circle.setScale(0.8f, 0.8f);
     circle.setColor(m_currentSpell->second.m_spellColor);
-    for(auto position: m_userPoints)
+    for(auto &position: m_userPoints)
     {
         circle.setPosition(position);
         m_window.draw(circle, &m_radialGradientShader);
