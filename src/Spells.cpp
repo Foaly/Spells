@@ -283,6 +283,12 @@ void Spells::update()
     {
         if(m_computingClock.getElapsedTime() >= sf::milliseconds(30)) // this clock determines the speed at which the wrong points fall
         {
+            if (m_userPoints.size() == 0)
+            {
+                m_isComputing = false;
+                return;
+            }
+
             bool didUserPointHit = false;
             const sf::Vector2f userPointPosition(*m_userPointIter);
 
