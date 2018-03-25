@@ -34,13 +34,17 @@
 #include "VectorEmitter.hpp"
 #include "PathResolver.hpp"
 
+namespace config {
+    const float    userPointRadius       = 20.f;
+    const float    spellPointRadius      = 22.f;
+    const sf::Time wrongParticleFallRate = sf::milliseconds(30);
+}
 
 
 Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
                    m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen, sf::ContextSettings(0, 0, 8)),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
-                   m_userPointRadius(20.f),
                    m_spellGenerator(m_windowCenter),
                    m_textures(loadTextures()),    // load textures
                    m_clock(m_textures)
@@ -266,7 +270,7 @@ void Spells::update()
     {
         for (const auto &point: m_spellPoints)
         {
-            if( util::circleContains(point, 22.f, mousePosition) )
+            if( util::circleContains(point, config::spellPointRadius, mousePosition) )
             {
                 showWandParticles = true;
                 break;
@@ -283,20 +287,20 @@ void Spells::update()
         const float movementLength = thor::length(delta);
 
         // add a point for every 20 pixel the mouse moves between two frames
-        if(movementLength > m_userPointRadius)
+        if(movementLength > config::userPointRadius)
         {
             const sf::Vector2f direction(thor::unitVector(delta));
-            const int steps = static_cast<int>(std::ceil(movementLength)) / static_cast<int>(m_userPointRadius);
+            const int steps = static_cast<int>(std::ceil(movementLength)) / static_cast<int>(config::userPointRadius);
             for(int i = 0; i < steps; i++)
             {
-                m_lastPosition += direction * m_userPointRadius;
+                m_lastPosition += direction * config::userPointRadius;
                 m_userPoints.push_back(m_lastPosition);
             }
         }
     }
     else if(m_isComputing)
     {
-        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30)) // this clock determines the rate at which the wrong points fall
+        if(m_computingClock.getElapsedTime() >= config::wrongParticleFallRate)
         {
             if (m_userPoints.size() == 0)
             {
@@ -312,7 +316,7 @@ void Spells::update()
             {
                 // calculate the distance between the current user point the current spell point
                 const sf::Vector2f spellPointPosition(*iter);
-                if( util::circleContains(spellPointPosition, 22.f, userPointPosition) )
+                if( util::circleContains(spellPointPosition, config::spellPointRadius, userPointPosition) )
                 {
                     m_numberOfPointsHit++;
                     didUserPointHit = true;
@@ -399,7 +403,7 @@ void Spells::update()
         }
     }
 
-    // update particle system
+    // update particle systems
     m_winParticleSystem.update(frameTime);
     m_failParticleSystem.update(frameTime);
     m_fallingPointParticleSystem.update(frameTime);
@@ -424,7 +428,7 @@ void Spells::draw()
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
     sf::Sprite circle(m_textures["circle.png"]);
     circle.setOrigin(25, 25);
-    circle.setColor(sf::Color(255, 255, 255, 100));
+    circle.setColor(sf::Color(255, 255, 255, 100)); // transparent white
     for(auto &position: m_spellPoints)
     {
         circle.setPosition(position);

@@ -68,7 +68,6 @@ private:
 
     thor::ResourceHolder<sf::Texture, std::string> m_textures;
     thor::ResourceHolder<sf::SoundBuffer, std::string> m_sounds;
-    const float m_userPointRadius;
     SpellGenerator m_spellGenerator;
     std::vector<sf::Vector2f> m_spellPoints;
     std::vector<sf::Vector2f> m_userPoints;
