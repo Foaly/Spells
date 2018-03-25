@@ -46,6 +46,7 @@ set(SOURCE_FILES src/main.cpp
                  src/ArcSegment.cpp
                  src/Ellipse.hpp
                  src/Ellipse.cpp
+                 src/ToggleEmitter.hpp
                  )
 
 # when we are on MacOS create a bundle and

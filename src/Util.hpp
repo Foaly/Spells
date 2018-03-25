@@ -71,7 +71,18 @@ namespace util
             };
         }
     }
-}
+
+    template <typename T>
+    bool circleContains(const sf::Vector2<T> &center, float radius, const sf::Vector2<T> &point)
+    {
+        sf::Vector2<T> delta(point - center);
+        delta.x = delta.x * delta.x;
+        delta.y = delta.y * delta.y;
+        if ((delta.x + delta.y) <= (radius * radius))
+            return true;
+        return false;
+    }
+} // namespace util
 
 
 std::vector<sf::Vector2f> loadPathsFromFile(std::string filename);

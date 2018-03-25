@@ -43,6 +43,7 @@
 #include "Level.hpp"
 #include "LoadHelpers.hpp"
 #include "Clock.hpp"
+#include "ToggleEmitter.hpp"
 
 class Spells {
 public:
@@ -92,7 +93,7 @@ private:
     sf::RectangleShape m_overlayRect;
     sf::Sprite m_wand;
     thor::ParticleSystem m_wandParticles;
-    thor::UniversalEmitter m_wandEmitter;
+    ToggleEmitter m_wandEmitter;
 
     std::map<std::string, Level> m_level;
     std::map<std::string, Level>::iterator m_currentSpell;

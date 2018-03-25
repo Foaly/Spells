@@ -241,7 +241,6 @@ void Spells::handleEvents()
                     m_userPointIter = m_userPoints.begin();
                     m_numberOfPointsHit = 0;
                     m_computingClock.restart();
-                    m_wandParticles.clearEmitters();
                 }
             }
         }
@@ -260,6 +259,21 @@ void Spells::update()
     // update wand
     m_wand.setPosition(mousePosition);
     m_wandEmitter.setParticlePosition(mousePosition);
+
+    // show the wand particles only when hovering over the spell
+    bool showWandParticles = false;
+    if(!m_isComputing)
+    {
+        for (const auto &point: m_spellPoints)
+        {
+            if( util::circleContains(point, 22.f, mousePosition) )
+            {
+                showWandParticles = true;
+                break;
+            }
+        }
+    }
+    m_wandEmitter.show(showWandParticles);
 
     m_clock.update(frameTime);
 
@@ -382,7 +396,6 @@ void Spells::update()
                 }
 
                 m_isComputing = false;
-                m_wandParticles.addEmitter(thor::refEmitter(m_wandEmitter));
             }
 
             m_computingClock.restart();
