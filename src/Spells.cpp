@@ -296,7 +296,7 @@ void Spells::update()
     }
     else if(m_isComputing)
     {
-        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30)) // this clock determines the speed at which the wrong points fall
+        if(m_computingClock.getElapsedTime() >= sf::milliseconds(30)) // this clock determines the rate at which the wrong points fall
         {
             if (m_userPoints.size() == 0)
             {
@@ -312,10 +312,7 @@ void Spells::update()
             {
                 // calculate the distance between the current user point the current spell point
                 const sf::Vector2f spellPointPosition(*iter);
-                const sf::Vector2f delta(spellPointPosition - userPointPosition);
-                const float distance = thor::length(delta);
-
-                if (distance < 22.f)
+                if( util::circleContains(spellPointPosition, 22.f, userPointPosition) )
                 {
                     m_numberOfPointsHit++;
                     didUserPointHit = true;
