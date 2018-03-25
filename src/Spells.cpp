@@ -54,7 +54,6 @@ Spells::Spells() : m_isUserDrawing(false),
     m_overlayRect.setFillColor(sf::Color(0, 0, 0, 100));
     m_overlayRect.setTexture(&m_textures["rect.png"]);
 
-    m_window.setMouseCursorVisible(false);
     m_textures["wand.png"].setSmooth(true);
     m_wand.setTexture(m_textures["wand.png"]);
     m_wand.setScale(-1.f, 1.f); // uncomment for left hand
@@ -145,6 +144,8 @@ Spells::Spells() : m_isUserDrawing(false),
 
 int Spells::run()
 {
+    m_window.setMouseCursorVisible(false);
+
     // run the program as long as the m_window is open
     while (m_window.isOpen())
     {
