@@ -17,6 +17,7 @@
 // File created by Maximilian on 12.01.2018.
 
 #include "Clock.hpp"
+#include "Util.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -25,6 +26,29 @@
 #include <Thor/Math/Random.hpp>
 
 #include <cmath>
+#include <chrono>
+#include <ctime>
+
+
+namespace {
+    /*
+     * Returns the phase of the moon. Algorithm from John Conway.
+     * Approximation apparently only valid for the 20th and 21st centuries...
+     * Taken from http://www.ben-daglish.net/moon.shtml
+     * Returns 0-29, where 0 = new moon, 1-14 waxing, 15 = full, 15-29 waning
+     */
+    int moonphaseConway(int year, int month, int day)
+    {
+        int r = year % 100;
+        r %= 19;
+        if (r>9){ r -= 19;}
+        r = ((r * 11) % 30) + month + day;
+        if (month<3){r += 2;}
+        r -= ((year<2000) ? 4 : 8.3);
+        r = static_cast<int>(std::floor(r+0.5)) % 30;
+        return (r < 0) ? r+30 : r;
+    }
+}
 
 
 Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
@@ -34,7 +58,7 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_origin(108, 162),
     m_planetRadius(34.f),
     m_jupiterAngle(thor::random(-2.f * thor::Pi, 0.f)),
-    m_moonShadow(/*-21*/ 15, 23, 22, 30)
+    m_moonShadow(-21, 23, 22, 30)
 {
     m_gradient[0.0f] = sf::Color( 20, 173,  0); // green
     m_gradient[0.4f] = sf::Color(220, 232, 13); // yellow
@@ -52,6 +76,27 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
 
     m_moonShadow.setPosition(m_origin + sf::Vector2f(0, 1.0));
     m_moonShadow.rotate(-30);
+
+    // get the local date
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    auto tm = std::localtime(&in_time_t);
+
+    // get the real current moon phase and set the moon shadow accordingly
+    float phase = moonphaseConway( 1900 + tm->tm_year, tm->tm_mon + 1, tm->tm_mday) / 29.f;
+    phase = clamp(phase, 0.f, 1.f);
+    if (phase <= 0.5)
+    {
+        // waxing moon
+        m_moonShadow.setA1(-21);
+        m_moonShadow.setA2( util::linearInterpolation(23, -23, phase * 2.f) );
+    }
+    else
+    {
+        // waning moon
+        m_moonShadow.setA1( util::linearInterpolation(21, -21, (phase - 0.5f) * 2.f) );
+        m_moonShadow.setA2(23);
+    }
 }
 
 

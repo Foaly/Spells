@@ -43,15 +43,15 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::Sprite                                         m_clockSprite;
-    ArcSegment                                         m_arc;
-    sf::Clock                                          m_clock;
-    thor::ColorGradient                                m_gradient;
-    const sf::Vector2f                                 m_origin;
-    const float                                        m_planetRadius;
-    sf::Sprite                                         m_jupiterSprite;
-    float                                              m_jupiterAngle;
-    Ellipse                                            m_moonShadow;
+    sf::Sprite             m_clockSprite;
+    ArcSegment             m_arc;
+    sf::Clock              m_clock;
+    thor::ColorGradient    m_gradient;
+    const sf::Vector2f     m_origin;
+    const float            m_planetRadius;
+    sf::Sprite             m_jupiterSprite;
+    float                  m_jupiterAngle;
+    Ellipse                m_moonShadow;
 };
 
 

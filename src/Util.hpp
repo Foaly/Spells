@@ -82,6 +82,12 @@ namespace util
             return true;
         return false;
     }
+
+    template <typename T>
+    T linearInterpolation(const T& start, const T& end, const float amount)
+    {
+        return static_cast<T>((end * amount) + (start * (1.f - amount)));
+    }
 } // namespace util
 
 
