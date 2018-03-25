@@ -1,0 +1,16 @@
+# Expelliarmus
+
+name = Expelliarmus
+
+path = Expelliarmus.svg
+
+backgroundTextureName = corridor.png
+
+emitterTexture = orange_orb.png
+
+emitter = scaledCircularEmitter
+
+affectors = toTransparent, slowScaleUp
+
+# bright red
+spellColor = 200, 0, 20, 200

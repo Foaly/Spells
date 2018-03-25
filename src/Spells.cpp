@@ -478,6 +478,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
     files.push_back(resolvePath("data/spells/Lumos.spell"));
     files.push_back(resolvePath("data/spells/Wingardium_Leviosa.spell"));
     files.push_back(resolvePath("data/spells/Incendio.spell"));
+    files.push_back(resolvePath("data/spells/Expelliarmus.spell"));
     //files.push_back(resolvePath("data/spells/Dummy.spell"));
 
     for (auto &file: files)
