@@ -13,3 +13,6 @@ emitter = upEmitter
 particleDownsampleFactor = 2
 
 affectors = toTransparent
+
+# light blue
+spellColor = 55, 146, 248, 200

@@ -13,3 +13,6 @@ emitterTexture = fire.png
 emitter = scaledRotatedUpEmitter
 
 affectors = toTransparent, slowScaleUp
+
+# orange
+spellColor = 220, 90, 0, 200
