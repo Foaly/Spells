@@ -28,7 +28,7 @@ VectorEmitter::VectorEmitter(std::vector<sf::Vector2f>& points)
         : m_points(points)
         , m_flipTowardsDirection(false)
         , m_firstEmission(true)
-        , mEmissionRate(1.f)
+        , mEmissionRate(0.f)
         , mEmissionDifference(0.f)
         , mParticleLifetime(sf::seconds(1.f))
         , mParticlePosition(sf::Vector2f(0.f, 0.f))
@@ -75,6 +75,14 @@ void VectorEmitter::emitParticle(thor::EmissionInterface& system, sf::Vector2f p
     particle.scale = mParticleScale();
     particle.color = mParticleColor();
     particle.textureIndex = mParticleTextureIndex();
+
+    if (m_randomOrientation)
+    {
+        if (thor::random(0, 1))
+            particle.scale.x *= -1.f;
+        if (thor::random(0, 1))
+            particle.scale.y *= -1.f;
+    }
     
     if (m_flipTowardsDirection)
     {
@@ -152,3 +160,9 @@ void VectorEmitter::setFlipTowardsDirection(bool flipTowardsDirection)
 {
     m_flipTowardsDirection = flipTowardsDirection;
 }
+
+void VectorEmitter::setRandomOrientation(bool randomOrientation)
+{
+    m_randomOrientation = randomOrientation;
+}
+

@@ -88,6 +88,11 @@ namespace util
     {
         return static_cast<T>((end * amount) + (start * (1.f - amount)));
     }
+
+    template <typename T>
+    int sign(T val) {
+        return (T(0) < val) - (val < T(0));
+    }
 } // namespace util
 
 

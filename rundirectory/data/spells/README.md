@@ -108,6 +108,7 @@ You can currently choose:
 | scaledCircularEmitter  | Emits randomly rotating particles in all directions scaled between 0.6 and 0.7.                                            |
 |       upEmitter        | Emits particles going upwards with a deflection of 60°. The particle texture is flipped into the moving direction.         |
 | scaledRotatedUpEmitter | Emits particles going upwards with a deflection of 40°. The particles are randomly rotated and sclaed between 0.5 and 0.8. |
+|    nonmovingEmitter    | Emits particles once without a speed in any direction. Particles are also flipped horizontally and vertically at random.   |
 
 
 `affectors`
@@ -118,12 +119,15 @@ Example: `affectors = toTransparent, slowScaleUp`
 Affectors affect the particles in the successful spell effect, after they have been created.
 You can choose as many of the following affectors as you like:
 
-|     Name      | Effect                                        |
-|:-------------:|:----------------------------------------------|
-|   downwards   | Lets the particle fall downward.              |
-| toTransparent | Changes the particles opacity to transparent. |
-|  slowScaleUp  | Slowly scales the particle up.                |
-|  fastScaleUp  | Scales the particle up fast.                  |
+|         Name         | Effect                                                 |
+|:--------------------:|:-------------------------------------------------------|
+|      downwards       | Lets the particle fall downward.                       |
+|    toTransparent     | Fades the particles to transparent gently.             |
+|   toTransparentEnd   | Fades the particles to transparent quickly at the end. |
+|     slowScaleUp      | Slowly scales the particle up.                         |
+|     fastScaleUp      | Scales the particle up fast.                           |
+|    directedCenter    | Move and rotate the particles towards the center.      |
+| scaleXUpDownAffector | Scales the partiles up and back down along the x axis. |
 
 
 `particleDownsampleFactor`

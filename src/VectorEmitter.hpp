@@ -89,6 +89,9 @@ public:
     /// @brief Flips the texture of the particle horizontally in the direction it is moving. Texture has to face towards the left by default.
     void                        setFlipTowardsDirection(bool flipTowardsDirection);
 
+    /// @brief Flips the texture of the particle horizontally and vertically at random
+    void                        setRandomOrientation(bool randomOrientation);
+
 
     // ---------------------------------------------------------------------------------------------------------------------------
     // Private member functions
@@ -105,6 +108,7 @@ private:
     std::vector<sf::Vector2f>&          m_points;
 
     bool                                m_flipTowardsDirection;
+    bool                                m_randomOrientation;
     bool                                m_firstEmission;
     float                               mEmissionRate;
     float                               mEmissionDifference;

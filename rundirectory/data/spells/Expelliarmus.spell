@@ -6,11 +6,13 @@ path = Expelliarmus.svg
 
 backgroundTextureName = corridor.png
 
-emitterTexture = orange_orb.png
+emitterTexture = redLightning.png
 
-emitter = scaledCircularEmitter
+emitter = nonmovingEmitter
 
-affectors = toTransparent, slowScaleUp
+particleDownsampleFactor = 2
+
+affectors = directedCenter, scaleXUpDownAffector, toTransparentEnd
 
 # bright red
 spellColor = 200, 0, 20, 200

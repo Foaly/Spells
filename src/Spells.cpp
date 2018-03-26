@@ -376,7 +376,6 @@ void Spells::update()
 
                     // generate a particle for each failed point
                     VectorEmitter emitter(m_failedPoints);
-                    emitter.setEmissionRate(0);
                     emitter.setParticleLifetime( util::Distributions::constant(sf::seconds(1.8f)) );
                     m_failParticleSystem.addEmitter(emitter, sf::seconds(2.f));
 

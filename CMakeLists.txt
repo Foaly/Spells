@@ -47,6 +47,7 @@ set(SOURCE_FILES src/main.cpp
                  src/Ellipse.hpp
                  src/Ellipse.cpp
                  src/ToggleEmitter.hpp
+                 src/Affectors.hpp
                  )
 
 # when we are on MacOS create a bundle and
