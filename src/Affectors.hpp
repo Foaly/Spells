@@ -50,15 +50,18 @@ class ScaleXUpDownAffector
 public:
     void operator() (thor::Particle& particle, sf::Time dt)
     {
-        float scale = 1.f;
+        sf::Vector2f scale(1.f, particle.scale.y);
         float ratio = thor::getRemainingRatio(particle);
         if (ratio <= 0.3f)
-            scale = util::linearInterpolation(0.1f, 1.f, ratio * 3.3333333333333333333f);
+        {
+            scale.x = util::linearInterpolation(0.1f, 1.f, ratio * 3.3333333333333333333f);
+            scale.y = util::linearInterpolation(0.3f, 1.f, ratio * 3.3333333333333333333f);
+        }
         else if (ratio >= 0.8)
-            scale = util::linearInterpolation(1.f, 0.1f, (ratio - 0.8f) * 5.f);
+            scale.x = util::linearInterpolation(1.f, 0.1f, (ratio - 0.8f) * 5.f);
 
-        scale *= util::sign(particle.scale.x);
-        particle.scale = sf::Vector2f(scale, particle.scale.y);
+        scale = thor::cwiseProduct(scale, sf::Vector2f(util::sign(particle.scale.x), util::sign(particle.scale.y)));
+        particle.scale = scale;
     }
 };
 

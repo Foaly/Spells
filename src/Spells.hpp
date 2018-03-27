@@ -63,6 +63,7 @@ private:
     bool m_isComputing;
 
     sf::Clock m_frameClock;
+    const sf::Clock m_clockSinceStart;
     sf::RenderWindow m_window;
     const sf::Vector2f m_windowCenter;
 
@@ -107,6 +108,7 @@ private:
 
     sf::Shader m_radialGradientShader;
     sf::Shader m_rectangleGradientShader;
+    sf::Shader m_noiseShader;
 };
 
 

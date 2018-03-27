@@ -51,7 +51,7 @@ Spells::Spells() : m_isUserDrawing(false),
 {
     // limit frame time
     m_window.setFramerateLimit(60);
-    
+
     // set up overlay
     m_overlayRect.setSize(sf::Vector2f(m_window.getSize().x - 200, m_window.getSize().y - 50));
     m_overlayRect.setPosition(100, 25);
@@ -62,7 +62,7 @@ Spells::Spells() : m_isUserDrawing(false),
     m_wand.setTexture(m_textures["wand.png"]);
     m_wand.setScale(-1.f, 1.f); // uncomment for left hand
     m_wand.setOrigin(94.f, 3.f);
-    
+
     // load emitters and affectors for the particle systems
     m_emitters = setupEmitters(m_winPoints);
     m_affectors = setupAffectors();
@@ -96,7 +96,7 @@ Spells::Spells() : m_isUserDrawing(false),
     {
         std::cerr << "Failed to load font!" << std::endl;
     }
-    
+
     m_percentBackground.setTexture(m_textures["parchment.png"]);
     m_percentBackground.setPosition(5, 10);
 
@@ -119,6 +119,10 @@ Spells::Spells() : m_isUserDrawing(false),
         if(!m_rectangleGradientShader.loadFromFile(resolvePath("data/shader/RectangleGradient.frag"), sf::Shader::Fragment))
         {
             std::cerr << "Failed to load radial gradient shader!" << std::endl;
+        }
+        if(!m_noiseShader.loadFromFile(resolvePath("data/shader/Noise.frag"), sf::Shader::Fragment))
+        {
+            std::cerr << "Failed to load noise shader!" << std::endl;
         }
         m_rectangleGradientShader.setUniform("leftTop", sf::Vector2f(0.f, 0.05f));
         m_rectangleGradientShader.setUniform("rightBottom", sf::Vector2f(0.95f, 1.0));
@@ -257,6 +261,8 @@ void Spells::update()
     // get frame time
     const sf::Time frameTime = m_frameClock.restart();
 
+    m_noiseShader.setUniform("time", m_clockSinceStart.getElapsedTime().asSeconds());
+
     // get mouse position
     const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
 
@@ -361,12 +367,12 @@ void Spells::update()
                     int downsampleFactor = m_currentSpell->second.m_particleDownsampleFactor;
                     m_winPoints.resize(m_userPoints.size() / downsampleFactor);
                     downsample(m_userPoints.begin(), m_userPoints.end(), m_winPoints.begin(), downsampleFactor);
-                    
+
                     m_winParticleSystem.addEmitter(m_emitters[m_currentSpell->second.m_emitterName], sf::seconds(2.f));
-                    
+
                     for (auto& affector: m_currentSpell->second.m_affectors)
                         m_winParticleSystem.addAffector(m_affectors[affector], sf::seconds(4.f));
-                    
+
                     m_winSound.play();
                 }
                 else
@@ -421,7 +427,7 @@ void Spells::draw()
     m_window.draw(m_overlayRect, &m_rectangleGradientShader);
 
     // draw the win particle system
-    m_window.draw(m_winParticleSystem);
+    m_window.draw(m_winParticleSystem, &m_noiseShader);
 
     // draw the spell
     m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
@@ -496,25 +502,25 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         } catch (thor::ResourceAccessException& e) {
             level.m_backgroundTextureName = "arches.png"; // default
         }
-        
+
         // make sure the sound names are valid
         try {
             m_sounds[level.m_sound].getChannelCount();
         } catch (thor::ResourceAccessException& e) {
             level.m_sound = "none"; // default
         }
-        
+
         // make sure emitter texture key is valid
         try {
             m_textures[level.m_emitterTexture].setSmooth(true);
         } catch (thor::ResourceAccessException& e) {
             level.m_emitterTexture = "circle.png"; // default
         }
-        
+
         // make sure the emitter names are valid
         if (m_emitters.find(level.m_emitterName) == m_emitters.end())
             level.m_emitterName = "circularEmitter";
-        
+
         // remove the affectors from the level that are not valid
         for (auto affectorIter = std::begin(level.m_affectors); affectorIter != std::end(level.m_affectors); )
         {
@@ -524,7 +530,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
             else
                 affectorIter++;
         }
-        
+
         level.m_particleDownsampleFactor = clamp(level.m_particleDownsampleFactor, 1, 10);
 
         m_level[level.m_name] = level;
@@ -548,15 +554,17 @@ void Spells::setSpell(Level& spell)
 
     // set up path to spell SVG
     m_spellPoints = loadPathsFromFile(resolvePath("data/svg/" + spell.m_svgPath));
-    
+
     // set the win particle system texture
     m_winParticleSystem.setTexture(m_textures[spell.m_emitterTexture]);
     m_winParticleSystem.clearParticles();
     m_winParticleSystem.clearEmitters();
-    
+
     // set the win sound
     m_winSound.setBuffer(m_sounds[spell.m_sound]);
-    
+
     // set up color for falling particles
     m_fallingPointEmitter.setColor(spell.m_spellColor);
+
+    m_noiseShader.setUniform("backgroundTexture", m_textures[spell.m_emitterTexture]);
 }

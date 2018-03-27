@@ -31,9 +31,9 @@
 EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
 {
     EmitterMap emitters;
-    
+
     VectorEmitter circularEmitter(winPointVector);
-    circularEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.4f), sf::seconds(1.8f)) );
+    circularEmitter.setParticleLifetime( thor::Distributions::uniform(sf::seconds(1.8f), sf::seconds(2.2f)) );
     circularEmitter.setRandomOrientation(true);
     emitters["nonmovingEmitter"] = circularEmitter;
 
@@ -44,7 +44,7 @@ EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
     circularEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );      // rotate randomly
     circularEmitter.setParticleRotationSpeed( thor::Distributions::uniform(10.f, 50.f));  // random rotation speed
     emitters["circularEmitter"] = circularEmitter;
-        
+
     circularEmitter.setParticleScale( util::Distributions::uniformScale(0.6f, 0.7f) ); // start with a lower scale
     emitters["scaledCircularEmitter"] = circularEmitter;
 
@@ -55,13 +55,13 @@ EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
     auto verticalSpeed = util::Distributions::uniform(sf::Vector2f(0.f, -250.f), sf::Vector2f(0.f, -200.f));
     upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 60.f) );
     emitters["upEmitter"] = upEmitter;
-    
+
     upEmitter.setFlipTowardsDirection(false); // turn flipping off, otherwise scaling looks weird
     upEmitter.setParticleRotation( thor::Distributions::uniform(0.f, 360.f) );   // rotate randomly
     upEmitter.setParticleScale( util::Distributions::uniformScale(0.5f, 0.8f) ); // start with a lower scale
     upEmitter.setParticleVelocity( util::Distributions::deflect(verticalSpeed, 40.f) );
     emitters["scaledRotatedUpEmitter"] = upEmitter;
-    
+
     return emitters;
 }
 
@@ -69,11 +69,11 @@ EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
 AffectorMap setupAffectors()
 {
     AffectorMap affectors;
-    
+
     // gravity
     thor::ForceAffector downwardsAffector(sf::Vector2f(0, 150));
     affectors["downwards"] = downwardsAffector;
-    
+
     // golden color that fades to transparent
     thor::ColorGradient goldGradient;
     goldGradient[0.0f] = sf::Color(255, 200, 50, 200); // slightly transparent gold
@@ -81,7 +81,7 @@ AffectorMap setupAffectors()
     goldGradient[1.0f] = sf::Color(255, 200, 50,   0); // transparent gold
     thor::ColorAnimation goldToTransparent(goldGradient);
     affectors["goldToTransparent"] = thor::AnimationAffector(goldToTransparent);
-    
+
     // gentle fade to transparent
     thor::ColorGradient toTransarentGradient;
     toTransarentGradient[0.0f] = sf::Color( 255, 255, 255, 255); // opaque
@@ -94,11 +94,11 @@ AffectorMap setupAffectors()
     toTransarentGradient[0.9f] = sf::Color( 255, 255, 255, 255); // still opaque
     thor::ColorAnimation toTansparentEnd(toTransarentGradient);
     affectors["toTransparentEnd"] = thor::AnimationAffector(toTansparentEnd);
-    
+
     // scale the particles up slowly
     ScaleAffector slowScaleUp(sf::Vector2f(0.6, 0.6));
     affectors["slowScaleUp"] = slowScaleUp;
-    
+
     // scale the particles up faster
     ScaleAffector fastScaleUp(sf::Vector2f(1.1, 1.1));
     affectors["fastScaleUp"] = fastScaleUp;
@@ -119,7 +119,7 @@ AffectorMap setupAffectors()
 thor::ResourceHolder<sf::Texture, std::string> loadTextures()
 {
     thor::ResourceHolder<sf::Texture, std::string> textures;
-    
+
     // load textures
     textures.acquire("circle.png",       thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/circle.png")),       thor::Resources::Reuse);
     textures.acquire("rect.png",         thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/rect.png")),         thor::Resources::Reuse);
@@ -147,7 +147,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
 thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
 {
     thor::ResourceHolder<sf::SoundBuffer, std::string> sounds;
-    
+
     // load sounds
     sounds.acquire("fail.wav",             thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/fail.wav")),             thor::Resources::Reuse);
     sounds.acquire("birds_taking_off.wav", thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/birds_taking_off.wav")), thor::Resources::Reuse);
@@ -161,6 +161,6 @@ thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
     };
     thor::ResourceLoader<sf::SoundBuffer> emptyLoader(emptySoundbuffer, "AudioNone");
     sounds.acquire("none", emptyLoader);
-    
+
     return sounds;
 }
