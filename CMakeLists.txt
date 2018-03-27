@@ -61,7 +61,7 @@ if(APPLE)
 
     # copy resource files into bundle
     copy_resource_folder_to_bundle(${EXECUTABLE_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/rundirectory/data data)
-  	set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/osx/Info.plist.in)
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/osx/Info.plist.in)
 else()
     # on windows there are no bundles
     set(SOURCE_FILES ${SOURCE_FILES}
@@ -75,12 +75,10 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 
-# Detect and add any version 2.X of SFML
-# See the FindSFML.cmake file for additional details and instructions
-find_package(SFML 2 COMPONENTS system window graphics network audio REQUIRED)
+# Detect and add any 2.5 version of SFML
+find_package(SFML 2.4 COMPONENTS system window graphics audio REQUIRED)
 if(SFML_FOUND)
-    include_directories(${SFML_INCLUDE_DIR})
-    target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+    target_link_libraries(${EXECUTABLE_NAME} sfml-graphics sfml-audio)
 else()
     message(FATAL_ERROR "Unable to find SFML!")
 endif()
