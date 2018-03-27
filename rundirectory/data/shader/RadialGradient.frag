@@ -1,5 +1,5 @@
 /// Spells - a game about magic spells
-/// Copyright (C) 2015 - 2017  Foaly
+/// Copyright (C) 2015 - 2018  Foaly
 
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -26,10 +26,9 @@ void main(void)
     float distanceFromCenter = distance(uv, center);
 
     vec4 vertexColor = gl_Color;
-    vec4 opaqueColor = vec4(gl_Color.rgb, 0.0);
+    vec4 transparentColor = vec4(gl_Color.rgb, 0.0);
 
     float interpolator = 1.0 - smoothstep(radiuses.x, radiuses.y, distanceFromCenter);
 
-    //gl_FragColor = vec4(uv.x, uv.y, 1.0, 1.0);
-    gl_FragColor = mix(vertexColor, opaqueColor, interpolator);
+    gl_FragColor = mix(vertexColor, transparentColor, interpolator);
 }

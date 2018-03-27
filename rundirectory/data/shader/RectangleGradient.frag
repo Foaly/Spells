@@ -1,5 +1,5 @@
 /// Spells - a game about magic spells
-/// Copyright (C) 2015 - 2017  Foaly
+/// Copyright (C) 2015 - 2018  Foaly
 
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@ void main(void)
     const vec2 center = vec2(0.5, 0.5);
 
     vec4 vertexColor = gl_Color;
-    vec4 opaqueColor = vec4(gl_Color.rgb, 0.0);
+    vec4 transparentColor = vec4(gl_Color.rgb, 0.0);
 
     // Bidirectional double smoothstep
     // see: http://www.fundza.com/rman_shaders/smoothstep/
     float blend = smoothstep(leftTop.x, leftTop.y, uv.x) * (1 - smoothstep(rightBottom.x, rightBottom.y, uv.x)) *
                   smoothstep(leftTop.x, leftTop.y, uv.y) * (1 - smoothstep(rightBottom.x, rightBottom.y, uv.y));
 
-    gl_FragColor = mix(opaqueColor, vertexColor, blend);
+    gl_FragColor = mix(transparentColor, vertexColor, blend);
 }
