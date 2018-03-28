@@ -27,6 +27,7 @@
 VectorEmitter::VectorEmitter(std::vector<sf::Vector2f>& points)
         : m_points(points)
         , m_flipTowardsDirection(false)
+        , m_randomOrientation (false)
         , m_firstEmission(true)
         , mEmissionRate(0.f)
         , mEmissionDifference(0.f)
