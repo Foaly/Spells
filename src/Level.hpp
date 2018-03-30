@@ -36,6 +36,7 @@ public:
     std::string              m_emitterName;
     std::string              m_emitterTexture;
     std::vector<std::string> m_affectors;
+    std::string              m_particleShader;
     int                      m_particleDownsampleFactor;
     sf::Color                m_spellColor;
 };

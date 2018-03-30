@@ -110,22 +110,12 @@ Spells::Spells() : m_isUserDrawing(false),
     m_percentageText.setStyle(sf::Text::Style::Bold);
     // TODO horizontal character spacing
 
+    m_shader = loadShaders();
+
     if(sf::Shader::isAvailable())
     {
-        if(!m_radialGradientShader.loadFromFile(resolvePath("data/shader/RadialGradient.frag"), sf::Shader::Fragment))
-        {
-            std::cerr << "Failed to load radial gradient shader!" << std::endl;
-        }
-        if(!m_rectangleGradientShader.loadFromFile(resolvePath("data/shader/RectangleGradient.frag"), sf::Shader::Fragment))
-        {
-            std::cerr << "Failed to load radial gradient shader!" << std::endl;
-        }
-        if(!m_noiseShader.loadFromFile(resolvePath("data/shader/Noise.frag"), sf::Shader::Fragment))
-        {
-            std::cerr << "Failed to load noise shader!" << std::endl;
-        }
-        m_rectangleGradientShader.setUniform("leftTop", sf::Vector2f(0.f, 0.05f));
-        m_rectangleGradientShader.setUniform("rightBottom", sf::Vector2f(0.95f, 1.0));
+        m_shader["RectangleGradient.frag"].setUniform("leftTop", sf::Vector2f(0.f, 0.05f));
+        m_shader["RectangleGradient.frag"].setUniform("rightBottom", sf::Vector2f(0.95f, 1.0));
     }
 
     // load sounds
@@ -261,7 +251,8 @@ void Spells::update()
     // get frame time
     const sf::Time frameTime = m_frameClock.restart();
 
-    m_noiseShader.setUniform("time", m_clockSinceStart.getElapsedTime().asSeconds());
+    if (m_winParticleShader)
+        m_winParticleShader->setUniform("time", m_clockSinceStart.getElapsedTime().asSeconds());
 
     // get mouse position
     const sf::Vector2f mousePosition(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)));
@@ -424,28 +415,28 @@ void Spells::draw()
     // draw background
     m_window.draw(m_backgroundSprite);
 
-    m_window.draw(m_overlayRect, &m_rectangleGradientShader);
+    m_window.draw(m_overlayRect, &m_shader["RectangleGradient.frag"]);
 
     // draw the win particle system
-    m_window.draw(m_winParticleSystem, &m_noiseShader);
+    m_window.draw(m_winParticleSystem, m_winParticleShader);
 
     // draw the spell
-    m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
+    m_shader["RadialGradient.frag"].setUniform("radiuses", sf::Vector2f(0.5f, 0.4f));
     sf::Sprite circle(m_textures["circle.png"]);
     circle.setOrigin(25, 25);
     circle.setColor(sf::Color(255, 255, 255, 100)); // transparent white
     for(auto &position: m_spellPoints)
     {
         circle.setPosition(position);
-        m_window.draw(circle, &m_radialGradientShader);
+        m_window.draw(circle, &m_shader["RadialGradient.frag"]);
     }
 
     // draw the falling user points
-    m_radialGradientShader.setUniform("radiuses", sf::Vector2f(0.5f, 0.3f));
-    m_window.draw(m_fallingPointParticleSystem, &m_radialGradientShader);
+    m_shader["RadialGradient.frag"].setUniform("radiuses", sf::Vector2f(0.5f, 0.3f));
+    m_window.draw(m_fallingPointParticleSystem, &m_shader["RadialGradient.frag"]);
 
     // draw the fail particle system
-    m_window.draw(m_failParticleSystem, &m_radialGradientShader);
+    m_window.draw(m_failParticleSystem, &m_shader["RadialGradient.frag"]);
 
     // draw the user spell
     circle.setScale(0.8f, 0.8f);
@@ -453,7 +444,7 @@ void Spells::draw()
     for(auto &position: m_userPoints)
     {
         circle.setPosition(position);
-        m_window.draw(circle, &m_radialGradientShader);
+        m_window.draw(circle, &m_shader["RadialGradient.frag"]);
     }
 
     // draw percentage
@@ -486,6 +477,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
     files.push_back(resolvePath("data/spells/Expelliarmus.spell"));
     //files.push_back(resolvePath("data/spells/Dummy.spell"));
 
+    // verify if spells contains valid data
     for (auto &file: files)
     {
         Level level;
@@ -531,6 +523,14 @@ void Spells::loadSpells(std::string spellsFileDirectory)
                 affectorIter++;
         }
 
+        // make sure emitter texture key is valid
+        try {
+            m_shader[level.m_particleShader];
+        } catch (thor::ResourceAccessException& e) {
+            level.m_particleShader = std::string();
+        }
+
+
         level.m_particleDownsampleFactor = clamp(level.m_particleDownsampleFactor, 1, 10);
 
         m_level[level.m_name] = level;
@@ -566,5 +566,10 @@ void Spells::setSpell(Level& spell)
     // set up color for falling particles
     m_fallingPointEmitter.setColor(spell.m_spellColor);
 
-    m_noiseShader.setUniform("backgroundTexture", m_textures[spell.m_emitterTexture]);
+    m_winParticleShader = nullptr;
+    if (!spell.m_particleShader.empty())
+    {
+        m_winParticleShader = &m_shader[spell.m_particleShader];
+        m_winParticleShader->setUniform("backgroundTexture", m_textures[spell.m_emitterTexture]);
+    }
 }

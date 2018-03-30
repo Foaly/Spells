@@ -26,6 +26,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 
 
@@ -36,5 +37,6 @@ EmitterMap  setupEmitters(std::vector<sf::Vector2f>& winPointVector);
 AffectorMap setupAffectors();
 thor::ResourceHolder<sf::Texture, std::string> loadTextures();
 thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds();
+thor::ResourceHolder<sf::Shader, std::string> loadShaders();
 
 #endif // SPELLS_PARTICLE_SETUP_HPP

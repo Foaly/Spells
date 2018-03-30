@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <memory>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -69,6 +70,8 @@ private:
 
     thor::ResourceHolder<sf::Texture, std::string> m_textures;
     thor::ResourceHolder<sf::SoundBuffer, std::string> m_sounds;
+    thor::ResourceHolder<sf::Shader, std::string> m_shader;
+
     SpellGenerator m_spellGenerator;
     std::vector<sf::Vector2f> m_spellPoints;
     std::vector<sf::Vector2f> m_userPoints;
@@ -106,9 +109,7 @@ private:
 
     Clock m_clock;
 
-    sf::Shader m_radialGradientShader;
-    sf::Shader m_rectangleGradientShader;
-    sf::Shader m_noiseShader;
+    sf::Shader* m_winParticleShader;
 };
 
 

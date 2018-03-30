@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     }
     catch (std::runtime_error &e)
     {
-        std::cout << e.what() << std::endl;
+        std::cout << "Caught runtime error: " << e.what() << std::endl;
         return -1;
     }
 }

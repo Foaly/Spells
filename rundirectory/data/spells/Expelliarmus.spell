@@ -14,5 +14,7 @@ particleDownsampleFactor = 2
 
 affectors = directedCenter, scaleXUpDownAffector, toTransparentEnd
 
+particleShader = Noise.frag
+
 # bright red
 spellColor = 200, 0, 20, 200

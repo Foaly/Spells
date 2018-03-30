@@ -27,6 +27,8 @@
 
 #include <SFML/Audio/SoundBuffer.hpp>
 
+#include <iostream>
+
 
 EmitterMap setupEmitters(std::vector<sf::Vector2f>& winPointVector)
 {
@@ -163,4 +165,43 @@ thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
     sounds.acquire("none", emptyLoader);
 
     return sounds;
+}
+
+
+thor::ResourceHolder<sf::Shader, std::string> loadShaders()
+{
+    thor::ResourceHolder<sf::Shader, std::string> shaders;
+
+    auto fragmentShaderLoader = [] (const std::string &path) -> std::unique_ptr<sf::Shader>
+    {
+        if (!sf::Shader::isAvailable())
+            return nullptr;
+
+        auto shader = std::make_unique<sf::Shader>();
+        if (!shader->loadFromFile(path, sf::Shader::Fragment))
+        {
+            std::cerr << "Failed to load shader: " << path << std::endl;
+            return nullptr;
+        }
+        return shader;
+    };
+
+    auto loadShader = [=] (std::string filename) -> thor::ResourceLoader<sf::Shader>
+    {
+        return thor::ResourceLoader<sf::Shader>([=] () { return fragmentShaderLoader(filename); }, filename);
+    };
+
+    // TODO: each aquire should be in a seperate try catch
+    try
+    {
+        shaders.acquire("RadialGradient.frag",    loadShader(resolvePath("data/shader/RadialGradient.frag")),    thor::Resources::Reuse);
+        shaders.acquire("RectangleGradient.frag", loadShader(resolvePath("data/shader/RectangleGradient.frag")), thor::Resources::Reuse);
+        shaders.acquire("Noise.frag",             loadShader(resolvePath("data/shader/Noise.frag")),             thor::Resources::Reuse);
+    }
+    catch (thor::ResourceLoadingException &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
+    return shaders;
 }

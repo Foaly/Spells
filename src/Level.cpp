@@ -63,6 +63,10 @@ bool Level::loadFromFile(std::string& filename)
     std::vector<std::string> affectors;
     spell.get("affectors", affectors);
     m_affectors = affectors;
+
+    std::string particleShader;
+    spell.get("particleShader", particleShader);
+    m_particleShader = particleShader;
     
     int particleDownsampleFactor = 1;
     spell.get("particleDownsampleFactor", particleDownsampleFactor);
