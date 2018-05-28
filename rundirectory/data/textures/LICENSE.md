@@ -40,6 +40,13 @@ Remixes
 | `KSC-2012-2734~orig.jpg` | no copyright for non-commercial use | NASA                                        | https://images.nasa.gov/details-KSC-2012-2734.html  |
 
 
+### water_orb.png ([CC BY-NC 4.0][by-nc-4.0])
+
+| Based on                      | License                   | Author  | Link                                              |
+|:------------------------------|:--------------------------|:--------|:--------------------------------------------------|
+| `6187284354_3cc5a1162e_o.jpg` | [CC BY-NC 2.0][by-nc-2.0] | eltpics | https://www.flickr.com/photos/eltpics/6187284354/ |
+
+
 
 
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/
@@ -49,4 +56,5 @@ Remixes
 [by-sa-4.0]: https://creativecommons.org/licenses/by-sa/4.0/
 [by-nd-2.0]: https://creativecommons.org/licenses/by-nd/2.0/
 [by-nc-2.0]: https://creativecommons.org/licenses/by-nc/2.0/
+[by-nc-4.0]: https://creativecommons.org/licenses/by-nc/4.0/
 [by-nc-sa-2.0]: https://creativecommons.org/licenses/by-nc-sa/2.0/

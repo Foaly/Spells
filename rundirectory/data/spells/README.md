@@ -126,6 +126,7 @@ You can choose as many of the following affectors as you like:
 |   toTransparentEnd   | Fades the particles to transparent quickly at the end. |
 |     slowScaleUp      | Slowly scales the particle up.                         |
 |     fastScaleUp      | Scales the particle up fast.                           |
+|    slowScaleDown     | The patricle is scaled down slowly.                    |
 |    directedCenter    | Move and rotate the particles towards the center.      |
 | scaleXUpDownAffector | Scales the partiles up and back down along the x axis. |
 

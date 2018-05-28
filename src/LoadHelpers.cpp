@@ -105,6 +105,10 @@ AffectorMap setupAffectors()
     ScaleAffector fastScaleUp(sf::Vector2f(1.1, 1.1));
     affectors["fastScaleUp"] = fastScaleUp;
 
+    // scale the particles down slowly
+    ScaleAffector slowScaleDown(sf::Vector2f(-0.6, -0.6));
+    affectors["slowScaleDown"] = slowScaleDown;
+
     // move in direction ov the center
     DirectedAffector directedAffector(sf::Vector2f(724, 416));
     affectors["directedCenter"] = directedAffector;
@@ -141,6 +145,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     textures.acquire("jupiter.png",      thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/jupiter.png")),      thor::Resources::Reuse);
     textures.acquire("corridor.png",     thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/corridor.png")),     thor::Resources::Reuse);
     textures.acquire("redLightning.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/redLightning.png")), thor::Resources::Reuse);
+    textures.acquire("water_orb.png",    thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/water_orb.png")),    thor::Resources::Reuse);
 
     return textures;
 }

@@ -14,7 +14,8 @@ endif()
 message(STATUS "Configuring in ${CMAKE_BUILD_TYPE} mode.")
 
 # enable C++14
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # define sources
 set(EXECUTABLE_NAME "${PROJECT_NAME}")

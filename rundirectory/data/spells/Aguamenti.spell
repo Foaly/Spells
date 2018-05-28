@@ -1,0 +1,18 @@
+# Aguamenti
+
+name = Aguamenti
+
+path = Aguamenti.svg
+
+backgroundTextureName = corridor.png
+
+emitterTexture = water_orb.png
+
+emitter = nonmovingEmitter
+
+particleDownsampleFactor = 2
+
+affectors = directedCenter, toTransparentEnd, slowScaleDown
+
+# dark blue
+spellColor = 0, 35, 145, 220
