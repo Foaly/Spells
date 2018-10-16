@@ -160,6 +160,7 @@ thor::ResourceHolder<sf::SoundBuffer, std::string> loadSounds()
     sounds.acquire("birds_taking_off.wav", thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/birds_taking_off.wav")), thor::Resources::Reuse);
     sounds.acquire("fire.wav",             thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/fire.wav")),             thor::Resources::Reuse);
     sounds.acquire("opening_lock.wav",     thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/opening_lock.wav")),     thor::Resources::Reuse);
+    sounds.acquire("aguamenti.wav",        thor::Resources::fromFile<sf::SoundBuffer>(resolvePath("data/sounds/aguamenti.wav")),        thor::Resources::Reuse);
 
     // create an empty Soundbuffer as a fallback
     auto emptySoundbuffer = [=] () -> std::unique_ptr<sf::SoundBuffer>

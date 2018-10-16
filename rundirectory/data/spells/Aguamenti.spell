@@ -4,6 +4,8 @@ name = Aguamenti
 
 path = Aguamenti.svg
 
+sound = aguamenti.wav
+
 backgroundTextureName = corridor.png
 
 emitterTexture = water_orb.png
