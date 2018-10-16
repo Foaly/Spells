@@ -51,6 +51,8 @@ private:
     const float            m_planetRadius;
     sf::Sprite             m_jupiterSprite;
     float                  m_jupiterAngle;
+    sf::Sprite             m_uranusSprite;
+    float                  m_uranusAngle;
     Ellipse                m_moonShadow;
 };
 

@@ -48,16 +48,20 @@ namespace {
         r = static_cast<int>(std::floor(r+0.5)) % 30;
         return (r < 0) ? r+30 : r;
     }
+
+    const float twoPi = 2.f * thor::Pi;
 }
 
 
 Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_clockSprite(textureHolder["clock.png"]),
-    m_jupiterSprite(textureHolder["jupiter.png"]),
     m_arc(48.f, 9.f),
-    m_origin(108, 162),
+    m_origin(109, 162),
     m_planetRadius(34.f),
-    m_jupiterAngle(thor::random(-2.f * thor::Pi, 0.f)),
+    m_jupiterSprite(textureHolder["jupiter.png"]),
+    m_jupiterAngle(thor::random(-twoPi, 0.f)),
+    m_uranusSprite(textureHolder["uranus.png"]),
+    m_uranusAngle(thor::random(0.f, twoPi)),
     m_moonShadow(-21, 23, 22, 30)
 {
     m_gradient[0.0f] = sf::Color( 20, 173,  0); // green
@@ -72,9 +76,9 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     m_arc.setColor(m_gradient.sampleColor(0.f));
 
     m_jupiterSprite.setOrigin(sf::Vector2f(textureHolder["jupiter.png"].getSize()) / 2.f);
-    m_jupiterSprite.setPosition(108, 128);
+    m_uranusSprite.setOrigin(sf::Vector2f(textureHolder["uranus.png"].getSize()) / 2.f);
 
-    m_moonShadow.setPosition(m_origin + sf::Vector2f(0, 1.0));
+    m_moonShadow.setPosition(m_origin + sf::Vector2f(-1.f, 1.f));
     m_moonShadow.rotate(-30);
 
     // get the local date
@@ -85,7 +89,7 @@ Clock::Clock(thor::ResourceHolder<sf::Texture, std::string>& textureHolder) :
     // get the real current moon phase and set the moon shadow accordingly
     float phase = moonphaseConway( 1900 + tm->tm_year, tm->tm_mon + 1, tm->tm_mday) / 29.f;
     phase = clamp(phase, 0.f, 1.f);
-    if (phase <= 0.5)
+    if (phase <= 0.5f)
     {
         // waxing moon
         m_moonShadow.setA1(-21);
@@ -120,11 +124,18 @@ void Clock::update(sf::Time frameTime)
     }
 
     m_jupiterAngle -= 0.3f * frameTime.asSeconds();
-    if (m_jupiterAngle < -2.f * thor::Pi)
+    if (m_jupiterAngle < -twoPi)
         m_jupiterAngle = 0.f;
 
     auto jupiterPosition = m_origin + m_planetRadius * sf::Vector2f(std::cos(m_jupiterAngle), std::sin(m_jupiterAngle));
     m_jupiterSprite.setPosition(jupiterPosition);
+
+    m_uranusAngle += 0.1f * frameTime.asSeconds();
+    if (m_uranusAngle > twoPi)
+        m_uranusAngle = 0.f;
+
+    auto uranusPostion = m_origin + m_planetRadius * sf::Vector2f(std::cos(m_uranusAngle), std::sin(m_uranusAngle));
+    m_uranusSprite.setPosition(uranusPostion);
 }
 
 
@@ -136,4 +147,5 @@ void Clock::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(m_moonShadow, states);
     target.draw(m_arc, states);
     target.draw(m_jupiterSprite, states);
+    target.draw(m_uranusSprite, states);
 }

@@ -146,6 +146,7 @@ thor::ResourceHolder<sf::Texture, std::string> loadTextures()
     textures.acquire("corridor.png",     thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/corridor.png")),     thor::Resources::Reuse);
     textures.acquire("redLightning.png", thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/redLightning.png")), thor::Resources::Reuse);
     textures.acquire("water_orb.png",    thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/water_orb.png")),    thor::Resources::Reuse);
+    textures.acquire("uranus.png",       thor::Resources::fromFile<sf::Texture>(resolvePath("data/textures/uranus.png")),       thor::Resources::Reuse);
 
     return textures;
 }
