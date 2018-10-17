@@ -45,8 +45,8 @@ Spells::Spells() : m_isUserDrawing(false),
                    m_isComputing(false),
                    m_window(sf::VideoMode(1280, 800), "Spells", sf::Style::Fullscreen, sf::ContextSettings(0, 0, 8)),
                    m_windowCenter(m_window.getSize().x / 2, m_window.getSize().y / 2),
-                   m_spellGenerator(m_windowCenter),
                    m_textures(loadTextures()),    // load textures
+                   m_spellGenerator(m_windowCenter),
                    m_clock(m_textures)
 {
     // limit frame time
@@ -101,14 +101,14 @@ Spells::Spells() : m_isUserDrawing(false),
     m_percentBackground.setPosition(5, 10);
 
     // move clock to correct position
-    const int clockXOffset = m_window.getSize().x - m_clock.getSize().x - 5;
+    const float clockXOffset = m_window.getSize().x - m_clock.getSize().x - 5.f;
     m_clock.setPosition(sf::Vector2f(clockXOffset, 1));
 
     m_percentageText.setFont(m_font);
     m_percentageText.setCharacterSize(50);
     m_percentageText.setPosition(35, 30);
     m_percentageText.setStyle(sf::Text::Style::Bold);
-    // TODO horizontal character spacing
+    m_percentageText.setLetterSpacing(1.5f);
 
     m_shader = loadShaders();
 
@@ -492,21 +492,21 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         // make sure background texture key is valid
         try {
             m_textures[level.m_backgroundTextureName].setSmooth(true); // use setter so this doesn't get optimized away. It's about the texture access.
-        } catch (thor::ResourceAccessException& e) {
+        } catch (thor::ResourceAccessException&) {
             level.m_backgroundTextureName = "arches.png"; // default
         }
 
         // make sure the sound names are valid
         try {
             m_sounds[level.m_sound].getChannelCount();
-        } catch (thor::ResourceAccessException& e) {
+        } catch (thor::ResourceAccessException&) {
             level.m_sound = "none"; // default
         }
 
         // make sure emitter texture key is valid
         try {
             m_textures[level.m_emitterTexture].setSmooth(true);
-        } catch (thor::ResourceAccessException& e) {
+        } catch (thor::ResourceAccessException&) {
             level.m_emitterTexture = "circle.png"; // default
         }
 
@@ -527,7 +527,7 @@ void Spells::loadSpells(std::string spellsFileDirectory)
         // make sure emitter texture key is valid
         try {
             m_shader[level.m_particleShader];
-        } catch (thor::ResourceAccessException& e) {
+        } catch (thor::ResourceAccessException&) {
             level.m_particleShader = std::string();
         }
 
